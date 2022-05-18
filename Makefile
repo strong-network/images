@@ -17,3 +17,12 @@ remove_base_image:
 .PHONY: golang_image
 golang_image: base_image
 	@docker build -t strong_network_golang:${VERSION} golang
+
+python_spark_image: base_image
+	@docker build -t strong_network_python_spark:${VERSION} python_spark
+
+python_datascience_image: base_image
+	@docker build -t strong_network_python_datascience:${VERSION} python_datascience
+
+python_anaconda_image: base_image
+	@docker build -t strong_network_python_anaconda:${VERSION} python_anaconda
