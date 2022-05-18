@@ -26,3 +26,6 @@ python_datascience_image: base_image
 
 python_anaconda_image: base_image
 	@docker build -t strong_network_python_anaconda:${VERSION} python_anaconda
+
+nodejs_image: base_image
+	@docker build -t strong_network_nodejs:${VERSION} nodejs
