@@ -1,0 +1,340 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
+# GNU Make 4.2.1
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2016 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Wed May 18 14:23:27 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+AWS_SECRET_ACCESS_KEY = p0e+yPQJ0gyqABQw/SYsAQjwXTCnN81+Oi+Y0J2/
+# default
+.SHELLFLAGS := -c
+# environment
+SERVICE_URL = http://release-proxy:8081/strongextensions
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+KUBERNETES_PORT_443_TCP_PORT = 443
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# automatic
+@F = $(notdir $@)
+# makefile
+CURDIR := /home/developer/images
+# makefile
+SHELL = /bin/sh
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-US","availableLanguages":{}}
+# environment
+_ = /strong/strong-ide/node
+# makefile (from 'Makefile', line 1)
+MAKEFILE_LIST :=  Makefile
+# environment
+ITEM_URL = http://release-proxy:8081/strongextensionitems
+# environment
+GO111MODULE = on
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+WORK_DIR = /home/developer
+# environment
+MONITOR_API_SERVICE = release-monitor-api
+# makefile (from 'Makefile', line 3)
+VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+AWS_DEFAULT_REGION = eu-central-1
+# environment
+VSCODE_CWD = /home/developer
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# environment
+PATH = /strong/strong-ide/bin/remote-cli:/strong/bin:/usr/local/go/bin:/home/developer/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+# environment
+OWNER_EMAIL = bjorn@strong.network
+# environment
+LC_ALL = C
+# environment
+GOPATH = /home/developer/go
+# makefile (from 'Makefile', line 1)
+GIT_ROOT = $(shell git rev-parse --show-toplevel)
+# environment
+OWNER_FULL_NAME = Bjorn Gudmundsson
+# environment
+VSCODE_LOG_STACK = false
+# environment
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-295de7b3-1757-4a3c-a538-fa4a9440b7f2.sock
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
+# environment
+KUBERNETES_PORT_443_TCP = tcp://10.100.0.1:443
+# environment
+SSH_AUTH_SOCK = /tmp/ssh-eyMRbUOZeM01/agent.8
+# automatic
+%F = $(notdir $%)
+# automatic
+*F = $(notdir $*)
+# environment
+CLOUD_EDITOR_SESSION = 39e02a42-0997-40b3-9f80-46e5c9656213
+# environment
+STRONG_NETWORK_REPOS = git@github.com:strong-network/monorepo.git
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+STRONG_NETWORK_WORKDIR = monorepo
+# environment
+PROXY_ADDRESS = 10.100.77.136
+# environment
+PWD = /home/developer/images
+# default
+.LOADED := 
+# environment
+SSH_AGENT_PID = 9
+# environment
+KUBERNETES_PORT = tcp://10.100.0.1:443
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /home/developer
+# environment
+startuptimeout = 720
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# automatic
++F = $(notdir $+)
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+HOSTNAME = ws-1021810873747811-0
+# environment
+MAKELEVEL := 0
+# environment
+DEFAULT_PORT = 1111
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+REQUESTS_CA_BUNDLE = /etc/ssl/certs/ca-certificates.crt
+# default
+MAKECMDGOALS := all
+# environment
+SHLVL = 2
+# default
+MAKE_VERSION := 4.2.1
+# makefile
+.DEFAULT_GOAL := base_image
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# default
+MAKE_COMMAND := make
+# default
+.VARIABLES := 
+# environment
+CLOUD_EDITOR_USER_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjbG91ZGNvZGVyLm5ldHdvcmsiLCJleHAiOjE2NTI4OTgwMjQsImlhdCI6MTY1Mjg1NDgyNCwidHlwZSI6MiwiaWRlbnRpdHkiOjIyMTQ4MTUyNTc0Nzk1LCJ0b2tlbl9pZCI6NDg1MjQ2MzMwODgxNjM0LCJ3b3Jrc3BhY2UiOjEwMjE4MTA4NzM3NDc4MTEsImZyaWVuZGx5X25hbWUiOiJiam9ybi13cyIsImlzX3VzZXJfb3duZXIiOnRydWV9.lpuHYpybSxEHFhX9_zLea6J8OEe00OPwWDvO9U1nNQI
+# environment
+EXTENSIONS_GALLERY = {"itemUrl":"http://release-proxy:8081/strongextensionitems","serviceUrl":"http://release-proxy:8081/strongextensions"}
+# makefile
+MAKEFLAGS = pqrR
+# environment
+MFLAGS = -pqrR
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+KUBERNETES_SERVICE_PORT_HTTPS = 443
+# environment
+BROWSER = /strong/strong-ide/bin/helpers/browser.sh
+# environment
+JENKINS_URL = https://strongnetworkexternal266761489630573
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+KUBERNETES_SERVICE_HOST = 10.100.0.1
+# environment
+KUBERNETES_SERVICE_PORT = 443
+# makefile (from 'Makefile', line 2)
+BASE_IMAGE_NAME = strong_network_base
+# environment
+DOCKER_TLS_VERIFY = 1
+# environment
+AWS_ACCESS_KEY_ID = AKIAQ7L72OOXUMKAHKLS
+# environment
+WORKING_DIRECTORY = /home/developer/monorepo
+# automatic
+^F = $(notdir $^)
+# environment
+KUBERNETES_PORT_443_TCP_ADDR = 10.100.0.1
+# default
+SUFFIXES := 
+# environment
+SSHPROXY_URL = release-proxy
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# default
+.RECIPEPREFIX := 
+# environment
+DOCKER_CERT_PATH = /certs/client
+# makefile (from 'Makefile', line 4)
+GOLANG_IMAGE = strong_network_golang
+# environment
+LANG = C
+# environment
+DOCKER_HOST = tcp://127.0.0.1:2376
+# environment
+VSCODE_EXTHOST_WILL_SEND_SOCKET = true
+# environment
+KUBERNETES_PORT_443_TCP_PROTO = tcp
+# variable set hash-table stats:
+# Load=95/1024=9%, Rehash=0, Collisions=8/120=7%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 66306, inode 2494685): 14 files, no impossibilities.
+
+# 14 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+generic_image: base_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 34):
+	@docker build -t strong_network_generic:${VERSION} generic
+
+base_image_rm:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+golang_image: base_image
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 19):
+	@docker build -t strong_network_golang:${VERSION} golang
+
+python_anaconda_image: base_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 28):
+	@docker build -t strong_network_python_anaconda:${VERSION} python_anaconda
+
+.PHONY: base_image base_image_rm golang_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+flutter_image: base_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 37):
+	@docker build -t strong_network_flutter:${VERSION} flutter
+
+remove_base_image:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 14):
+	@docker image rm ${BASE_IMAGE_NAME}:${VERSION}
+	@docker image rm ${BASE_IMAGE_NAME}:latest
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-05-18 14:11:05.026728337
+#  File has been updated.
+#  Successfully updated.
+
+python_spark_image: base_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 22):
+	@docker build -t strong_network_python_spark:${VERSION} python_spark
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+base_image:
+#  Phony target (prerequisite of .PHONY).
+#  Implicit rule search has not been done.
+#  File does not exist.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 8):
+ 
+	@echo ${VERSION}
+	@docker build -t ${BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base
+	@docker tag ${BASE_IMAGE_NAME}:${VERSION} ${BASE_IMAGE_NAME}
+
+nodejs_image: base_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 31):
+	@docker build -t strong_network_nodejs:${VERSION} nodejs
+
+python_datascience_image: base_image
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 25):
+	@docker build -t strong_network_python_datascience:${VERSION} python_datascience
+
+# files hash-table stats:
+# Load=15/1024=1%, Rehash=0, Collisions=0/39=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 30 / storage = 343 B / avg = 11 B
+# current buf: size = 8162 B / used = 343 B / count = 30 / avg = 11 B
+
+# strcache performance: lookups = 57 / hit rate = 47%
+# hash-table stats:
+# Load=30/8192=0%, Rehash=0, Collisions=1/57=2%
+# Finished Make data base on Wed May 18 14:23:27 2022
+
+ 

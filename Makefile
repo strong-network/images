@@ -32,3 +32,6 @@ nodejs_image: base_image
 
 generic_image: base_image
 	@docker build -t strong_network_generic:${VERSION} generic
+
+flutter_image: base_image
+	@docker build -t strong_network_flutter:${VERSION} flutter

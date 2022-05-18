@@ -1,0 +1,1 @@
+{"buildTargets":["base_image","base_image_rm","flutter_image","generic_image","golang_image","nodejs_image","python_anaconda_image","python_datascience_image","python_spark_image","remove_base_image"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
