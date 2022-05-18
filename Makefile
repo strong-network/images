@@ -29,3 +29,6 @@ python_anaconda_image: base_image
 
 nodejs_image: base_image
 	@docker build -t strong_network_nodejs:${VERSION} nodejs
+
+generic_image: base_image
+	@docker build -t strong_network_generic:${VERSION} generic
