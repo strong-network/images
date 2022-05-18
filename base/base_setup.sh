@@ -29,3 +29,6 @@ echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd
 # Change permissions of /usr/local
 chgrp -R developer /usr/local
 chmod -R g+w /usr/local
+mkdir -p /home/developer
+chown -R developer /home/developer
+chmod -R 770 /home/developer

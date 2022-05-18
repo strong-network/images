@@ -8,6 +8,4 @@ COPY base_setup.sh /base_setup.sh
 
 RUN chmod +x /base_setup.sh && /base_setup.sh && rm /base_setup.sh
 
-USER 1000
-
 RUN bash
