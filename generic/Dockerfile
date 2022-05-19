@@ -1,4 +1,4 @@
-FROM strong_network_base
+FROM sn_base
 
 ENV GOPATH /home/developer/go/bin
 ENV PATH /usr/local/go/bin:/home/developer/go/bin:${PATH}
