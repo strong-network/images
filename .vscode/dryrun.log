@@ -1,8 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/developer/images'
- 
-echo 1.0.0
-docker build -t strong_network_base:1.0.0 /home/developer/images/base
-docker tag strong_network_base:1.0.0 strong_network_base
-make: Leaving directory '/home/developer/images'
- 
