@@ -73,3 +73,7 @@ get_nodejs_image:
 .PHONY: get_flutter_image
 get_flutter_image:
 	@echo ${FLUTTER_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_generic_image
+get_generic_image:
+	@echo ${GENERIC_IMAGE_NAME}:${VERSION}
