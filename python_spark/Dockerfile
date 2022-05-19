@@ -1,4 +1,4 @@
-FROM strong_network_base
+FROM sn_base
 
 ENV DEFAULT_PORT 1111
 

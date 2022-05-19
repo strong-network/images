@@ -1,4 +1,4 @@
-FROM strong_network_base
+FROM sn_base
 
 ENV ANDROID_HOME /home/developer/androidsdk
 ENV QTWEBENGINE_DISABLE_SANDBOX 1

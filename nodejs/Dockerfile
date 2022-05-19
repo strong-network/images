@@ -1,4 +1,4 @@
-FROM strong_network_base
+FROM sn_base
 
 COPY --chown=developer:developer setup.sh /setup.sh
 COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
