@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build:
+  build_base:
 
     runs-on: ubuntu-latest
 
@@ -16,3 +16,65 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the base image
       run: make base_image
+  
+  build_golang:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network golang image
+        run: make golang_image && docker inspect --type=image $(make get_golang_image) > /dev/null
+
+  build_flutter:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network flutter
+        run: make flutter_image && docker inspect --type=image $(make get_flutter_image) > /dev/null
+  
+  build_python_spark:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network python spark image 
+        run: make python_spark_image && docker inspect --type=image $(make get_spark_image) > /dev/null
+
+  build_python_datascience:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network python datascience image 
+        run: make python_datascience_image && docker inspect --type=image $(make get_python_datascience_image) > /dev/null
+
+  build_python_anaconda:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network python anaconda image 
+        run: make python_anaconda_image && docker inspect --type=image $(make get_python_anaconda_image) > /dev/null
+
+  build_nodejs_image:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network nodejs iamge 
+        run: make nodejs_image && docker inspect --type=image $(make get_nodejs_image) > /dev/null
+  build_generic:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network generic image
+        run: make generic_image && docker inspect --type=image $(make get_generic_image) > /dev/null
