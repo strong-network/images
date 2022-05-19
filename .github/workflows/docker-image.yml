@@ -8,11 +8,20 @@ on:
 
 jobs:
 
-  build:
+  build_base:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v3
     - name: Build the base image
       run: make base_image
+  
+  build_golang:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network golang image
+        run: make golang_image
