@@ -7,5 +7,3 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 COPY base_setup.sh /base_setup.sh
 
 RUN chmod +x /base_setup.sh && /base_setup.sh && rm /base_setup.sh
-
-RUN bash
