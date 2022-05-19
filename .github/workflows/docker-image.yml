@@ -24,4 +24,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build strong network golang image
-        run: make golang_image && docker inspect --type=image $(make get_golang_image) > /dev/null
+        run: make golang_image && docker inspect --type=image $(make get_golang_image) > /dev/null ; hello
+
+  build_flutter:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network flutter
+        run: make flutter_image && docker inspect --type=image $(make get_flutter_image) > /dev/null
