@@ -24,4 +24,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build strong network golang image
-        run: make golang_image && docker inspect --type=image ${make get_golang_image}
+        run: make golang_image && docker inspect --type=image $(make get_golang_image) > /dev/null
