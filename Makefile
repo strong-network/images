@@ -8,6 +8,7 @@ PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
 FLUTTER_IMAGE_NAME=sn_flutter
+JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -56,6 +57,10 @@ get_version:
 get_base_image:
 	@echo ${BASE_IMAGE_NAME}:${VERSION}
 
+.PHONY: get_base_jetbrains_image
+get_base_jetbrains_image:
+	@echo ${BASE_JEBRAINS_IMAGE_NAME}:${VERSION}
+
 .PHONY: get_golang_image
 get_golang_image:
 	@echo ${GOLANG_IMAGE_NAME}:${VERSION}
@@ -83,3 +88,7 @@ get_flutter_image:
 .PHONY: get_generic_image
 get_generic_image:
 	@echo ${GENERIC_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_java_intellij
+get_java_intellij:
+	@echo ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION}
