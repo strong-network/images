@@ -42,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build strong network python spark image 
-        run: make python_spark_image && docker inspect --type=image $(make get_flutter_image) > /dev/null
+        run: make python_spark_image && docker inspect --type=image $(make get_spark_image) > /dev/null
 
   build_python_datascience:
     
@@ -50,7 +50,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build strong network python spark image 
+      - name: Build strong network python datascience image 
         run: make python_datascience_image && docker inspect --type=image $(make get_python_datascience_image) > /dev/null
 
   build_python_anaconda:
@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build strong network python spark image 
+      - name: Build strong network python anaconda image 
         run: make python_anaconda_image && docker inspect --type=image $(make get_python_anaconda_image) > /dev/null
 
   build_nodejs_image:
@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Build strong network python spark image 
+      - name: Build strong network nodejs iamge 
         run: make nodejs_image && docker inspect --type=image $(make get_nodejs_image) > /dev/null
   build_generic:
 
