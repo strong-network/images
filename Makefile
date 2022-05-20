@@ -9,6 +9,7 @@ NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
+GOLAND_IMAGE_NAME=sn_goland
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -49,8 +50,13 @@ generic_image: base_image
 flutter_image: base_image
 	@docker build -t ${FLUTTER_IMAGE_NAME}:${VERSION} flutter
 
+.PHONY: java_intellij
 java_intellij: base_jetbrains_image
 	@docker build -t ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION} java_intellij
+
+.PHONY: goland
+goland: base_jetbrains_image
+	@docker build -t ${GOLAND_IMAGE_NAME}:${VERSION} goland
 
 .PHONY: get_version
 get_version:
@@ -95,3 +101,7 @@ get_generic_image:
 .PHONY: get_java_intellij
 get_java_intellij:
 	@echo ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_goland
+get_goland:
+	@echo ${GOLAND_IMAGE_NAME}:${VERSION}
