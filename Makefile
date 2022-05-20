@@ -66,11 +66,11 @@ pycharm: base_jetbrains_image
 	@docker build -t ${PYCHARM_IMAGE_NAME}:${VERSION} pycharm
 
 .PHONY: phpstorm
-phpstorm:
+phpstorm: base_jetbrains_image
 	@docker build -t  ${PHPSTORM_IMAGE_NAME}:${VERSION} phpstorm
 
 .PHONY: android_studio 
-android_studio:
+android_studio: base_jetbrains_image
 	@docker build -t ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} android_studio
 
 .PHONY: get_version
