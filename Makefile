@@ -10,6 +10,7 @@ GENERIC_IMAGE_NAME=sn_generic
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
+PYCHARM_IMAGE_NAME=sn_pycharm
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -58,6 +59,10 @@ java_intellij: base_jetbrains_image
 goland: base_jetbrains_image
 	@docker build -t ${GOLAND_IMAGE_NAME}:${VERSION} goland
 
+.PHONY: pycharm
+pycharm: base_jetbrains_image
+	@docker build -t ${PYCHARM_IMAGE_NAME}:${VERSION} pycharm
+
 .PHONY: get_version
 get_version:
 	@echo ${VERSION}
@@ -105,3 +110,7 @@ get_java_intellij:
 .PHONY: get_goland
 get_goland:
 	@echo ${GOLAND_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_pycharm
+get_pycharm:
+	@echo ${PYCHARM_IMAGE_NAME}:${VERSION}
