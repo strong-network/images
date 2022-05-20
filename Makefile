@@ -49,6 +49,9 @@ generic_image: base_image
 flutter_image: base_image
 	@docker build -t ${FLUTTER_IMAGE_NAME}:${VERSION} flutter
 
+java_intellij: base_jetbrains_image
+	@docker build -t ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION} java_intellij
+
 .PHONY: get_version
 get_version:
 	@echo ${VERSION}
