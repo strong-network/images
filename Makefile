@@ -11,6 +11,8 @@ FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
 PYCHARM_IMAGE_NAME=sn_pycharm
+PHPSTORM_IMAGE_NAME=sn_phpstorm
+ANDROID_STUDIO_IMAGE_NAME=sn_android_studio
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -63,6 +65,14 @@ goland: base_jetbrains_image
 pycharm: base_jetbrains_image
 	@docker build -t ${PYCHARM_IMAGE_NAME}:${VERSION} pycharm
 
+.PHONY: phpstorm
+phpstorm:
+	@docker build -t  ${PHPSTORM_IMAGE_NAME}:${VERSION} phpstorm
+
+.PHONY: android_studio 
+android_studio:
+	@docker build -t ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} android_studio
+
 .PHONY: get_version
 get_version:
 	@echo ${VERSION}
@@ -114,3 +124,11 @@ get_goland:
 .PHONY: get_pycharm
 get_pycharm:
 	@echo ${PYCHARM_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_phpstorm
+get_phpstorm:
+	@echo ${PHPSTORM_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_android_studio
+get_android_studio:
+	@echo ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION}
