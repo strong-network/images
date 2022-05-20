@@ -113,22 +113,22 @@ get_flutter_image:
 get_generic_image:
 	@echo ${GENERIC_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_java_intellij
-get_java_intellij:
+.PHONY: get_java_intellij_image
+get_java_intellij_image:
 	@echo ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_goland
-get_goland:
+.PHONY: get_goland_image
+get_goland_image:
 	@echo ${GOLAND_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_pycharm
-get_pycharm:
+.PHONY: get_pycharm_image
+get_pycharm_image:
 	@echo ${PYCHARM_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_phpstorm
-get_phpstorm:
+.PHONY: get_phpstorm_image
+get_phpstorm_image:
 	@echo ${PHPSTORM_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_android_studio
-get_android_studio:
+.PHONY: get_android_studio_image
+get_android_studio_image:
 	@echo ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION}
