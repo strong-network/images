@@ -73,6 +73,9 @@ phpstorm: base_jetbrains_image
 android_studio: base_jetbrains_image
 	@docker build -t ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} android_studio
 
+.PHONY: all
+all: base_image base_jetbrains_image golang_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
+
 .PHONY: get_version
 get_version:
 	@echo ${VERSION}
