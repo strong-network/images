@@ -1,0 +1,19 @@
+{
+    "kernel_python_credentials" : {
+      "username": "admin",
+      "base64_password": "TWFya29DYXIyMDIwIQ==",
+      "url": "https://westinnopeaksstrong.azurehdinsight.net/livy"
+    },
+  
+    "kernel_scala_credentials" : {
+      "username": "admin",
+      "base64_password": "TWFya29DYXIyMDIwIQ==",
+      "url": "https://westinnopeaksstrong.azurehdinsight.net/livy"
+    },
+    "custom_headers" : {
+      "X-Requested-By": "livy"
+    },
+    "heartbeat_refresh_seconds": 5,
+    "livy_server_heartbeat_timeout_seconds": 120,
+    "heartbeat_retry_seconds": 1
+  }
