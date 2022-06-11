@@ -2,7 +2,7 @@
 Need help? Email support@strong.network
 
 ## What's in This Repository?
-This repository is a collection of docker files and scripts that are used to build and deploy workspace images to use with the Virtual Workspace Infastructure (VWI) by Strong Network. The files fulfill several requirements that allow project owner to import them as resources.
+This repository is a collection of docker files and scripts that are used to build and deploy workspace images to use with the Virtual Workspace Infastructure (VWI) by Strong Network. The files fulfill several requirements that allow a project owner to import them as resources.
 
 ![Container images](assets/images/container_images.png)
 ##  Provided Environments
