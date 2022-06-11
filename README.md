@@ -1,14 +1,15 @@
+![strong.network logo](assets/images/strong_logo.png)
+Need help? Email support@strong.network
 
+## What's in This Repository?
+This repository is a collection of docker files and scripts that are used to build and deploy workspace images to use with the Virtual Workspace Infastructure (VWI) by Strong Network. The files fulfill several requirements that allow project owner to import them as resources.
 
-# Strong Network container workspace images
-## What is this repository
-This repository is a collection of docker files and associated scripts that are used to build and deploy the default workspace images provided by Strong Network. Strong Network provides virtual coding environment that enable embedding Zero-trust policies in the code development process while not jeopardizing the developer experience.
+![Container images](assets/images/container_images.png)
+##  Provided Environments
+These container images cover typical environment needs to develop in languages such as nodejs, python, golang or java, both for back-end and front-end development. You can customize them to fullfil your personal needs. Note that these containers can be updated as well in the VWI by using startup scripts.
 
-##  Provided environments
-The provided images provide a large set of varying environments that can fit the needs of most developers. This can include images for nodejs, python, golang or java development or full-stack like environment that perfectly serves both back-end and front-end development. 
-
-## Code editors
-Strong Network supports both terminal and VS Code based development for both provided and custom images that are compatible with the base image provided in this repository. JetBrains based editors is not supported out of box but images are provided that are compatible with multiple JetBrains based editors such as Intellij, pycharm, goland and Android studio.
+## IDE Compatibility
+Images built with the provided docker files can be used with Visual Studio Code and the terminal (vim, emacs, etcl) without the need to embed the IDE as part of the image. For JetBrains IDEs, the IDE has to be embedded in the image. You can find image files here that embed Intellij and that can be used as examples to embed other IDEs from JetBrain.
 
 ## How to build the images
 The base image for all of the provided images can be found in the base folder and can be built by running the command:
