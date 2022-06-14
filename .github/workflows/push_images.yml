@@ -1,0 +1,210 @@
+name: Push images
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  deploy_generic_image:
+    
+    environment: production
+    env:
+      REGISTRY_URL : "TEST.COM"
+      GENERIC_IMAGE_URL : $REGISTRY_URL/cloud_editor_generic:$(make get_version)
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the generic cloud editor
+      - run: make generic_image ; docker tag $(make get_generic_image) $GENERIC_IMAGE_URL
+      - run: docker tag $(make get_generic_image) $GENERIC_IMAGE_URL
+      - run: docker push $GENERIC_IMAGE_URL
+      - run: docker rm $(make get_generic_image) $GENERIC_IMAGE_URL
+      
+    
+  deploy_nodejs:
+  
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      NODEJS_IMAGE_URL: $REGISTRY_URL/cloud_editor_nodejs:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: Push cloud editor nodejs image
+      - run: make nodejs_image
+      - run: docker tag $(make get_nodejs_image) $NODEJS_IMAGE_URL
+      - run: docker push $NODEJS_IMAGE_URL
+      - run: docker rm $(make get_nodejs_image) $NODEJS_IMAGE_URL
+      
+  push_golang:
+  
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      GOLANG_IMAGE_URL: $REGISTRY_URL/cloud_editor_golang/$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: Push cloud editor golang images
+      - run: make golang_image
+      - run: docker tag $(make get_golang_image) $GOLANG_IMAGE_URL
+      - run: docker push $GOLANG_IMAGE_URL
+      - run: docker rm $(make get_golang_image) $GOLANG_IMAGE_URL
+      
+  push_python_spark:
+  
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      PYTHON_SPARK_IMAGE_URL : $REGISTRY_URL/cloud_editor_python:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push cloud editor python image
+      - run: make python_spark_image
+      - run: docker tag $(make get_python_spark_image) $PYTHON_SPARK_IMAGE_URL
+      - run: docker push $PYTHON_SPARK_IMAGE_URL
+      - run: docker rm $(make get_python_spark_image) $PYTHON_SPARK_IMAGE_URL
+  
+  push_python_datascience_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      PYTHON_DATASCIENCE_IMAGE_URL : $REGISTRY_URL/cloud_editor_python_datascience:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push cloud editor python datascience image
+      - run: make python_datascience_image
+      - run: docker tag $(make get_python_datascience_image) $PYTHON_DATASCIENCE_IMAGE_URL
+      - run: docker push $PYTHON_DATASCIENCE_IMAGE_URL
+      - run: docker rm $PYTHON_DATASCIENCE_IMAGE_URL $(make get_python_datascience_image)
+      
+      
+  push_python_anaconda_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL : ${{ secrets.REGISTRY_URL }}
+      PYTHON_ANACONDA_IMAGE_URL: $REGISTRY_URL/cloud_editor_python_anaconda:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push the python anaconda image
+      - run: make python_anaconda_image
+      - run: docker tag $(make get_python_anaconda_image) $PYTHON_ANACONDA_IMAGE_URL
+      - run: docker push $PYTHON_ANACONDA_IMAGE_URL
+      - run: docker rm $(make get_python_anaconda_image) $PYTHON_ANACONDA_IMAGE_URL
+      
+      
+  push_flutter_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      FLUTTER_IMAGE_URL: $REGISTRY_URL/cloud_editor_flutter:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push the cloud editor flutter image
+      - run: make flutter_image
+      - run: docker tag $(make get_flutter_image) $FLUTTER_IMAGE_URL
+      - run: docker push $FLUTTER_IMAGE_URL
+      - run: docker rm $(make get_flutter_image) $FLUTTER_IMAGE_URL
+      
+  push_java_intellij_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      JAVA_INTELLIJ_IMAGE_URL: $REGISTRY_URL/cloud_editor_java_intellij:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push the cloud editor java intellij image
+      - run: make java_intellij
+      - run: docker tag $(make get_java_intellij_image)
+      - run: docker push $JAVA_INTELLIJ_IMAGE_URL
+      - run: docker rm $(make get_java_intellij_image) $JAVA_INTELLIJ_IMAGE_URL
+      
+      
+  push_goland:
+  
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      GOLAND_IMAGE_URL: $REGISTRY_URL/goland_go:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push goland image
+      - run: make goland
+      - run: docker tag $(make get_goland_image) $GOLAND_IMAGE_URL
+      - run: docker push $GOLAND_IMAGE_URL
+      - run: docker rm $(make get_goland_image) $GOLAND_IMAGE_URL
+      
+      
+  push_pycharm_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      PYCHARM_IMAGE_URL: $REGISTRY_URL/pycharm_python:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push pycharm image
+      - run: make pycharm
+      - run: docker tag $(make get_pycharm_image) $PYCHARM_IMAGE_URL
+      - run: docker push $PYCHARM_IMAGE_URL
+      - run: docker rm $PYCHARM_IMAGE_URL $(make get_pycharm_image)
+      
+  push_phpstorm_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      PHPSTORM_IMAGE_URL: $REGISTRY_URL/phpstorm_php:$(make get_version)
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: push phpstorm image
+      - run: make phpstorm
+      - run: docker tag $(make get_phpstorm_image) $PHPSTORM_IMAGE_URL
+      - run: docker push $PHPSTORM_IMAGE_URL
+      - run: docker rm $PYCHARM_IMAGE_URL $(make get_phpstorm_image)
+    
+  push_android_studio_image:
+    
+    environment: production
+    runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      ANDROID_IMAGE_URL: $REGISTRY_URL/android_studio:$(make get_version)
