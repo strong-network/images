@@ -208,3 +208,11 @@ jobs:
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
       ANDROID_IMAGE_URL: $REGISTRY_URL/android_studio:$(make get_version)
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: push android studio image 
+      - run: make android_studio
+      - run: docker tag $(make get_android_studio_image):$(make get_version)
+      - run: docker push $ANDROID_IMAGE_URL
+      - run: docker rm $ANDROID_IMAGE_URL $(make get_android_studio_image)
