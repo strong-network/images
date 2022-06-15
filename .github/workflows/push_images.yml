@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the generic cloud editor
-        run: make generic_image && && docker tag $(make get_generic_image) $GENERIC_IMAGE_URL && docker push $GENERIC_IMAGE_URL && docker rm $(make get_generic_image) $GENERIC_IMAGE_URL
+        run: make generic_image && docker tag $(make get_generic_image) $GENERIC_IMAGE_URL && docker push $GENERIC_IMAGE_URL && docker rm $(make get_generic_image) $GENERIC_IMAGE_URL
       
     
   deploy_nodejs:
