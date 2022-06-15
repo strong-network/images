@@ -12,13 +12,18 @@ jobs:
     
     environment: production
     env:
-      REGISTRY_URL : ${{ secrets.REGISTRY_URL }}
-      GENERIC_IMAGE_URL : ${{ secrets.REGISTRY_URL }}/cloud_editor_generic:${{ secrets.VERSION }}
+      REGISTRY_URL : ${{ secrets.REGISTRY }}
+      GENERIC_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_generic:${{ secrets.VERSION }}
     
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: Build the generic cloud editor
         run: make generic_image && docker tag $(make get_generic_image) $GENERIC_IMAGE_URL && docker push $GENERIC_IMAGE_URL && docker rm $(make get_generic_image) $GENERIC_IMAGE_URL
       
@@ -29,11 +34,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      NODEJS_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_nodejs:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      NODEJS_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_nodejs:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: Push cloud editor nodejs image
         run: make nodejs_image && docker tag $(make get_nodejs_image) $NODEJS_IMAGE_URL && docker push $NODEJS_IMAGE_URL && docker rm $(make get_nodejs_image) $NODEJS_IMAGE_URL
       
@@ -43,11 +53,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      GOLANG_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_golang:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      GOLANG_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_golang:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: Push cloud editor golang images
         run: make golang_image && docker tag $(make get_golang_image) $GOLANG_IMAGE_URL && docker push $GOLANG_IMAGE_URL && docker rm $(make get_golang_image) $GOLANG_IMAGE_URL
       
@@ -57,11 +72,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PYTHON_SPARK_IMAGE_URL : ${{ secrets.REGISTRY_URL }}/cloud_editor_python:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      PYTHON_SPARK_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_python:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push cloud editor python image
         run: make python_spark_image && docker tag $(make get_python_spark_image) $PYTHON_SPARK_IMAGE_URL && docker push $PYTHON_SPARK_IMAGE_URL && docker rm $(make get_python_spark_image) $PYTHON_SPARK_IMAGE_URL
   
@@ -71,11 +91,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY_URL }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push cloud editor python datascience image
         run: make python_datascience_image && docker tag $(make get_python_datascience_image) $PYTHON_DATASCIENCE_IMAGE_URL && docker push $PYTHON_DATASCIENCE_IMAGE_URL && docker rm $PYTHON_DATASCIENCE_IMAGE_URL $(make get_python_datascience_image)
       
@@ -86,11 +111,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL : ${{ secrets.REGISTRY_URL }}
-      PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
+      REGISTRY_URL : ${{ secrets.REGISTRY }}
+      PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push the python anaconda image
         run: make python_anaconda_image && docker tag $(make get_python_anaconda_image) $PYTHON_ANACONDA_IMAGE_URL && cker push $PYTHON_ANACONDA_IMAGE_URL && cker rm $(make get_python_anaconda_image) $PYTHON_ANACONDA_IMAGE_URL
       
@@ -101,11 +131,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      FLUTTER_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_flutter:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      FLUTTER_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_flutter:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push the cloud editor flutter image
         run: make flutter_image && docker tag $(make get_flutter_image) $FLUTTER_IMAGE_URL && docker push $FLUTTER_IMAGE_URL && docker rm $(make get_flutter_image) $FLUTTER_IMAGE_URL
       
@@ -115,11 +150,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      JAVA_INTELLIJ_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_java_intellij:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      JAVA_INTELLIJ_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_java_intellij:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push the cloud editor java intellij image
         run: make java_intellij && docker tag $(make get_java_intellij_image) && docker push $JAVA_INTELLIJ_IMAGE_URL && docker rm $(make get_java_intellij_image) $JAVA_INTELLIJ_IMAGE_URL
       
@@ -130,11 +170,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      GOLAND_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/goland_go:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      GOLAND_IMAGE_URL: ${{ secrets.REGISTRY }}/goland_go:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push goland image
         run: make goland && docker tag $(make get_goland_image) $GOLAND_IMAGE_URL && docker push $GOLAND_IMAGE_URL && docker rm $(make get_goland_image) $GOLAND_IMAGE_URL
       
@@ -145,11 +190,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PYCHARM_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/pycharm_python:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      PYCHARM_IMAGE_URL: ${{ secrets.REGISTRY }}/pycharm_python:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push pycharm image
         run: make pycharm && docker tag $(make get_pycharm_image) $PYCHARM_IMAGE_URL && docker push $PYCHARM_IMAGE_URL && docker rm $PYCHARM_IMAGE_URL $(make get_pycharm_image)
       
@@ -159,11 +209,16 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PHPSTORM_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/phpstorm_php:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      PHPSTORM_IMAGE_URL: ${{ secrets.REGISTRY }}/phpstorm_php:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push phpstorm image
         run: make phpstorm && docker tag $(make get_phpstorm_image) $PHPSTORM_IMAGE_URL && docker push $PHPSTORM_IMAGE_URL && docker rm $PYCHARM_IMAGE_URL $(make get_phpstorm_image)
     
@@ -173,10 +228,15 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      ANDROID_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/android_studio:${{ secrets.VERSION }}
+      REGISTRY_URL: ${{ secrets.REGISTRY }}
+      ANDROID_IMAGE_URL: ${{ secrets.REGISTRY }}/android_studio:${{ secrets.VERSION }}
 
     steps:
       - uses: actions/checkout@v3
+      - uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.REGISTRY }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.TOKEN }}
       - name: push android studio image 
         run: make android_studio ; docker tag $(make get_android_studio_image):$(make get_version) ; docker push $ANDROID_IMAGE_URL ; docker rm $ANDROID_IMAGE_URL $(make get_android_studio_image)
