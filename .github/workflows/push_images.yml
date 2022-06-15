@@ -13,7 +13,7 @@ jobs:
     environment: production
     env:
       REGISTRY_URL : ${{ secrets.REGISTRY_URL }}
-      GENERIC_IMAGE_URL : /cloud_editor_generic:${{ secrets.VERSION }}
+      GENERIC_IMAGE_URL : ${{ secrets.REGISTRY_URL }}/cloud_editor_generic:${{ secrets.VERSION }}
     
     runs-on: ubuntu-latest
 
