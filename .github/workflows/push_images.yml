@@ -12,8 +12,8 @@ jobs:
     
     environment: production
     env:
-      REGISTRY_URL : "TEST.COM"
-      GENERIC_IMAGE_URL : $REGISTRY_URL/cloud_editor_generic:$(make get_version)
+      REGISTRY_URL : ${{ secrets.REGISTRY_URL }}
+      GENERIC_IMAGE_URL : /cloud_editor_generic:${{ secrets.VERSION }}
     
     runs-on: ubuntu-latest
 
@@ -30,7 +30,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      NODEJS_IMAGE_URL: $REGISTRY_URL/cloud_editor_nodejs:$(make get_version)
+      NODEJS_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_nodejs:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      GOLANG_IMAGE_URL: $REGISTRY_URL/cloud_editor_golang/$(make get_version)
+      GOLANG_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_golang:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -58,7 +58,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PYTHON_SPARK_IMAGE_URL : $REGISTRY_URL/cloud_editor_python:$(make get_version)
+      PYTHON_SPARK_IMAGE_URL : ${{ secrets.REGISTRY_URL }}/cloud_editor_python:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -72,7 +72,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PYTHON_DATASCIENCE_IMAGE_URL : $REGISTRY_URL/cloud_editor_python_datascience:$(make get_version)
+      PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY_URL }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -87,7 +87,7 @@ jobs:
     
     env:
       REGISTRY_URL : ${{ secrets.REGISTRY_URL }}
-      PYTHON_ANACONDA_IMAGE_URL: $REGISTRY_URL/cloud_editor_python_anaconda:$(make get_version)
+      PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -102,7 +102,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      FLUTTER_IMAGE_URL: $REGISTRY_URL/cloud_editor_flutter:$(make get_version)
+      FLUTTER_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_flutter:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -116,7 +116,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      JAVA_INTELLIJ_IMAGE_URL: $REGISTRY_URL/cloud_editor_java_intellij:$(make get_version)
+      JAVA_INTELLIJ_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/cloud_editor_java_intellij:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -131,7 +131,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      GOLAND_IMAGE_URL: $REGISTRY_URL/goland_go:$(make get_version)
+      GOLAND_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/goland_go:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -146,7 +146,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PYCHARM_IMAGE_URL: $REGISTRY_URL/pycharm_python:$(make get_version)
+      PYCHARM_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/pycharm_python:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -160,7 +160,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      PHPSTORM_IMAGE_URL: $REGISTRY_URL/phpstorm_php:$(make get_version)
+      PHPSTORM_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/phpstorm_php:${{ secrets.VERSION }}
       
     steps:
       - uses: actions/checkout@v3
@@ -174,7 +174,7 @@ jobs:
     
     env:
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
-      ANDROID_IMAGE_URL: $REGISTRY_URL/android_studio:$(make get_version)
+      ANDROID_IMAGE_URL: ${{ secrets.REGISTRY_URL }}/android_studio:${{ secrets.VERSION }}
 
     steps:
       - uses: actions/checkout@v3
