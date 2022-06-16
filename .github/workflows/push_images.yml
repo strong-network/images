@@ -63,13 +63,13 @@ jobs:
         # Build the nodejs image
 
       - name: Build the nodejs cloud editor
-        run: make nodejs
+        run: make nodejs_image
 
       - name: Tag new nodejs cloud editor image
         run: docker tag $(make get_nodejs_image) $NODEJS_IMAGE_URL
 
       - name: Push the nodejs cloud editor image
-        run: docker push $NODEJS_IMAGE
+        run: docker push $NODEJS_IMAGE_URL
       
       - name: Remove nodejs cloud editor image
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
@@ -94,7 +94,7 @@ jobs:
         run: make python_spark_image
 
       - name: Tag new python spark cloud editor image
-        run: docker tag $(make get_python_spark_image) $PYTHON_SPARK_IMAGE_URL 
+        run: docker tag $(make get_spark_image) $PYTHON_SPARK_IMAGE_URL 
 
       - name: Push the python spark cloud editor image
         run: docker push $PYTHON_SPARK_IMAGE_URL
@@ -151,7 +151,7 @@ jobs:
         run: make java_intellij
 
       - name: Tag new java intellij cloud editor image
-        run: docker tag $(make get_java_intellij_image)
+        run: docker tag $(make get_java_intellij_image) $JAVA_INTELLIJ_IMAGE_URL 
 
       - name: Push the java intellij cloud editor image
         run:  docker push $JAVA_INTELLIJ_IMAGE_URL 
@@ -207,7 +207,7 @@ jobs:
         run:  make android_studio
 
       - name: Tag new Android studio cloud editor image
-        run: docker tag $(make get_android_studio_image):$(make get_version)
+        run: docker tag $(make get_android_studio_image):$(make get_version) $ANDROID_IMAGE_URL
 
       - name: Push the Android Studio cloud editor image
         run:  docker push $ANDROID_IMAGE_URL
