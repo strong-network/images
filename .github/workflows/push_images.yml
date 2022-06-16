@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  deploy_generic_image:
+  deploy_images:
     
     environment: production
     env:
@@ -39,7 +39,7 @@ jobs:
       
       - name: Configure gcloud with docker
         run: |
-          gcloud config set project ${{ secrets.PROJECT_NAME }}
+          gcloud config set project ${{ secrets.PROJECT_ID }}
           gcloud auth configure-docker -q 
 
       # Build the base image
