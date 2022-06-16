@@ -39,7 +39,7 @@ jobs:
       
       - name: Configure gcloud with docker
         run: |
-          gcloud auth configure-docker -q ${{ secrets.REGISTRY }} 
+          gcloud auth configure-docker -q ${{ secrets.REGISTRY_DOMAIN }} 
 
       # Build the base image
 
