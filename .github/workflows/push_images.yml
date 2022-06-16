@@ -207,7 +207,7 @@ jobs:
         run:  make android_studio
 
       - name: Tag new Android studio cloud editor image
-        run: docker tag $(make get_android_studio_image):$(make get_version) $ANDROID_IMAGE_URL
+        run: docker tag $(make get_android_studio_image) $ANDROID_IMAGE_URL
 
       - name: Push the Android Studio cloud editor image
         run:  docker push $ANDROID_IMAGE_URL
