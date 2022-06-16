@@ -39,8 +39,7 @@ jobs:
       
       - name: Configure gcloud with docker
         run: |
-          gcloud config set project ${{ secrets.PROJECT_NAME }}
-          gcloud auth configure-docker -q 
+          gcloud auth configure-docker -q ${{ secrets.REGISTRY }} 
 
       # Build the base image
 
