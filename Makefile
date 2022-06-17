@@ -13,6 +13,7 @@ GOLAND_IMAGE_NAME=sn_goland
 PYCHARM_IMAGE_NAME=sn_pycharm
 PHPSTORM_IMAGE_NAME=sn_phpstorm
 ANDROID_STUDIO_IMAGE_NAME=sn_android_studio
+INTELLIJ_ULTIMATE_IMAGE_NAME=sn_intellij_ultimate
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -72,6 +73,10 @@ phpstorm: base_jetbrains_image
 .PHONY: android_studio 
 android_studio: base_jetbrains_image
 	@docker build -t ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} android_studio
+
+.PHONY: intellij_ultimate
+intellij_ultimate: base_jetbrains_image
+	@docker build -t ${INTELLIJ_ULTIMATE_IMAGE_NAME}:${VERSION} intellij_ultimate
 
 .PHONY: all
 all: base_image base_jetbrains_image golang_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
@@ -134,4 +139,8 @@ get_phpstorm_image:
 
 .PHONY: get_android_studio_image
 get_android_studio_image:
-	@echo ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION}
+	@echo ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} 
+
+.PHONY: get_intellij_ultimate_image
+get_intellij_ultimate_image:
+	@echo ${INTELLIJ_ULTIMATE_IMAGE_NAME}:${VERSION}
