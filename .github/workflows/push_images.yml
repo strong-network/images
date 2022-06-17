@@ -17,7 +17,7 @@ jobs:
       PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
       PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
       FLUTTER_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_flutter:${{ secrets.VERSION }}
-      JAVA_INTELLIJ_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_java_intellij:${{ secrets.VERSION }}
+      JAVA_INTELLIJ_IMAGE_URL: ${{ secrets.REGISTRY }}/intellij_java:${{ secrets.VERSION }}
       GOLAND_IMAGE_URL: ${{ secrets.REGISTRY }}/goland_go:${{ secrets.VERSION }}
       PYCHARM_IMAGE_URL: ${{ secrets.REGISTRY }}/pycharm_python:${{ secrets.VERSION }}
       PHPSTORM_IMAGE_URL: ${{ secrets.REGISTRY }}/phpstorm_php:${{ secrets.VERSION }}
