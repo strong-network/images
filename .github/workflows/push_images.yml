@@ -22,6 +22,7 @@ jobs:
       PYCHARM_IMAGE_URL: ${{ secrets.REGISTRY }}/pycharm_python:${{ secrets.VERSION }}
       PHPSTORM_IMAGE_URL: ${{ secrets.REGISTRY }}/phpstorm_php:${{ secrets.VERSION }}
       ANDROID_IMAGE_URL: ${{ secrets.REGISTRY }}/android_studio:${{ secrets.VERSION }}
+      INTELLIJ_ULTIMATE_IMAGE_URL: ${{ secrets.REGISTRY }}/intellij_ultimate:${{ secrets.VERSION }}
 
     runs-on: ubuntu-latest
 
@@ -213,4 +214,18 @@ jobs:
         run:  docker push $ANDROID_IMAGE_URL
       
       - name: Remove Android Studio cloud editor image
+        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+
+      # Build Intellij Ultimate
+
+      - name: Build the Intellij Ultimate image
+        run:  make intellij_ultimate
+
+      - name: Tag new intellij ultimate image
+        run: docker tag $(make get_intellij_ultimate_image) $INTELLIJ_ULTIMATE_IMAGE_URL
+
+      - name: Push the Intellij Ultimate image
+        run:  docker push $INTELLIJ_ULTIMATE_IMAGE_URL
+      
+      - name: Remove the Intellij Ultimate image url
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
