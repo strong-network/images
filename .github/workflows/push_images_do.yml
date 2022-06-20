@@ -1,4 +1,4 @@
-name: Push images
+name: Push images to digital ocean
 
 on:
   workflow_dispatch:
