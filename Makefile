@@ -2,6 +2,7 @@ GIT_ROOT=$(shell git rev-parse --show-toplevel)
 BASE_IMAGE_NAME=sn_base
 BASE_JEBRAINS_IMAGE_NAME=sn_base_jetbrains
 GOLANG_IMAGE_NAME=sn_golang
+GOLANG_1.17_IMAGE_NAME=sn_golang_1.17
 PYTHON_SPARK_IMAGE_NAME=sn_python_spark
 PYTHON_DATASCIENCE_IMAGE_NAME=sn_python_datascience
 PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
@@ -35,6 +36,10 @@ remove_base_image:
 .PHONY: golang_image
 golang_image: base_image
 	@docker build -t ${GOLANG_IMAGE_NAME}:${VERSION} golang
+
+.PHONY: golang_1.17_image
+golang_1.17_image: base_image
+	@docker build -t ${GOLANG_1.17_IMAGE_NAME}:${VERSION} golang_1.17
 
 python_spark_image: base_image
 	@docker build -t ${PYTHON_SPARK_IMAGE_NAME}:${VERSION} python_spark
@@ -79,7 +84,7 @@ intellij_ultimate: base_jetbrains_image
 	@docker build -t ${INTELLIJ_ULTIMATE_IMAGE_NAME}:${VERSION} intellij_ultimate
 
 .PHONY: all
-all: base_image base_jetbrains_image golang_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
+all: base_image base_jetbrains_image golang_image golang_1.17_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
 
 .PHONY: get_version
 get_version:
@@ -96,6 +101,10 @@ get_base_jetbrains_image:
 .PHONY: get_golang_image
 get_golang_image:
 	@echo ${GOLANG_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_golang_1.17_image
+get_golang_1.17_image:
+	@echo ${GOLANG_1.17_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_spark_image
 get_spark_image:
