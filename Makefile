@@ -103,7 +103,7 @@ get_golang_image:
 	@echo ${GOLANG_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_golang_1.17_image
-get_get_golang_1.17_image:
+get_golang_1.17_image:
 	@echo ${GOLANG_1.17_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_spark_image
