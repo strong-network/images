@@ -13,7 +13,7 @@ jobs:
       GENERIC_IMAGE_URL : ${{ secrets.REGISTRY_DO }}/cloud_editor_generic:${{ secrets.VERSION }}
       NODEJS_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_nodejs:${{ secrets.VERSION }}
       GOLANG_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_golang:${{ secrets.VERSION }}
-      GOLANG_1.17_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_golang_1.17:${{ secrets.VERSION }}
+      GOLANG_1_17_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_golang_1.17:${{ secrets.VERSION }}
       PYTHON_SPARK_IMAGE_URL : ${{ secrets.REGISTRY_DO }}/cloud_editor_python:${{ secrets.VERSION }}
       PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY_DO }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
       PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
@@ -87,10 +87,10 @@ jobs:
         run: make golang_1.17_image
 
       - name: Tag new golang_1.17 cloud editor image
-        run: docker tag $(make get_golang_1.17_image) $GOLANG_1.17_IMAGE_URL
+        run: docker tag $(make get_golang_1.17_image) $GOLANG_1_17_IMAGE_URL
 
       - name: Push the golang_1.17 cloud editor image
-        run: docker push $GOLANG_1.17_IMAGE_URL 
+        run: docker push $GOLANG_1_17_IMAGE_URL 
       
       - name: Remove golang_1.17 cloud editor image
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
