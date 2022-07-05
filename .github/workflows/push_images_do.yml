@@ -13,6 +13,7 @@ jobs:
       GENERIC_IMAGE_URL : ${{ secrets.REGISTRY_DO }}/cloud_editor_generic:${{ secrets.VERSION }}
       NODEJS_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_nodejs:${{ secrets.VERSION }}
       GOLANG_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_golang:${{ secrets.VERSION }}
+      GOLANG_1.17_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_golang_1.17:${{ secrets.VERSION }}
       PYTHON_SPARK_IMAGE_URL : ${{ secrets.REGISTRY_DO }}/cloud_editor_python:${{ secrets.VERSION }}
       PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY_DO }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
       PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY_DO }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
@@ -39,12 +40,10 @@ jobs:
         run: doctl registry login
 
       # Build the base image
-
       - name: Build the base image
         run: make base_image
 
       # Build the generic cloud editor image 
-
       - name: Build the generic cloud editor
         run: make generic_image
 
@@ -58,7 +57,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
         # Build the nodejs image
-
       - name: Build the nodejs cloud editor
         run: make nodejs_image
 
@@ -72,7 +70,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
         # Build golang image
-        
       - name: Build the golang cloud editor
         run: make golang_image
 
@@ -85,8 +82,20 @@ jobs:
       - name: Remove golang cloud editor image
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
-        # Build python spark
+      # Build golang_1.17 image
+      - name: Build the golang_1.17 cloud editor
+        run: make golang_1.17_image
 
+      - name: Tag new golang_1.17 cloud editor image
+        run: docker tag $(make get_golang_1.17_image) $GOLANG_1.17_IMAGE_URL
+
+      - name: Push the golang_1.17 cloud editor image
+        run: docker push $GOLANG_1.17_IMAGE_URL 
+      
+      - name: Remove golang_1.17 cloud editor image
+        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+
+        # Build python spark
       - name: Build the python spark cloud editor
         run: make python_spark_image
 
@@ -114,7 +123,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
       # Build python anaconda
-
       - name: Build the python anaconda cloud editor
         run: make python_anaconda_image
 
@@ -129,7 +137,6 @@ jobs:
 
 
       # Build flutter image 
-
       - name: Build the flutter cloud editor
         run: make flutter_image
 
@@ -143,7 +150,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
         # Build Java Intellij image
-
       - name: Build the java intellij cloud editor
         run: make java_intellij
 
@@ -157,7 +163,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
       # build Goland image
-
       - name: Build the goland cloud editor
         run: make goland 
 
@@ -171,7 +176,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
       # Build Pycharm image
-
       - name: Build the Pycharm cloud editor
         run:  make pycharm
 
@@ -185,7 +189,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
 
       # Build phpstorm
-
       - name: Build the PHPStorm cloud editor
         run:  make phpstorm
 
@@ -199,7 +202,6 @@ jobs:
         run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
       
       # Build Android studio
-
       - name: Build the Android Studio cloud editor
         run:  make android_studio
 
