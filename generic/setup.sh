@@ -22,7 +22,7 @@ dpkg -i jq*.deb && rm *.deb
 wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.70.0/doctl-1.70.0-linux-amd64.tar.gz
 tar -C /usr/local/bin -xzf doctl.tar.gz
 rm doctl.tar.gz
-wget -O helm.tar.gz https://get.helm.sh/helm-v3.10.0-linux-amd64.tar.gz
+wget -O helm.tar.gz https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz
 tar -C /tmp -xzf helm.tar.gz
 mv /tmp/linux-amd64/helm /usr/local/bin
 rm helm.tar.gz
