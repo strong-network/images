@@ -10,20 +10,6 @@ jobs:
     environment: production
     env:
       REGISTRY_URL : ${{ secrets.REGISTRY }}
-      GENERIC_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_generic:${{ secrets.VERSION }}
-      NODEJS_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_nodejs:${{ secrets.VERSION }}
-      GOLANG_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_golang:${{ secrets.VERSION }}
-      GOLANG_1_17_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_golang_1.17:${{ secrets.VERSION }}
-      PYTHON_SPARK_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_python:${{ secrets.VERSION }}
-      PYTHON_DATASCIENCE_IMAGE_URL : ${{ secrets.REGISTRY }}/cloud_editor_python_datascience:${{ secrets.VERSION }}
-      PYTHON_ANACONDA_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_python_anaconda:${{ secrets.VERSION }}
-      FLUTTER_IMAGE_URL: ${{ secrets.REGISTRY }}/cloud_editor_flutter:${{ secrets.VERSION }}
-      JAVA_INTELLIJ_IMAGE_URL: ${{ secrets.REGISTRY }}/intellij_java:${{ secrets.VERSION }}
-      GOLAND_IMAGE_URL: ${{ secrets.REGISTRY }}/goland_go:${{ secrets.VERSION }}
-      PYCHARM_IMAGE_URL: ${{ secrets.REGISTRY }}/pycharm_python:${{ secrets.VERSION }}
-      PHPSTORM_IMAGE_URL: ${{ secrets.REGISTRY }}/phpstorm_php:${{ secrets.VERSION }}
-      ANDROID_IMAGE_URL: ${{ secrets.REGISTRY }}/android_studio:${{ secrets.VERSION }}
-      INTELLIJ_ULTIMATE_IMAGE_URL: ${{ secrets.REGISTRY }}/intellij_ultimate:${{ secrets.VERSION }}
 
     runs-on: ubuntu-latest
 
@@ -31,6 +17,23 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Get image url
+        run: |
+          VERSION=$(shell awk NF ${GIT_ROOT}/VERSION)
+          echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
+          echo NODEJS_IMAGE_URL=$REGISTRY_URL/cloud_editor_nodejs:$VERSION >>  $GITHUB_ENV
+          echo GOLANG_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang:$VERSION >>  $GITHUB_ENV
+          echo GOLANG_1_17_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang_17:$VERSION >>  $GITHUB_ENV
+          echo PYTHON_SPARK_IMAGE_URL=$REGISTRY_URL/cloud_editor_python:$VERSION >>  $GITHUB_ENV
+          echo PYTHON_DATASCIENCE_IMAGE_URL=$REGISTRY_URL/cloud_editor_python_datascience:$VERSION >>  $GITHUB_ENV
+          echo PYTHON_ANACONDA_IMAGE_URL=$REGISTRY_URL/cloud_editor_python_anaconda:$VERSION >>  $GITHUB_ENV
+          echo FLUTTER_IMAGE_URL=$REGISTRY_URL/cloud_editor_flutter:$VERSION >>  $GITHUB_ENV
+          echo JAVA_INTELLIJ_IMAGE_URL=$REGISTRY_URL/intellij_java:$VERSION >>  $GITHUB_ENV
+          echo GOLAND_IMAGE_URL=$REGISTRY_URL/goland_go:$VERSION >>  $GITHUB_ENV
+          echo PYCHARM_IMAGE_URL=$REGISTRY_URL/pycharm_python:$VERSION >>  $GITHUB_ENV
+          echo PHPSTORM_IMAGE_URL=$REGISTRY_URL/phpstorm_php:$VERSION >>  $GITHUB_ENV
+          echo ANDROID_IMAGE_URL=$REGISTRY_URL/android_studio:$VERSION >>  $GITHUB_ENV
+          echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
 
       - name: Setup Google cloud SDK
         uses: google-github-actions/setup-gcloud@v0
