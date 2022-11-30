@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-      - uses: actions/checkout@v3
-
-      - name: install trivy
-        run: | 
-          docker pull aquasec/trivy        
+      - uses: actions/checkout@v3    
 
       - name: build generic
-        run: make base_image
-
+        run: |
+          make base_image
+          echo IMAGE=$(make get_base_image) >>  $GITHUB_ENV
       - name: scan base image
-        run: docker run aquasec/trivy image $(make get_base_image)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: $IMAGE
+          format: 'json'
+          output: 'trivy-base-results.json'
