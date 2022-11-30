@@ -8,8 +8,6 @@ jobs:
   trivy-scan-base:
     
     environment: production
-    env:
-      REGISTRY_URL : ${{ secrets.REGISTRY }}
 
     runs-on: ubuntu-latest
 
@@ -23,6 +21,6 @@ jobs:
       - name: scan base image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: $IMAGE
+          image-ref: ${{ env.IMAGE }}
           format: 'json'
           output: 'trivy-base-results.json'
