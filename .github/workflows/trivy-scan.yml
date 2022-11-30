@@ -1,4 +1,4 @@
-name: Push images to gcloud
+name: trivy scans
 
 on:
   workflow_dispatch:
