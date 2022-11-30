@@ -24,3 +24,6 @@ jobs:
           image-ref: ${{ env.IMAGE }}
           format: 'json'
           output: 'trivy-base-results.json'
+
+      - name: scan results
+        run: cat trivy-base-results.json
