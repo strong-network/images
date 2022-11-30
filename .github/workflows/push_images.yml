@@ -19,7 +19,7 @@ jobs:
 
       - name: Get image url
         run: |
-          VERSION=$(shell awk NF ${GIT_ROOT}/VERSION)
+          VERSION=$(awk NF ${GIT_ROOT}/VERSION)
           echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
           echo NODEJS_IMAGE_URL=$REGISTRY_URL/cloud_editor_nodejs:$VERSION >>  $GITHUB_ENV
           echo GOLANG_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang:$VERSION >>  $GITHUB_ENV
