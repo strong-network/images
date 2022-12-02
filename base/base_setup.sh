@@ -15,7 +15,7 @@ rm docker.tar.gz
 mv /tmp/docker/docker /usr/bin/
 mv /tmp/docker/dockerd /usr/bin/
 rm -r /tmp/docker
-wget https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose
+wget https://github.com/docker/compose/releases/download/v2.13.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 # Create startup directory
 mkdir -p /usr/bin/strong_network_startup
