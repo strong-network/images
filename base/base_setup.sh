@@ -9,13 +9,14 @@ wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1-lin
 tar -C /usr/bin -xzf fixuid-linux-amd64.tar.gz
 rm fixuid-linux-amd64.tar.gz
 # Install docker
-wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.9.tgz -O  docker.tar.gz
+wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.19.tgz -O  docker.tar.gz
 tar -C /tmp -xzf docker.tar.gz
 rm docker.tar.gz
 mv /tmp/docker/docker /usr/bin/
 mv /tmp/docker/dockerd /usr/bin/
 rm -r /tmp/docker
-wget https://github.com/docker/compose/releases/download/v2.13.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose
+
+wget https://github.com/docker/compose/releases/download/v2.14.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 # Create startup directory
 mkdir -p /usr/bin/strong_network_startup
