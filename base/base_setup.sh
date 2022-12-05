@@ -9,7 +9,7 @@ wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1-lin
 tar -C /usr/bin -xzf fixuid-linux-amd64.tar.gz
 rm fixuid-linux-amd64.tar.gz
 # Install docker
-wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.12.tgz -O  docker.tar.gz
+wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.19.tgz -O  docker.tar.gz
 tar -C /tmp -xzf docker.tar.gz
 rm docker.tar.gz
 mv /tmp/docker/docker /usr/bin/
