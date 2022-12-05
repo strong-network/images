@@ -28,14 +28,14 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
-          output: base_scan_results.json
+          #output: base_scan_results.json
           input: base.tar
           scan-type: image
           
 
-      - name: Upload scan results
-        uses: actions/upload-artifact@v3
-        with:
-          name: base_scan_results.json
-          path: base_scan_results.json
-          retention-days: 5
+      #- name: Upload scan results
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: base_scan_results.json
+      #    path: base_scan_results.json
+      #    retention-days: 5
