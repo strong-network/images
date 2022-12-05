@@ -17,8 +17,7 @@ jobs:
 
       - name: Make base image env
         run: |
-          BASE_IMAGE_NAME=$(make get_base_image)
-          BASE_IMAGE=$BASE_IMAGE_NAME >> $GITHUB_ENV
+          echo BASE_IMAGE=$(make get_base_image) >> $GITHUB_ENV
 
       - uses: ./.github/actions/scan-image
         name: scan base image
