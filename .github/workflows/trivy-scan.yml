@@ -25,4 +25,11 @@ jobs:
         run: make base_image
 
       - name: scan base image
-        run: docker run aquasec/trivy $(make get_base_image)
+        run: docker run aquasec/trivy $(make get_base_image) > base_scan_results.json
+
+      - name: Upload scan results
+        uses: actions/upload-artifact@v3
+        with:
+          name: base_scan_results.json
+          path: base_scan_results.json
+          retention-days: 5
