@@ -1,4 +1,4 @@
-name: Push images to gcloud
+name: Run trivy scans
 
 on:
   workflow_dispatch:
@@ -24,8 +24,16 @@ jobs:
       - name: build generic
         run: make base_image
 
-      - name: scan base image
-        run: docker run aquasec/trivy $(make get_base_image) > base_scan_results.json
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+          output: base_scan_results.json
 
       - name: Upload scan results
         uses: actions/upload-artifact@v3
