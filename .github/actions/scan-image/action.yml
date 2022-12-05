@@ -24,7 +24,7 @@ runs:
         format: 'table'
         exit-code: '1'
         ignore-unfixed: true
-        #severity: 'CRITICAL,HIGH'
+        severity: 'CRITICAL,HIGH'
         #output: base_scan_results.json
         input: image.tar
         scan-type: image
