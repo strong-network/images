@@ -20,7 +20,7 @@ jobs:
       - name: build base
         run: |
           make base_image
-          IMAGE=$(make get_base_image) > $GITHUB_ENV
+          IMAGE=$(make get_base_image) >> $GITHUB_ENV
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
