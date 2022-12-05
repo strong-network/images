@@ -2,7 +2,7 @@ name: Trivy scan image
 description: Scan the specified image with trivy and save the results
 inputs:
   image-name:  # id of input
-    description: Name of the image to scan
+    description: Name of the image 
     required: true
   make-command:
     description: 'which make command to run'
