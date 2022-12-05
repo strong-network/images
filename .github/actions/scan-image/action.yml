@@ -7,7 +7,6 @@ inputs:
   make-command:
     description: 'which make command to run'
     required: true
-    default: push-images-saas-aws-fargate
 
 runs:
   using: "composite"

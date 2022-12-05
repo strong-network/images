@@ -22,6 +22,7 @@ jobs:
         name: scan base image
         with:
           image-name: ${{ env.BASE_IMAGE }}
+          make-command: base_image
           
 
       #- name: Upload scan results
