@@ -22,7 +22,7 @@ runs:
       uses: aquasecurity/trivy-action@master
       with:
         format: 'table'
-        exit-code: '1'
+        #exit-code: '1'
         ignore-unfixed: true
         severity: 'CRITICAL,HIGH'
         #output: base_scan_results.json

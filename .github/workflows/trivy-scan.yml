@@ -32,3 +32,21 @@ jobs:
       #    name: base_scan_results.json
       #    path: base_scan_results.json
       #    retention-days: 5
+  scan-generic:
+
+    environment: production
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make generic image env
+        run: |
+          echo GENERIC_IMAGE=$(make get_generic_image) >> $GITHUB_ENV
+      - uses: ./.github/actions/scan-image
+      
+        name: scan base image
+        with:
+          image-name: ${{ env.GENERIC_IMAGE }}
+          make-command: generic_image
