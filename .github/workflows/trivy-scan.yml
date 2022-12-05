@@ -8,8 +8,6 @@ jobs:
   trivy-scan-base:
     
     environment: production
-    env:
-      REGISTRY_URL : ${{ secrets.REGISTRY }}
 
     runs-on: ubuntu-latest
 
@@ -21,17 +19,19 @@ jobs:
         run: |
           make base_image
           IMAGE=$(make get_base_image) >> $GITHUB_ENV
+          docker save -o base.tar $(make get_base_image)
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.IMAGE }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
-          vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
           output: base_scan_results.json
+          input: base.tar
+          scan-type: image
+          
 
       - name: Upload scan results
         uses: actions/upload-artifact@v3
