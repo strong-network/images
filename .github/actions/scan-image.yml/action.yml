@@ -1,0 +1,31 @@
+name: 'Deploy images'
+description: 'Deploy the service images to ECR in the specified region'
+inputs:
+  image-name:  # id of input
+    description: The region of AWS to deploy the images to
+    required: true
+  make-command:
+    description: 'which make command to run'
+    required: true
+    default: push-images-saas-aws-fargate
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: build base
+      shell: bash
+      run: |
+        make ${{ inputs.make-command }}
+        docker save -o image.tar ${{ inputs.image-name }}
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        #severity: 'CRITICAL,HIGH'
+        #output: base_scan_results.json
+        input: image.tar
+        scan-type: image

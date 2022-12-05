@@ -13,24 +13,15 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v3    
+      - uses: actions/checkout@v3
 
-      - name: build base
-        run: |
-          make base_image
-          IMAGE=$(make get_base_image) >> $GITHUB_ENV
-          docker save -o base.tar $(make get_base_image)
+      - name: Make base image env
+        run: BASE_IMAGE=$(make get_base_image) >> $GITHUB_ENV
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+      - uses: ./.github/actions/scan-image
+        name: scan base image
         with:
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          severity: 'CRITICAL,HIGH'
-          #output: base_scan_results.json
-          input: base.tar
-          scan-type: image
+          image-name: ${{ env.BASE_IMAGE }}
           
 
       #- name: Upload scan results
