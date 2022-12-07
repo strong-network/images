@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  trivy-scan-base:
+  scan-base:
 
     runs-on: ubuntu-22.04
 
@@ -23,7 +23,7 @@ jobs:
           image-name: ${{ env.BASE_IMAGE }}
           make-command: base_image
 
-  trivy-scan-base-intellij:
+  scan-base-intellij:
     
     runs-on: ubuntu-22.04
 
