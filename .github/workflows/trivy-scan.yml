@@ -253,7 +253,7 @@ jobs:
         name: scan image
         with:
           image-name: ${{ env.PYTHON_DATASCIENCE_IMAGE }}
-          make-command: python_anaconda_image
+          make-command: python_datascience_image
 
   scan-python-spark:
     runs-on: ubuntu-22.04
