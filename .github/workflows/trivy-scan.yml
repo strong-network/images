@@ -109,3 +109,19 @@ jobs:
         with:
           image-name: ${{ env.GOLANG_IMAGE_1.17 }}
           make-command: golang__1.17_image
+
+  scan-goland:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make goland env
+        run: |
+          echo GOLAND_IMAGE=$(make get_goland_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.GOLAND_IMAGE }}
+          make-command: goland
