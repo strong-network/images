@@ -6,8 +6,6 @@ on:
 jobs:
 
   trivy-scan-base:
-    
-    environment: production
 
     runs-on: ubuntu-22.04
 
@@ -27,8 +25,6 @@ jobs:
 
   trivy-scan-base-intellij:
     
-    environment: production
-
     runs-on: ubuntu-22.04
 
     steps:
@@ -48,8 +44,6 @@ jobs:
 
   scan-generic:
 
-    environment: production
-
     runs-on: ubuntu-22.04
 
     steps:
@@ -67,8 +61,6 @@ jobs:
 
   scan-intellij-ultimate:
 
-    environment: production
-
     runs-on: ubuntu-22.04
 
     steps:
@@ -77,9 +69,26 @@ jobs:
       - name: Make intellij image env
         run: |
           echo INTELLIJ_ULTIMATE_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
-      - uses: ./.github/actions/scan-image
 
+      - uses: ./.github/actions/scan-image
         name: scan image
         with:
           image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE }}
           make-command: intellij_ultimate
+
+  scan-golang:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make golang env
+        run: |
+          echo GOLANG_IMAGE=$(make get_golang_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.GOLANG_IMAGE }}
+          make-command: golang_image
