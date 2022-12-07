@@ -92,3 +92,20 @@ jobs:
         with:
           image-name: ${{ env.GOLANG_IMAGE }}
           make-command: golang_image
+
+  scan-golang-1-17:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make golang env
+        run: |
+          echo GOLANG_IMAGE_1.17=$(make get_golang_1.17_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.GOLANG_IMAGE_1.17 }}
+          make-command: golang__1.17_image
