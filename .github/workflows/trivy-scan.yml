@@ -24,14 +24,28 @@ jobs:
         with:
           image-name: ${{ env.BASE_IMAGE }}
           make-command: base_image
-          
 
-      #- name: Upload scan results
-      #  uses: actions/upload-artifact@v3
-      #  with:
-      #    name: base_scan_results.json
-      #    path: base_scan_results.json
-      #    retention-days: 5
+  trivy-scan-base-intellij:
+    
+    environment: production
+
+    runs-on: ubuntu-22.04
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Make base intellij image env
+        run: |
+          echo BASE_INTELLIJ_IMAGE=$(make get_base_jetbrains_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.BASE_INTELLIJ_IMAGE }}
+          make-command: base_jetbrains_image
+
+
   scan-generic:
 
     environment: production
@@ -62,10 +76,10 @@ jobs:
 
       - name: Make intellij image env
         run: |
-          echo GENERIC_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
+          echo INTELLIJ_ULTIMATE_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
 
         name: scan image
         with:
-          image-name: ${{ env.GENERIC_IMAGE }}
+          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE }}
           make-command: intellij_ultimate
