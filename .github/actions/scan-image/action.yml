@@ -28,3 +28,4 @@ runs:
         #output: base_scan_results.json
         input: image.tar
         scan-type: image
+        security-checks: vuln
