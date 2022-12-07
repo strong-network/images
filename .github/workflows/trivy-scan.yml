@@ -50,3 +50,22 @@ jobs:
         with:
           image-name: ${{ env.GENERIC_IMAGE }}
           make-command: generic_image
+
+  scan-intellij-ultimate:
+
+    environment: production
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make intellij image env
+        run: |
+          echo GENERIC_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
+      - uses: ./.github/actions/scan-image
+
+        name: scan image
+        with:
+          image-name: ${{ env.GENERIC_IMAGE }}
+          make-command: intellij_ultimate
