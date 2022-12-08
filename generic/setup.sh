@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 
-wget -O golang_sdk-linux-amd64.tar.gz https://golang.org/dl/go1.19.linux-amd64.tar.gz
+wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.19.4.linux-amd64.tar.gz
 tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz
 rm golang_sdk-linux-amd64.tar.gz
 mv install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
@@ -19,7 +19,7 @@ dpkg -i libjq*.deb
 curl -fsSOL http://http.us.debian.org/debian/pool/main/j/jq/jq_1.5+dfsg-2+b1_amd64.deb
 dpkg -i jq*.deb && rm *.deb
 # Install deployment dependencies
-wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.70.0/doctl-1.70.0-linux-amd64.tar.gz
+wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.88.0/doctl-1.88.0-linux-amd64.tar.gz
 tar -C /usr/local/bin -xzf doctl.tar.gz
 rm doctl.tar.gz
 wget -O helm.tar.gz https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz

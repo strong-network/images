@@ -1,0 +1,28 @@
+name: Trivy scan image
+description: Scan the specified image with trivy and save the results
+inputs:
+  image-name:  # id of input
+    description: Name of the image 
+    required: true
+  make-command:
+    description: 'which make command to run'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: build base
+      shell: bash
+      run: |
+        make ${{ inputs.make-command }}
+        docker save -o image.tar ${{ inputs.image-name }}
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        format: 'table'
+        ignore-unfixed: true
+        input: image.tar
+        scan-type: image
+        security-checks: vuln

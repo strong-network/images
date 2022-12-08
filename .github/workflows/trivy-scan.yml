@@ -1,28 +1,272 @@
-name: Push images to gcloud
+name: Run trivy scans
 
 on:
   workflow_dispatch:
 
 jobs:
 
-  trivy-scan-base:
-    
-    environment: production
-    env:
-      REGISTRY_URL : ${{ secrets.REGISTRY }}
+  scan-base:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
 
       - uses: actions/checkout@v3
 
-      - name: install trivy
-        run: | 
-          docker pull aquasec/trivy        
+      - name: Make base image env
+        run: |
+          echo BASE_IMAGE=$(make get_base_image) >> $GITHUB_ENV
 
-      - name: build generic
-        run: make base_image
+      - uses: ./.github/actions/scan-image
+        name: scan base image
+        with:
+          image-name: ${{ env.BASE_IMAGE }}
+          make-command: base_image
 
-      - name: scan base image
-        run: docker run aquasec/trivy $(make get_base_image)
+  scan-base-intellij:
+    
+    runs-on: ubuntu-22.04
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Make base intellij image env
+        run: |
+          echo BASE_INTELLIJ_IMAGE=$(make get_base_jetbrains_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.BASE_INTELLIJ_IMAGE }}
+          make-command: base_jetbrains_image
+
+
+  scan-generic:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make generic image env
+        run: |
+          echo GENERIC_IMAGE=$(make get_generic_image) >> $GITHUB_ENV
+      - uses: ./.github/actions/scan-image
+
+        name: scan image
+        with:
+          image-name: ${{ env.GENERIC_IMAGE }}
+          make-command: generic_image
+
+  scan-intellij-ultimate:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make intellij image env
+        run: |
+          echo JAVA_INTELLIJ_IMAGE=$(make get_java_intellij_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.JAVA_INTELLIJ_IMAGE }}
+          make-command: java_intellij
+
+  scan-java-intellij:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make intellij image env
+        run: |
+          echo INTELLIJ_ULTIMATE_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE }}
+          make-command: intellij_ultimate
+
+  scan-golang:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make golang env
+        run: |
+          echo GOLANG_IMAGE=$(make get_golang_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.GOLANG_IMAGE }}
+          make-command: golang_image
+
+  scan-golang-1-17:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make golang 1.17 env
+        run: |
+          echo GOLANG_IMAGE_1_17=$(make get_golang_1.17_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.GOLANG_IMAGE_1_17 }}
+          make-command: golang_1.17_image
+
+  scan-goland:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make goland env
+        run: |
+          echo GOLAND_IMAGE=$(make get_goland_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.GOLAND_IMAGE }}
+          make-command: goland
+
+  scan-flutter:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make flutter env
+        run: |
+          echo FLUTTER_IMAGE=$(make get_flutter_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.FLUTTER_IMAGE }}
+          make-command: flutter_image
+
+  scan-android-studio:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make android studio env
+        run: |
+          echo ANDROID_STUDIO_IMAGE=$(make get_android_studio_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.ANDROID_STUDIO_IMAGE }}
+          make-command: android_studio
+
+  scan-nodejs:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make nodejs env
+        run: |
+          echo NODEJS_IMAGE=$(make get_nodejs_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.NODEJS_IMAGE }}
+          make-command: nodejs_image
+
+  scan-phpstorm:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make phpstorm env
+        run: |
+          echo PHPSTORM_IMAGE=$(make get_phpstorm_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.PHPSTORM_IMAGE }}
+          make-command: phpstorm
+
+  scan-pycharm:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make pycharm env
+        run: |
+          echo PYCHARM_IMAGE=$(make get_pycharm_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.PYCHARM_IMAGE }}
+          make-command: pycharm
+
+  scan-python-anaconda:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make python anaconda env
+        run: |
+          echo PYTHON_ANACONDA_IMAGE=$(make get_python_anaconda_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.PYTHON_ANACONDA_IMAGE }}
+          make-command: python_anaconda_image
+
+  scan-python-datascience:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make python datascience env
+        run: |
+          echo PYTHON_DATASCIENCE_IMAGE=$(make get_python_datascience_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.PYTHON_DATASCIENCE_IMAGE }}
+          make-command: python_datascience_image
+
+  scan-python-spark:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make python spark env
+        run: |
+          echo PYTHON_SPARK_IMAGE=$(make get_spark_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.PYTHON_SPARK_IMAGE }}
+          make-command: python_spark_image
