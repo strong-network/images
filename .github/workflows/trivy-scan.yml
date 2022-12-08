@@ -270,3 +270,19 @@ jobs:
         with:
           image-name: ${{ env.PYTHON_SPARK_IMAGE }}
           make-command: python_spark_image
+
+  scan-webstorm:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make webstorm env
+        run: |
+          echo WEBSTORM_IMAGE=$(make get_webstorm_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.WEBSTORM_IMAGE }}
+          make-command: webstorm_image
