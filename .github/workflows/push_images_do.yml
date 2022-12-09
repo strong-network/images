@@ -23,7 +23,7 @@ jobs:
           echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
           echo NODEJS_IMAGE_URL=$REGISTRY_URL/cloud_editor_nodejs:$VERSION >>  $GITHUB_ENV
           echo GOLANG_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang:$VERSION >>  $GITHUB_ENV
-          echo GOLANG_1_17_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang_17:$VERSION >>  $GITHUB_ENV
+          echo GOLANG_1_17_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang_1.17:$VERSION >>  $GITHUB_ENV
           echo PYTHON_SPARK_IMAGE_URL=$REGISTRY_URL/cloud_editor_python:$VERSION >>  $GITHUB_ENV
           echo PYTHON_DATASCIENCE_IMAGE_URL=$REGISTRY_URL/cloud_editor_python_datascience:$VERSION >>  $GITHUB_ENV
           echo PYTHON_ANACONDA_IMAGE_URL=$REGISTRY_URL/cloud_editor_python_anaconda:$VERSION >>  $GITHUB_ENV
