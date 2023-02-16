@@ -93,10 +93,6 @@ get_version:
 get_base_image:
 	@echo ${BASE_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_base_image
-get_base_image:
-	@echo ${BASE_JEBRAINS_IMAGE_NAME}:${VERSION}
-
 .PHONY: get_golang_image
 get_golang_image:
 	@echo ${GOLANG_IMAGE_NAME}:${VERSION}
