@@ -55,35 +55,35 @@ flutter_image: base_image
 	@docker build -t ${FLUTTER_IMAGE_NAME}:${VERSION} flutter
 
 .PHONY: java_intellij
-java_intellij: base_jetbrains_image
+java_intellij: base_image
 	@docker build -t ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION} java_intellij
 
 .PHONY: goland
-goland: base_jetbrains_image
+goland: base_image
 	@docker build -t ${GOLAND_IMAGE_NAME}:${VERSION} goland
 
 .PHONY: pycharm
-pycharm: base_jetbrains_image
+pycharm: base_image
 	@docker build -t ${PYCHARM_IMAGE_NAME}:${VERSION} pycharm
 
 .PHONY: phpstorm
-phpstorm: base_jetbrains_image
+phpstorm: base_image
 	@docker build -t  ${PHPSTORM_IMAGE_NAME}:${VERSION} phpstorm
 
 .PHONY: android_studio 
-android_studio: base_jetbrains_image
+android_studio: base_image
 	@docker build -t ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} android_studio
 
 .PHONY: intellij_ultimate
-intellij_ultimate: base_jetbrains_image
+intellij_ultimate: base_image
 	@docker build -t ${INTELLIJ_ULTIMATE_IMAGE_NAME}:${VERSION} intellij_ultimate
 
 .PHONY: webstorm_image
-webstorm_image: base_jetbrains_image
+webstorm_image: base_image
 	@docker build -t ${WEBSTORM_IMAGE_NAME}:${VERSION} webstorm
 
 .PHONY: all
-all: base_image base_jetbrains_image golang_image golang_1.17_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
+all: base_image base_image golang_image golang_1.17_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
 
 .PHONY: get_version
 get_version:
@@ -93,8 +93,8 @@ get_version:
 get_base_image:
 	@echo ${BASE_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_base_jetbrains_image
-get_base_jetbrains_image:
+.PHONY: get_base_image
+get_base_image:
 	@echo ${BASE_JEBRAINS_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_golang_image

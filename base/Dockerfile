@@ -37,5 +37,7 @@ RUN mkdir -p /usr/bin/strong_network_startup ;\
     chmod -R 770 /home/developer
 
 COPY unzip_ide.sh /unzip_ide.sh
+COPY --chown=developer:developer install_go_tools.sh /install_go_tools.sh
+COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
 
 RUN  chmod +x /unzip_ide.sh
