@@ -1,4 +1,4 @@
-FROM sn_base_jetbrains
+FROM sn_base
 
 COPY --chown=developer:developer setup.sh /setup.sh
 

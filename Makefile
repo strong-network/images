@@ -1,6 +1,5 @@
 GIT_ROOT=$(shell git rev-parse --show-toplevel)
 BASE_IMAGE_NAME=sn_base
-BASE_JEBRAINS_IMAGE_NAME=sn_base_jetbrains
 GOLANG_IMAGE_NAME=sn_golang
 GOLANG_1.17_IMAGE_NAME=sn_golang_1.17
 PYTHON_SPARK_IMAGE_NAME=sn_python_spark
@@ -23,11 +22,6 @@ base_image:
 	@echo ${VERSION}
 	@docker build -t ${BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base
 	@docker tag ${BASE_IMAGE_NAME}:${VERSION} ${BASE_IMAGE_NAME}
-
-.PHONY: base_jetbrains_image
-base_jetbrains_image: base_image
-	@docker build -t ${BASE_JEBRAINS_IMAGE_NAME}:${VERSION} base_jetbrains
-	@docker tag ${BASE_JEBRAINS_IMAGE_NAME}:${VERSION} ${BASE_JEBRAINS_IMAGE_NAME}
 
 .PHONY: base_image_rm
 remove_base_image:
