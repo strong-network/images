@@ -29,23 +29,8 @@ RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vi
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
     apt-get update
 
-
-WORKDIR /tmp
-
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb ;\
-    dpkg -i packages-microsoft-prod.deb ;\
-    apt-get install -y aspnetcore-runtime-3.1 ;\
-    cd / ;\
-    dotnet tool install -g powershell ;\
-    pip install git+https://github.com/jeffkaufman/icdiff.git ;\
-    curl -s "https://get.sdkman.io" | bash ;\
-    curl -sL https://aka.ms/InstallAzureCLIDeb | bash ;\
-    curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-
-WORKDIR /
-
 # Create the developer user and set permissions
-RUN   chsh -s /bin/bash ;\
+RUN chsh -s /bin/bash ;\
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen ;\
     mkdir -p /usr/bin/strong_network_startup ;\
     chown root:root /usr/bin/fixuid ;\
