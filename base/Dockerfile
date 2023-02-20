@@ -4,30 +4,79 @@ ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
+COPY validate_file_hash.sh /validate_file_hash
+
 # Install base packages for other applications and update the package repository
 RUN apt-get update ;\
-    apt-get install -y git wget python3-dev python3-pip python3-venv curl libffi-dev libkrb5-dev libssl-dev build-essential clang-format clang ;\
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip openjdk-11-jdk libxext6 libxrender1 libxtst6 libxi6 libfreetype6 
+    apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
+    libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo \
+    libkrb5-dev libssl-dev build-essential clang-format clang lsb-release ;\
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip libxext6 libxrender1 libxtst6 libxi6 libfreetype6 ;\
+    chmod +x /validate_file_hash
 
-# Download common developer tools and SDK as tarball
+# Download docker tools
 RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.19.tgz -O  docker.tar.gz ;\
+    /validate_file_hash ddcd732baaa03958cc8f326a5dca09bcd8f348bb7d2737aaf67bbdd7d80302d1 docker.tar.gz ;\
     tar -C /tmp -xzf docker.tar.gz ;\
     rm docker.tar.gz ;\
     mv /tmp/docker/docker /usr/bin/ ;\
     rm -r /tmp/docker ;\
     wget https://github.com/docker/compose/releases/download/v2.14.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose ;\
+    /validate_file_hash f15a7cd54a85f760a8ece92da63fb85b93036c72ead8056391b8a3fe9dc73134 /usr/local/bin/docker-compose ;\
     chmod +x /usr/local/bin/docker-compose ;\
-    mkdir -p /usr/bin/strong_network_startup ;\
-    wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1-linux-amd64.tar.gz -O fixuid-linux-amd64.tar.gz ;\
+    mkdir -p /usr/bin/strong_network_startup
+
+# Install kubernetes related tools
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz ;\
+    /validate_file_hash 2315941a13291c277dac9f65e75ead56386440d3907e0540bf157ae70f188347 helm.tar.gz ;\
+    tar -C /tmp -xzf helm.tar.gz ;\
+    mv /tmp/linux-amd64/helm /usr/local/bin ;\
+    rm helm.tar.gz ;\
+    rm -r /tmp/linux-amd64 ;\
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.23.3/bin/linux/amd64/kubectl ;\
+    /validate_file_hash d7da739e4977657a3b3c84962df49493e36b09cc66381a5e36029206dd1e01d0 kubectl ;\
+    mv kubectl /usr/local/bin ;\
+    chmod 4755 /usr/local/bin/kubectl
+
+# Install cloud specific CLI tools
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.88.0/doctl-1.88.0-linux-amd64.tar.gz ;\
+    /validate_file_hash e5180c3b69fd06086a21f3f99e1527ffefc1e90a60808171a51d5c6f8719cf7a doctl.tar.gz ;\
+    tar -C /usr/local/bin -xzf doctl.tar.gz ;\
+    rm doctl.tar.gz ;\
+    # Install AWS cli
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" ;\
+    /validate_file_hash 3a37be4ac0d790b00db7664e95c40db81c4a9c37f4222846d6bd9acdc0c03791 awscliv2.zip ;\
+    unzip awscliv2.zip ;\
+    ./aws/install ;\
+    rm -rf aws ;\
+    # Install  Azure CLi
+    mkdir -p /etc/apt/keyrings ;\
+    curl -sLS https://packages.microsoft.com/keys/microsoft.asc |\
+    gpg --dearmor |\
+    tee /etc/apt/keyrings/microsoft.gpg > /dev/null ;\
+    chmod go+r /etc/apt/keyrings/microsoft.gpg ;\
+    /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg ;\
+    AZ_REPO=$(lsb_release -cs) ;\
+    echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |\
+    tee /etc/apt/sources.list.d/azure-cli.list ;\
+    apt-get update ;\
+    apt-get install azure-cli
+
+
+RUN wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1-linux-amd64.tar.gz -O fixuid-linux-amd64.tar.gz ;\
     tar -C /usr/bin -xzf fixuid-linux-amd64.tar.gz ;\
-    rm fixuid-linux-amd64.tar.gz
+    rm fixuid-linux-amd64.tar.gz 
+
 
 # Setup environment for developers
     # install general packages related to development
-RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim zsh software-properties-common jq zip shellcheck \
+RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim \
+    zsh software-properties-common jq zip shellcheck \
+    nodejs yarn npm openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
     apt-get update
+
 
 # Create the developer user and set permissions
 RUN chsh -s /bin/bash ;\
@@ -47,10 +96,7 @@ RUN chsh -s /bin/bash ;\
     chmod -R 770 /home/developer
 
 COPY unzip_ide.sh /unzip_ide.sh
-COPY --chown=developer:developer install_go_tools.sh /install_go_tools.sh
+COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
 
-RUN bash install_nodejs_tools.sh && rm install_nodejs_tools.sh ;\
-    mv install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh ;\
-    chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh ;\
-    chmod +x /unzip_ide.sh
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh ;\

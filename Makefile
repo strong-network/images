@@ -45,9 +45,6 @@ python_datascience_image: base_image
 python_anaconda_image: base_image
 	@docker build -t ${PYTHON_ANACONDA_IMAGE_NAME}:${VERSION} python_anaconda
 
-nodejs_image: base_image
-	@docker build -t ${NODEJS_IMAGE_NAME}:${VERSION} nodejs
-
 generic_image: base_image
 	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
 
