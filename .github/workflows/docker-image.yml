@@ -17,13 +17,6 @@ jobs:
     - name: Build the base image
       run: make base_image
   
-  build_golang:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build strong network golang image
-        run: make golang_image && docker inspect --type=image $(make get_golang_image) > /dev/null
-  
   build_generic:
     runs-on: ubuntu-latest
     steps:
