@@ -62,6 +62,22 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     apt-get update ;\
     apt-get install azure-cli
 
+# Install hashcorp/terraform tools
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
+    /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029  hashicorp.key ;\
+    cat hashicorp.key | apt-key add - ;\
+    rm hashicorp.key ;\
+    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\
+    apt-get update ;\
+    apt-get install terraform -y ;\
+    curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  ;\
+    /validate_file_hash 9b56dc92643c3e88c4fb634fff283c4a8c0f535f827bf1e18d39084f7181b077  terrascan.tar.gz ;\
+    tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz ;\
+    install terrascan /usr/local/bin && rm terrascan ;\
+    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh ;\
+    /validate_file_hash 0f606a0a472f857a9d34e9978a2d344a19ed36ffae43085e7d4736f253238105  install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh ;\
+    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh ;\
+    /validate_file_hash c1620085730cc45e4ba3b023fffeca2c58b8260561fb34cf52d7ad21d494134a  install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh 
 
 RUN wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1-linux-amd64.tar.gz -O fixuid-linux-amd64.tar.gz ;\
     tar -C /usr/bin -xzf fixuid-linux-amd64.tar.gz ;\
@@ -70,7 +86,7 @@ RUN wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1
 
 # Setup environment for developers
     # install general packages related to development
-RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim \
+RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
     zsh software-properties-common jq zip shellcheck \
     nodejs yarn npm openjdk-11-jdk \
     # install networking related packages
@@ -99,4 +115,4 @@ COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh ;\
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\

@@ -5,6 +5,7 @@ ENV PATH /usr/local/go/bin:/home/developer/go/bin:${PATH}
 ENV GO111MODULE  on
 
 RUN apt-get update ;\
+    apt-get upgrade ;\
     apt-get install -y yarn rlwrap ;\
     wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.19.4.linux-amd64.tar.gz ;\
     /validate_file_hash c9c08f783325c4cf840a94333159cc937f05f75d36a8b307951d5bd959cf2ab8  golang_sdk-linux-amd64.tar.gz ;\
@@ -29,7 +30,6 @@ RUN apt-get update ;\
     /validate_file_hash 3bbab4d253eda43e3122fd5705014a69c44944a6dee8ea4d7d567afe157eb4ef linux-install-1.11.1.1224.sh ;\ 
     chmod +x linux-install-1.11.1.1224.sh ;\
     ./linux-install-1.11.1.1224.sh ; rm -f linux-install-1.11.1.1224.sh
-
 
 USER 1000
 
