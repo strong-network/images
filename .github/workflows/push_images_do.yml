@@ -21,19 +21,20 @@ jobs:
           GIT_ROOT=$(git rev-parse --show-toplevel)
           VERSION=$(awk NF ${GIT_ROOT}/VERSION)
           echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
-          echo NODEJS_IMAGE_URL=$REGISTRY_URL/cloud_editor_nodejs:$VERSION >>  $GITHUB_ENV
-          echo GOLANG_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang:$VERSION >>  $GITHUB_ENV
-          echo GOLANG_1_17_IMAGE_URL=$REGISTRY_URL/cloud_editor_golang_1.17:$VERSION >>  $GITHUB_ENV
-          echo PYTHON_SPARK_IMAGE_URL=$REGISTRY_URL/cloud_editor_python:$VERSION >>  $GITHUB_ENV
-          echo PYTHON_DATASCIENCE_IMAGE_URL=$REGISTRY_URL/cloud_editor_python_datascience:$VERSION >>  $GITHUB_ENV
-          echo PYTHON_ANACONDA_IMAGE_URL=$REGISTRY_URL/cloud_editor_python_anaconda:$VERSION >>  $GITHUB_ENV
-          echo FLUTTER_IMAGE_URL=$REGISTRY_URL/cloud_editor_flutter:$VERSION >>  $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_URL=$REGISTRY_URL/intellij_java:$VERSION >>  $GITHUB_ENV
           echo GOLAND_IMAGE_URL=$REGISTRY_URL/goland_go:$VERSION >>  $GITHUB_ENV
           echo PYCHARM_IMAGE_URL=$REGISTRY_URL/pycharm_python:$VERSION >>  $GITHUB_ENV
           echo PHPSTORM_IMAGE_URL=$REGISTRY_URL/phpstorm_php:$VERSION >>  $GITHUB_ENV
           echo ANDROID_IMAGE_URL=$REGISTRY_URL/android_studio:$VERSION >>  $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
+          echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
+          echo INTELLIJ_ULTIMATE_IMAGE_NAME=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
+          echo JAVA_INTELLIJ_IMAGE_NAME=$(make get_java_intellij_image) >> $GITHUB_ENV
+          echo GOLAND_IMAGE_NAME=$(make get_goland_image) >> $GITHUB_ENV
+          echo PYCHARM_IMAGE_NAME=$(make get_pycharm_image) >> GITHUB_ENV
+          echo PHPSTORM_IMAGE_NAME=$(make get_phpstorm_image) >> $GITHUB_ENV
+          echo WEBSTORM_IMAGE_NAME=$(make get_webstorm_image) >> $GITHUB_ENV
+          echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -47,94 +48,57 @@ jobs:
       - name: Build the base image
         run: make base_image
 
-      # Build the generic cloud editor image 
-      - name: Build the generic cloud editor
-        run: make generic_image
+      - uses: ./.github/actions/push-image
+        name: push generic image image
+        with:
+          image-name: ${{ env.GENERIC_IMAGE_NAME }}
+          make-command: generic_image
+          image-url: ${{ env.GENERIC_IMAGE_URL }}
 
-      - name: Tag new generic cloud editor image
-        run: docker tag $(make get_generic_image) $GENERIC_IMAGE_URL
-
-      - name: Push the generic cloud editor image
-        run: docker push $GENERIC_IMAGE_URL
-      
-      - name: Remove generic cloud editor image
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
-
-        # Build Java Intellij image
-      - name: Build the java intellij cloud editor
-        run: make java_intellij
-
-      - name: Tag new java intellij cloud editor image
-        run: docker tag $(make get_java_intellij_image) $JAVA_INTELLIJ_IMAGE_URL 
-
-      - name: Push the java intellij cloud editor image
-        run:  docker push $JAVA_INTELLIJ_IMAGE_URL 
-      
-      - name: Remove java intellij cloud editor image
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+      # Build Java Intellij image
+      - uses: ./.github/actions/push-image
+        name: push java intellij image
+        with:
+          image-name: ${{ env.JAVA_INTELLIJ_IMAGE_NAME }}
+          make-command: java_intellij
+          image-url: ${{ env.JAVA_INTELLIJ_IMAGE_URL }}
 
       # build Goland image
-      - name: Build the goland cloud editor
-        run: make goland 
-
-      - name: Tag new goland cloud editor image
-        run: docker tag $(make get_goland_image) $GOLAND_IMAGE_URL
-
-      - name: Push the goland cloud editor image
-        run:  docker push $GOLAND_IMAGE_URL
-      
-      - name: Remove Goland cloud editor image
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+      - uses: ./.github/actions/push-image
+        name: push goland image
+        with:
+          image-name: ${{ env.GOLAND_IMAGE_NAME }}
+          make-command: goland
+          image-url: ${{ env.GOLAND_IMAGE_URL }}
 
       # Build Pycharm image
-      - name: Build the Pycharm cloud editor
-        run:  make pycharm
-
-      - name: Tag new Pycharm cloud editor image
-        run: docker tag $(make get_pycharm_image) $PYCHARM_IMAGE_URL
-
-      - name: Push the Pycharm cloud editor image
-        run:  docker push $PYCHARM_IMAGE_URL 
-      
-      - name: Remove Pycharm cloud editor image
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+      - uses: ./.github/actions/push-image
+        name: push pycharm image
+        with:
+          image-name: ${{ env.PYCHARM_IMAGE_NAME }}
+          make-command: pycharm
+          image-url: ${{ env.PYCHARM_IMAGE_URL }}
 
       # Build phpstorm
-      - name: Build the PHPStorm cloud editor
-        run:  make phpstorm
-
-      - name: Tag new PHPStorm cloud editor image
-        run: docker tag $(make get_phpstorm_image) $PHPSTORM_IMAGE_URL
-
-      - name: Push the PHPStorm cloud editor image
-        run:  docker push $PHPSTORM_IMAGE_URL
-      
-      - name: Remove PHPstorm cloud editor image
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+      - uses: ./.github/actions/push-image
+        name: push phpstorm image
+        with:
+          image-name: ${{ env.PHPSTORM_IMAGE_NAME }}
+          make-command: phpstorm
+          image-url: ${{ env.PHPSTORM_IMAGE_URL }}
       
       # Build Android studio
-      - name: Build the Android Studio cloud editor
-        run:  make android_studio
+      - uses: ./.github/actions/push-image
+        name: push android studio image
+        with:
+          image-name: ${{ env.ANDROID_IMAGE_NAME }}
+          make-command: android_studio
+          image-url: ${{ env.ANDROID_IMAGE_URL }}
 
-      - name: Tag new Android studio cloud editor image
-        run: docker tag $(make get_android_studio_image) $ANDROID_IMAGE_URL
-
-      - name: Push the Android Studio cloud editor image
-        run:  docker push $ANDROID_IMAGE_URL
-      
-      - name: Remove Android Studio cloud editor image
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
-
-       # Build Intellij Ultimate
-
-      - name: Build the Intellij Ultimate image
-        run:  make intellij_ultimate
-
-      - name: Tag new intellij ultimate image
-        run: docker tag $(make get_intellij_ultimate_image) $INTELLIJ_ULTIMATE_IMAGE_URL
-
-      - name: Push the Intellij Ultimate image
-        run:  docker push $INTELLIJ_ULTIMATE_IMAGE_URL
-      
-      - name: Remove the Intellij Ultimate image url
-        run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'
+      # Build Intellij Ultimate
+      - uses: ./.github/actions/push-image
+        name: push intellij ultimate image
+        with:
+          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE_NAME }}
+          make-command: intellij_ultimate
+          image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
