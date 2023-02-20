@@ -1,0 +1,34 @@
+name: Push image
+description: Push the specified image with trivy
+inputs:
+  image-name  :  # id of input
+    description: Name of the image 
+    required: true
+  make-command:
+    description: 'which make command to run'
+    required: true
+  image-url:
+    description: 'The url of the image'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+# Build the generic cloud editor image 
+
+  - name: build image
+    shell: bash
+    run: make ${{ inputs.make-command }}
+
+  - name: Tag the image as the image url
+    shell: bash
+    run: docker tag ${{ inputs.image-name }} ${{ inputs.image-url }}
+
+  - name: Push the image
+    shell: bash
+    run: docker push ${{ inputs.image-url }}
+    
+  - name: Remove the image
+    shell: bash
+    run: docker rmi $(docker images -a | grep -v sn_base | grep -v IMAGE  |  awk {'print $3'}) || echo 'ignoring error'

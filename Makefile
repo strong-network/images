@@ -32,24 +32,8 @@ remove_base_image:
 golang_image: base_image
 	@docker build -t ${GOLANG_IMAGE_NAME}:${VERSION} golang
 
-.PHONY: golang_1.17_image
-golang_1.17_image: base_image
-	@docker build -t ${GOLANG_1.17_IMAGE_NAME}:${VERSION} golang_1.17
-
-python_spark_image: base_image
-	@docker build -t ${PYTHON_SPARK_IMAGE_NAME}:${VERSION} python_spark
-
-python_datascience_image: base_image
-	@docker build -t ${PYTHON_DATASCIENCE_IMAGE_NAME}:${VERSION} python_datascience
-
-python_anaconda_image: base_image
-	@docker build -t ${PYTHON_ANACONDA_IMAGE_NAME}:${VERSION} python_anaconda
-
 generic_image: base_image
 	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
-
-flutter_image: base_image
-	@docker build -t ${FLUTTER_IMAGE_NAME}:${VERSION} flutter
 
 .PHONY: java_intellij
 java_intellij: base_image
@@ -80,7 +64,7 @@ webstorm_image: base_image
 	@docker build -t ${WEBSTORM_IMAGE_NAME}:${VERSION} webstorm
 
 .PHONY: all
-all: base_image base_image golang_image golang_1.17_image python_spark_image python_datascience_image python_anaconda_image nodejs_image generic_image flutter_image java_intellij goland pycharm phpstorm android_studio
+all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image
 
 .PHONY: get_version
 get_version:
@@ -89,34 +73,6 @@ get_version:
 .PHONY: get_base_image
 get_base_image:
 	@echo ${BASE_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_golang_image
-get_golang_image:
-	@echo ${GOLANG_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_golang_1.17_image
-get_golang_1.17_image:
-	@echo ${GOLANG_1.17_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_spark_image
-get_spark_image:
-	@echo ${PYTHON_SPARK_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_python_datascience_image
-get_python_datascience_image:
-	@echo ${PYTHON_DATASCIENCE_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_python_anaconda_image
-get_python_anaconda_image:
-	@echo ${PYTHON_ANACONDA_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_nodejs_image
-get_nodejs_image:
-	@echo ${NODEJS_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_flutter_image
-get_flutter_image:
-	@echo ${FLUTTER_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_generic_image
 get_generic_image:
