@@ -32,7 +32,7 @@ jobs:
           echo INTELLIJ_ULTIMATE_IMAGE_NAME=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_NAME=$(make get_java_intellij_image) >> $GITHUB_ENV
           echo GOLAND_IMAGE_NAME=$(make get_goland_image) >> $GITHUB_ENV
-          echo PYCHARM_IMAGE_NAME=$(make get_pycharm_image) >> GITHUB_ENV
+          echo PYCHARM_IMAGE_NAME=$(make get_pycharm_image) >> $GITHUB_ENV
           echo PHPSTORM_IMAGE_NAME=$(make get_phpstorm_image) >> $GITHUB_ENV
           echo WEBSTORM_IMAGE_NAME=$(make get_webstorm_image) >> $GITHUB_ENV
           echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
