@@ -87,7 +87,7 @@ RUN wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1
 # Setup environment for developers
     # install general packages related to development
 RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
-    zsh software-properties-common jq zip shellcheck \
+    zsh software-properties-common jq zip shellcheck tree \
     nodejs yarn npm openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
