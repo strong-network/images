@@ -10,7 +10,7 @@ COPY validate_file_hash.sh /validate_file_hash
 RUN apt-get update ;\
     apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
     libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo \
-    libkrb5-dev libssl-dev build-essential clang-format clang lsb-release ;\
+    libkrb5-dev libssl-dev build-essential clang-format clang dirmngr lsb-release ;\
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip libxext6 libxrender1 libxtst6 libxi6 libfreetype6 ;\
     chmod +x /validate_file_hash
 
@@ -51,16 +51,16 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     rm -rf aws ;\
     # Install  Azure CLi
     mkdir -p /etc/apt/keyrings ;\
-    curl -sLS https://packages.microsoft.com/keys/microsoft.asc |\
-    gpg --dearmor |\
-    tee /etc/apt/keyrings/microsoft.gpg > /dev/null ;\
+    curl -sLS https://packages.microsoft.com/keys/microsoft.asc > microsoft.asc ;\
+    cat microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null ;\
+    cat microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/powershell.gpg > /dev/null ;\
     chmod go+r /etc/apt/keyrings/microsoft.gpg ;\
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg ;\
     AZ_REPO=$(lsb_release -cs) ;\
-    echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" |\
-    tee /etc/apt/sources.list.d/azure-cli.list ;\
+    echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/powershell.gpg] https://packages.microsoft.com/ubuntu/22.04/prod/ jammy main" | tee /etc/apt/sources.list.d/powershell.list ;\
+    echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list ;\
     apt-get update ;\
-    apt-get install azure-cli
+    apt-get install azure-cli powershell
 
 # Install hashcorp/terraform tools
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
@@ -87,7 +87,7 @@ RUN wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1
 # Setup environment for developers
     # install general packages related to development
 RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
-    zsh software-properties-common jq zip shellcheck \
+    zsh software-properties-common jq zip shellcheck tree \
     nodejs yarn npm openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
@@ -116,3 +116,10 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
 
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\
+    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
+    cd /tmp ;\
+    /validate_file_hash 97edfa3a9d73858a2bb5a3a4b64231e8e68e2b9b0a9f216f51ff1c523987fdc2  install_sdkman.sh ;\
+    echo '#!/bin/bash\n\
+    cat /tmp/install_sdkman.sh | bash && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
+    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh ;\
+    chmod +x  /usr/bin/strong_network_startup/add_sdk.sh

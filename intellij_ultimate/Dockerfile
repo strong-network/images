@@ -8,5 +8,7 @@ RUN  wget -O /ide.tar.gz https://download.jetbrains.com/idea/ideaIU-2022.1.1.tar
     rm -rf /var/cache/apt ;\
     chown -R developer:developer /ide/bin
 
+RUN chown -R developer:developer //usr/bin/strong_network_startup
+
 USER developer
 WORKDIR /home/developer
