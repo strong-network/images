@@ -116,3 +116,10 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
 
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\
+    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
+    cd /tmp ;\
+    /validate_file_hash 97edfa3a9d73858a2bb5a3a4b64231e8e68e2b9b0a9f216f51ff1c523987fdc2  install_sdkman.sh ;\
+    echo '#!/bin/bash\n\
+    cat /tmp/install_sdkman.sh | bash && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
+    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh ;\
+    chmod +x  /usr/bin/strong_network_startup/add_sdk.sh

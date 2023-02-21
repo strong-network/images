@@ -12,8 +12,3 @@ RUN chown -R developer:developer //usr/bin/strong_network_startup
 
 USER developer
 WORKDIR /home/developer
-
-RUN curl -s https://get.sdkman.io > install_sdkman.sh ;\
-    /validate_file_hash 97edfa3a9d73858a2bb5a3a4b64231e8e68e2b9b0a9f216f51ff1c523987fdc2  install_sdkman.sh ;\
-    echo '#!/binbash\n\
-    cat install_sdkman.sh | bash && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk
