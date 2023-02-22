@@ -7,8 +7,8 @@ ENV GO111MODULE  on
 RUN apt-get update ;\
     apt-get upgrade ;\
     apt-get install -y yarn rlwrap ;\
-    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.19.4.linux-amd64.tar.gz ;\
-    /validate_file_hash c9c08f783325c4cf840a94333159cc937f05f75d36a8b307951d5bd959cf2ab8  golang_sdk-linux-amd64.tar.gz ;\
+    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.19.6.linux-amd64.tar.gz ;\
+    /validate_file_hash e3410c676ced327aec928303fef11385702a5562fd19d9a1750d5a2979763c3d  golang_sdk-linux-amd64.tar.gz ;\
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz ;\
     rm golang_sdk-linux-amd64.tar.gz ;\
     chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh ;\
