@@ -27,6 +27,7 @@ jobs:
           echo PHPSTORM_IMAGE_URL=$REGISTRY_URL/phpstorm_php:$VERSION >>  $GITHUB_ENV
           echo ANDROID_IMAGE_URL=$REGISTRY_URL/android_studio:$VERSION >>  $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
+          echo WEBSTORM_IMAGE_URL=$REGISTRY_URL/webstorm_image:$VERSION >> $GITHUB_ENV
           echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_NAME=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_NAME=$(make get_java_intellij_image) >> $GITHUB_ENV
@@ -102,3 +103,12 @@ jobs:
           image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE_NAME }}
           make-command: intellij_ultimate
           image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
+
+      # Push webstorm image
+
+      - uses: ./.github/actions/push-image
+        name: push webstorm image
+        with:
+          image-name: ${{ env.WEBSTORM_IMAGE_NAME }}
+          make-command: webstorm_image
+          image-url: ${{ env.WEBSTORM_IMAGE_URL }}
