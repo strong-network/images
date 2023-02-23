@@ -86,12 +86,17 @@ RUN wget https://github.com/boxboat/fixuid/releases/download/v0.5.1/fixuid-0.5.1
 
 # Setup environment for developers
     # install general packages related to development
-RUN apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
+RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh ;\
+    /validate_file_hash 645b5e6e14d476f8bb951bf3519cbb6a9327bd1394daa69595edc2855de03f34  install_nodejs.sh ;\
+    cat install_nodejs.sh | sudo -E bash && rm install_nodejs.sh ;\
+    apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
     zsh software-properties-common jq zip shellcheck tree \
-    nodejs yarn npm openjdk-11-jdk \
+    nodejs yarn openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
     apt-get update
+    
+
 
 
 # Create the developer user and set permissions
@@ -113,12 +118,11 @@ RUN chsh -s /bin/bash ;\
 
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
-COPY --chown=developer:developer install_nodejs_tools.sh /install_nodejs_tools.sh
 
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
     cd /tmp ;\
-    /validate_file_hash 97edfa3a9d73858a2bb5a3a4b64231e8e68e2b9b0a9f216f51ff1c523987fdc2  install_sdkman.sh ;\
+    /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh ;\
     echo '#!/bin/bash\n\
     cat /tmp/install_sdkman.sh | bash && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
     chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh ;\
