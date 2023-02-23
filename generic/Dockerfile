@@ -13,7 +13,6 @@ RUN apt-get update ;\
     rm golang_sdk-linux-amd64.tar.gz ;\
     chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh ;\
     # Install vscode deps
-    bash install_nodejs_tools.sh && rm install_nodejs_tools.sh ;\
     update-alternatives --install /usr/bin/python python /usr/bin/python2 1 ;\
     update-alternatives --install /usr/bin/python python /usr/bin/python3 2 ;\
     curl -fsSOL http://http.us.debian.org/debian/pool/main/libo/libonig/libonig5_6.9.1-1_amd64.deb ;\
