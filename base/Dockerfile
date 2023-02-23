@@ -15,32 +15,32 @@ RUN apt-get update ;\
     chmod +x /validate_file_hash
 
 # Download docker tools
-RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.19.tgz -O  docker.tar.gz ;\
-    /validate_file_hash ddcd732baaa03958cc8f326a5dca09bcd8f348bb7d2737aaf67bbdd7d80302d1 docker.tar.gz ;\
+RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.23.tgz -O  docker.tar.gz ;\
+    /validate_file_hash 0ee39f72cc434137d294c14d30897826bad6e24979e421f51a252769ad37e6d1 docker.tar.gz ;\
     tar -C /tmp -xzf docker.tar.gz ;\
     rm docker.tar.gz ;\
     mv /tmp/docker/docker /usr/bin/ ;\
     rm -r /tmp/docker ;\
-    wget https://github.com/docker/compose/releases/download/v2.14.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose ;\
-    /validate_file_hash f15a7cd54a85f760a8ece92da63fb85b93036c72ead8056391b8a3fe9dc73134 /usr/local/bin/docker-compose ;\
+    wget https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose ;\
+    /validate_file_hash 54ab01967b05e392e6bf13afbc654146890b9fa40501b40aca83a2db18f10427  /usr/local/bin/docker-compose ;\
     chmod +x /usr/local/bin/docker-compose ;\
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.10.2-linux-amd64.tar.gz ;\
-    /validate_file_hash 2315941a13291c277dac9f65e75ead56386440d3907e0540bf157ae70f188347 helm.tar.gz ;\
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.11.1-linux-amd64.tar.gz ;\
+    /validate_file_hash 0b1be96b66fab4770526f136f5f1a385a47c41923d33aab0dcb500e0f6c1bf7c helm.tar.gz ;\
     tar -C /tmp -xzf helm.tar.gz ;\
     mv /tmp/linux-amd64/helm /usr/local/bin ;\
     rm helm.tar.gz ;\
     rm -r /tmp/linux-amd64 ;\
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.23.3/bin/linux/amd64/kubectl ;\
-    /validate_file_hash d7da739e4977657a3b3c84962df49493e36b09cc66381a5e36029206dd1e01d0 kubectl ;\
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.26.1/bin/linux/amd64/kubectl ;\
+    /validate_file_hash d57be22cfa25f7427cfb538cfc8853d763878f8b36c76ce93830f6f2d67c6e5d kubectl ;\
     mv kubectl /usr/local/bin ;\
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.88.0/doctl-1.88.0-linux-amd64.tar.gz ;\
-    /validate_file_hash e5180c3b69fd06086a21f3f99e1527ffefc1e90a60808171a51d5c6f8719cf7a doctl.tar.gz ;\
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.92.1/doctl-1.92.1-linux-amd64.tar.gz ;\
+    /validate_file_hash 646badf8a31abe6c5c0e08e9aeff83b288829bbe16517ed47ccb8cd441442b56 doctl.tar.gz ;\
     tar -C /usr/local/bin -xzf doctl.tar.gz ;\
     rm doctl.tar.gz ;\
     # Install AWS cli
@@ -71,7 +71,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
     apt-get update ;\
     apt-get install terraform -y ;\
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  ;\
-    /validate_file_hash 9b56dc92643c3e88c4fb634fff283c4a8c0f535f827bf1e18d39084f7181b077  terrascan.tar.gz ;\
+    /validate_file_hash cabf9ef46cc9aadcced34c1ad992dffbc12cc1f28a9e16ad9ce341b90967e1fb  terrascan.tar.gz ;\
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz ;\
     install terrascan /usr/local/bin && rm terrascan ;\
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh ;\
