@@ -89,6 +89,8 @@ RUN wget https://github.com/strong-network/fixuid/blob/master/fixuid-0.5.2-linux
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh ;\
     /validate_file_hash 645b5e6e14d476f8bb951bf3519cbb6a9327bd1394daa69595edc2855de03f34  install_nodejs.sh ;\
     cat install_nodejs.sh | sudo -E bash && rm install_nodejs.sh ;\
+    # script is to have the latest available version of git-lfs
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash ;\
     apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
     zsh software-properties-common jq zip shellcheck tree \
     nodejs yarn openjdk-11-jdk \
