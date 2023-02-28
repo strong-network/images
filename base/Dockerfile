@@ -87,19 +87,22 @@ RUN wget https://github.com/strong-network/fixuid/blob/master/fixuid-0.5.2-linux
 # Setup environment for developers
     # install general packages related to development
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh ;\
-    /validate_file_hash 645b5e6e14d476f8bb951bf3519cbb6a9327bd1394daa69595edc2855de03f34  install_nodejs.sh ;\
+    /validate_file_hash 645b5e6e14d476f8bb951bf3519cbb6a9327bd1394daa69595edc2855de03f34 install_nodejs.sh ;\
     cat install_nodejs.sh | sudo -E bash && rm install_nodejs.sh ;\
+    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key ;\
+    /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - ;\
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list ;\
+    apt-get update && apt-get -y install gcc g++ make yarn ;\
     # script is to have the latest available version of git-lfs
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash ;\
     apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
     zsh software-properties-common jq zip shellcheck tree \
-    nodejs yarn openjdk-11-jdk \
+    nodejs openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
-    apt-get update
-    
-
-
+    apt-get update ;\
+    rm -rf /var/lib/apt/lists/* ;\
+    rm -rf /var/cache/apt
 
 # Create the developer user and set permissions
 RUN chsh -s /bin/bash ;\
