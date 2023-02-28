@@ -95,7 +95,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh ;\
     apt-get update && apt-get -y install gcc g++ make yarn ;\
     # script is to have the latest available version of git-lfs
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash ;\
-    apt-get install -y git-lfs git htop less locales man nano ssh sudo tmux vim emacs asciinema \
+    apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
     zsh software-properties-common jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
     # install networking related packages
