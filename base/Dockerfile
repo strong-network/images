@@ -125,6 +125,6 @@ RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /
     cd /tmp ;\
     /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh ;\
     echo '#!/bin/bash\n\
-    cat /tmp/install_sdkman.sh | bash && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
+    echo "testing" ; bash /tmp/install_sdkman.sh && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
     chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh ;\
     chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
