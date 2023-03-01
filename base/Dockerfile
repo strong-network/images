@@ -67,7 +67,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
     /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029  hashicorp.key ;\
     cat hashicorp.key | apt-key add - ;\
     rm hashicorp.key ;\
-    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\
+    apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" ;\
     apt-get update ;\
     apt-get install terraform -y ;\
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  ;\
