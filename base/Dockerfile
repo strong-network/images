@@ -118,10 +118,10 @@ RUN chsh -s /bin/bash ;\
     chmod -R 770 /home/developer
 
 COPY unzip_ide.sh /unzip_ide.sh
-COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
+#COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\
-    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
+#RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\
+RUN    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
     cd /tmp ;\
     /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh ;\
     echo '#!/bin/bash\n\

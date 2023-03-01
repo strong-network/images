@@ -11,7 +11,6 @@ RUN apt-get update ;\
     /validate_file_hash e3410c676ced327aec928303fef11385702a5562fd19d9a1750d5a2979763c3d  golang_sdk-linux-amd64.tar.gz ;\
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz ;\
     rm golang_sdk-linux-amd64.tar.gz ;\
-    chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh ;\
     # Install vscode deps
     update-alternatives --install /usr/bin/python python /usr/bin/python2 1 ;\
     update-alternatives --install /usr/bin/python python /usr/bin/python3 2 ;\
