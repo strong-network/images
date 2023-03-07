@@ -5,7 +5,8 @@ RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/idea/ideaIC-2021.3.2.t
     /unzip_ide.sh ;\
     chown -R developer:developer /ide/bin
 
-RUN apt-get install -y maven gradle ;\
+RUN apt-get update ;\
+    apt-get install -y maven gradle ;\
     rm -rf /var/lib/apt/lists/* ;\
     rm -rf /var/cache/apt 
 
