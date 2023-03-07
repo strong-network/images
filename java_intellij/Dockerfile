@@ -12,7 +12,3 @@ RUN apt-get update ;\
 
 USER developer
 WORKDIR /home/developer
-
-RUN curl -s https://get.sdkman.io > install_sdkman.sh ;\
-    /validate_file_hash 97edfa3a9d73858a2bb5a3a4b64231e8e68e2b9b0a9f216f51ff1c523987fdc2  install_sdkman.sh ;\
-    export SDKMAN_DIR=/tmp/custom_installations && cat install_sdkman.sh | bash && bash -c "source /tmp/custom_installations/bin/sdkman-init.sh && sdk install grails"

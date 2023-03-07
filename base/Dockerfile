@@ -9,7 +9,7 @@ COPY validate_file_hash.sh /validate_file_hash
 # Install base packages for other applications and update the package repository
 RUN apt-get update ;\
     apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
-    libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo \
+    libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo software-properties-common \
     libkrb5-dev libssl-dev build-essential clang-format clang dirmngr lsb-release ;\
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip libxext6 libxrender1 libxtst6 libxi6 libfreetype6 ;\
     chmod +x /validate_file_hash
@@ -60,7 +60,7 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/powershell.gpg] https://packages.microsoft.com/ubuntu/22.04/prod/ jammy main" | tee /etc/apt/sources.list.d/powershell.list ;\
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list ;\
     apt-get update ;\
-    apt-get install azure-cli powershell
+    apt-get install -y azure-cli powershell
 
 # Install hashcorp/terraform tools
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
@@ -79,10 +79,6 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
     curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh ;\
     /validate_file_hash c1620085730cc45e4ba3b023fffeca2c58b8260561fb34cf52d7ad21d494134a  install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh 
 
-RUN wget https://github.com/strong-network/fixuid/blob/master/fixuid-0.5.2-linux-amd64.tar.gz -O fixuid-linux-amd64.tar.gz ;\
-    tar -C /usr/bin -xzf fixuid-linux-amd64.tar.gz ;\
-    rm fixuid-linux-amd64.tar.gz 
-
 
 # Setup environment for developers
     # install general packages related to development
@@ -96,7 +92,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh ;\
     # script is to have the latest available version of git-lfs
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash ;\
     apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
-    zsh software-properties-common jq zip shellcheck tree \
+    zsh  jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools ;\ 
@@ -124,11 +120,11 @@ RUN chsh -s /bin/bash ;\
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh ;\
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh ;\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
     cd /tmp ;\
     /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh ;\
     echo '#!/bin/bash\n\
-    cat /tmp/install_sdkman.sh | bash && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
+    echo "testing" ; bash /tmp/install_sdkman.sh && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
     chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh ;\
     chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
