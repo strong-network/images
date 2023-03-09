@@ -60,7 +60,7 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     echo "deb [arch=amd64,armhf,arm64 signed-by=/usr/share/keyrings/powershell.gpg] https://packages.microsoft.com/ubuntu/22.04/prod/ jammy main" | tee /etc/apt/sources.list.d/powershell.list ;\
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list ;\
     apt-get update ;\
-    apt-get install -y azure-cli powershell
+    apt-get install -y azure-cli
 
 # Install hashcorp/terraform tools
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key ;\
@@ -124,7 +124,14 @@ RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh ;\
     cd /tmp ;\
     /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh ;\
+    export SDKMAN_DIR=/tmp/sdkman ;\
+    bash /tmp/install_sdkman.sh ;\
+    bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" ;\
     echo '#!/bin/bash\n\
-    echo "testing" ; bash /tmp/install_sdkman.sh && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh ;\
+    if ! grep -q SDKMAN_DIR "/home/developer/.bashrc" ; then\n\
+        cp -r /tmp/sdkman /home/developer/.sdkman\n\
+        echo "SDKMAN_DIR=/home/developer/.sdkman" >> ~/.bashrc\n\
+        echo "[[ -s $HOME/.sdkman/bin/sdkman-init.sh ]] && source     $HOME/.sdkman/bin/sdkman-init.sh" >> $HOME/.bashrc  \n\
+    fi \n' > /usr/bin/strong_network_startup/add_sdk.sh ;\
     chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh ;\
     chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
