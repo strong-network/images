@@ -11,8 +11,7 @@ jobs:
     env:
       REGISTRY_URL : ${{ secrets.REGISTRY }}
 
-    runs-on:
-      labels: ubuntu-latest-8-cores
+    runs-on: ubuntu-latest
 
 
     steps:
