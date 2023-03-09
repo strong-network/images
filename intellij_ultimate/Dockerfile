@@ -15,5 +15,8 @@ RUN wget -c https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -P /t
 
 RUN chown -R developer:developer //usr/bin/strong_network_startup
 
+ENV GRADLE_HOME=/opt/gradle/gradle-7.6.1
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
 USER developer
 WORKDIR /home/developer
