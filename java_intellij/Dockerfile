@@ -8,6 +8,7 @@ RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/idea/ideaIC-2021.3.2.t
 RUN apt-get update && \
     apt-get install default-jdk -y && \
     wget -c https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -P /tmp && \
+    /validate_file_hash 6147605a23b4eff6c334927a86ff3508cb5d6722cd624c97ded4c2e8640f1f87 /tmp/gradle-7.6.1-bin.zip && \
     unzip -d /opt/gradle /tmp/gradle-7.6.1-bin.zip && \
     ln -s /opt/gradle/gradle-7.6.1 /opt/gradle/latest && \
     apt-get install -y maven && \
