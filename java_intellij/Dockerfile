@@ -6,9 +6,16 @@ RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/idea/ideaIC-2021.3.2.t
     chown -R developer:developer /ide/bin
 
 RUN apt-get update && \
-    apt-get install -y maven gradle && \
+    apt-get install default-jdk -y && \
+    wget -c https://services.gradle.org/distributions/gradle-7.6.1-bin.zip -P /tmp && \
+    unzip -d /opt/gradle /tmp/gradle-7.6.1-bin.zip && \
+    ln -s /opt/gradle/gradle-7.6.1 /opt/gradle/latest && \
+    apt-get install -y maven && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt 
+
+ENV GRADLE_HOME=/opt/gradle/gradle-7.6.1
+ENV PATH=$PATH:$GRADLE_HOME/bin
 
 USER developer
 WORKDIR /home/developer
