@@ -5,7 +5,8 @@ RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/webide/PhpStorm-2021.3
     /unzip_ide.sh && \
     chown -R developer:developer /ide/bin
 
-RUN DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install php libapache2-mod-php -y && \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install php libapache2-mod-php -y && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt
 
