@@ -122,11 +122,18 @@ RUN chsh -s /bin/bash && \
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh && \
-    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh && \
-    cd /tmp && \
-    /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh && \
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
+    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
+    cd /tmp &&\
+    /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh &&\
+    export SDKMAN_DIR=/tmp/sdkman &&\
+    bash /tmp/install_sdkman.sh &&\
+    bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
     echo '#!/bin/bash\n\
-    echo "testing" ; bash /tmp/install_sdkman.sh && source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install grails' > /usr/bin/strong_network_startup/add_sdk.sh && \
-    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh && \
+    if ! grep -q SDKMAN_DIR "/home/developer/.bashrc" ; then\n\
+        cp -r /tmp/sdkman /home/developer/.sdkman\n\
+        echo "SDKMAN_DIR=/home/developer/.sdkman" >> ~/.bashrc\n\
+        echo "[[ -s $HOME/.sdkman/bin/sdkman-init.sh ]] && source     $HOME/.sdkman/bin/sdkman-init.sh" >> $HOME/.bashrc  \n\
+    fi \n' > /usr/bin/strong_network_startup/add_sdk.sh &&\
+    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh &&\
     chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
