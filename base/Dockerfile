@@ -27,25 +27,25 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.23.
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.11.1-linux-amd64.tar.gz && \
-    /validate_file_hash 0b1be96b66fab4770526f136f5f1a385a47c41923d33aab0dcb500e0f6c1bf7c helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.11.2-linux-amd64.tar.gz && \
+    /validate_file_hash 781d826daec584f9d50a01f0f7dadfd25a3312217a14aa2fbb85107b014ac8ca helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.26.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash d57be22cfa25f7427cfb538cfc8853d763878f8b36c76ce93830f6f2d67c6e5d kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.26.3/bin/linux/amd64/kubectl && \
+    /validate_file_hash 026c8412d373064ab0359ed0d1a25c975e9ce803a093d76c8b30c5996ad73e75 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.92.1/doctl-1.92.1-linux-amd64.tar.gz && \
-    /validate_file_hash 646badf8a31abe6c5c0e08e9aeff83b288829bbe16517ed47ccb8cd441442b56 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.93.1/doctl-1.93.1-linux-amd64.tar.gz && \
+    /validate_file_hash b84c96443815a4ee8857c82eba47e36cec953eb9d3f5c542a2c2ab9868f40f4f doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 41d1877fdf0ea5848ffc4f7218badd8d0b2c5695ed3c69ace818cebe0ffc7ac5 awscliv2.zip && \
+    /validate_file_hash f55eb8a8d63fdf7a19f776054e503cb851e424a21997d85997c97c486337ad92 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm -rf aws
@@ -70,20 +70,20 @@ RUN mkdir -p /etc/apt/keyrings && \
 
 # Install hashcorp/terraform tools
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
-    /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029  hashicorp.key && \
+    /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029 hashicorp.key && \
     cat hashicorp.key | apt-key add - && \
     rm hashicorp.key && \
     apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
     apt-get update && \
     apt-get install terraform -y && \
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash cabf9ef46cc9aadcced34c1ad992dffbc12cc1f28a9e16ad9ce341b90967e1fb  terrascan.tar.gz && \
+    /validate_file_hash cabf9ef46cc9aadcced34c1ad992dffbc12cc1f28a9e16ad9ce341b90967e1fb terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
-    /validate_file_hash 0f606a0a472f857a9d34e9978a2d344a19ed36ffae43085e7d4736f253238105  install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
+    /validate_file_hash 0f606a0a472f857a9d34e9978a2d344a19ed36ffae43085e7d4736f253238105 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
     curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
-    /validate_file_hash c1620085730cc45e4ba3b023fffeca2c58b8260561fb34cf52d7ad21d494134a  install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh 
+    /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh 
 
 
 # Setup environment for developers
@@ -125,7 +125,7 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
     cd /tmp &&\
-    /validate_file_hash cc6b79e64624e4dbac2b82704dcfa800dc492afb7af7015e71c76167025e9809 install_sdkman.sh &&\
+    /validate_file_hash 1228a9a341cae4e608b492c8797db8cd435830bd0612ba734b8d650f27f3a5ff install_sdkman.sh &&\
     export SDKMAN_DIR=/tmp/sdkman &&\
     bash /tmp/install_sdkman.sh &&\
     bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
