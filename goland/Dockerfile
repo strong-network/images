@@ -4,8 +4,8 @@ ENV GOPATH=/home/developer/go
 ENV PATH=/usr/local/go/bin:/home/developer/go/bin:${PATH}
 ENV GO111MODULE=on
 
-RUN wget -O /ide.tar.gz https://download.jetbrains.com/go/goland-2022.3.3.tar.gz && \
-    /validate_file_hash 8c85b56b4e226739a0e36549f5f80fed4cbf2b2798eff442499f5779396a6917 ide.tar.gz && \
+RUN wget -O /ide.tar.gz https://download.jetbrains.com/go/goland-2021.3.5.tar.gz && \
+    /validate_file_hash c369f984712da159d4105380fbd7735b575de9192c729ea8e985c992d2332b37 ide.tar.gz && \
     /unzip_ide.sh && \
     chown -R developer:developer /ide/bin
 

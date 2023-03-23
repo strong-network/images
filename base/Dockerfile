@@ -48,6 +48,7 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     /validate_file_hash 13209240d766efe84f4cfbdf6f6fd7358ea12be37d065235c216c80affba6927 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
+    rm awscliv2.zip && \ 
     rm -rf aws
     
 # Install  Azure CLi
@@ -65,6 +66,7 @@ RUN mkdir -p /etc/apt/keyrings && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
     apt-get update && \
     apt-get install -y azure-cli && \
+    rm powershell.tar.gz && \
     rm -rf /etc/apt/sources.list.d/azure-cl.list && \
     apt-get update
 
