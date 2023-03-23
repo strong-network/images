@@ -45,7 +45,7 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     rm doctl.tar.gz && \
     # Install AWS cli
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 41d1877fdf0ea5848ffc4f7218badd8d0b2c5695ed3c69ace818cebe0ffc7ac5 awscliv2.zip && \
+    /validate_file_hash 13209240d766efe84f4cfbdf6f6fd7358ea12be37d065235c216c80affba6927 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm -rf aws
