@@ -21,31 +21,31 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 6abb771a438b8ef82b0ff0ef0e2e404032699104c3c40c59cd174b56214876c3  /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.18.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 02b69f1f23167fce126b16d9d6b645362f5a6fa7fc9a073d3d080e45e12d32fc   /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.11.3-linux-amd64.tar.gz && \
-    /validate_file_hash ca2d5d40d4cdfb9a3a6205dd803b5bc8def00bd2f13e5526c127e9b667974a89 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz && \
+    /validate_file_hash da36e117d6dbc57c8ec5bab2283222fbd108db86c83389eebe045ad1ef3e2c3b helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.27.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash 71a78259d70da9c5540c4cf4cff121f443e863376f68f89a759d90cef3f51e87 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.27.1/bin/linux/amd64/kubectl && \
+    /validate_file_hash 7fe3a762d926fb068bae32c399880e946e8caf3d903078bea9b169dcd5c17f6d kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.93.1/doctl-1.93.1-linux-amd64.tar.gz && \
-    /validate_file_hash b84c96443815a4ee8857c82eba47e36cec953eb9d3f5c542a2c2ab9868f40f4f doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.95.0/doctl-1.95.0-linux-amd64.tar.gz && \
+    /validate_file_hash 6426a1727b4729e8de3225c9a3683e874c76bb2ddcf5e1a0dca8e6ec438f1f31 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.11.17.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 77bc50708c65a279756c76614312a25406db5e02dee048eaaae691dffe350d13 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.11.20.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 639ea246a1195290416f64471434ac74ccfe0a4e5dff0a5375447d6c05648917 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \ 
@@ -127,7 +127,7 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
     cd /tmp &&\
-    /validate_file_hash 1a5f034cac1e9c3ef588c9c821a1ce46d8bd02031c5f0361450b649eb24dc428 install_sdkman.sh &&\
+    /validate_file_hash 570ce32b2b96863a82194bde22c28373b7af92cb688aec59ce269545885442f0 install_sdkman.sh &&\
     export SDKMAN_DIR=/tmp/sdkman &&\
     bash /tmp/install_sdkman.sh &&\
     bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
