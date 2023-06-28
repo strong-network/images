@@ -21,8 +21,8 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.18.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 02b69f1f23167fce126b16d9d6b645362f5a6fa7fc9a073d3d080e45e12d32fc   /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash b4e6aff14c30f82ce26e94d37686b5598b3f870ce1e053927c853b4f4b128575   /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
@@ -33,19 +33,19 @@ RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.27.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash 7fe3a762d926fb068bae32c399880e946e8caf3d903078bea9b169dcd5c17f6d kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.27.2/bin/linux/amd64/kubectl && \
+    /validate_file_hash 4f38ee903f35b300d3b005a9c6bfb9a46a57f92e89ae602ef9c129b91dc6c5a5 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.95.0/doctl-1.95.0-linux-amd64.tar.gz && \
-    /validate_file_hash 6426a1727b4729e8de3225c9a3683e874c76bb2ddcf5e1a0dca8e6ec438f1f31 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.96.1/doctl-1.96.1-linux-amd64.tar.gz && \
+    /validate_file_hash f19200546b643c292923a4746930d0a42d249d514eaaf29532537e6d1539a1ef doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.11.20.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 639ea246a1195290416f64471434ac74ccfe0a4e5dff0a5375447d6c05648917 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.11.23.zip" -o "awscliv2.zip" && \
+    /validate_file_hash e4962990f24634814b6d4834a5c105a524c8895fca478a8fc17f7cc7e6191fa4 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \ 
