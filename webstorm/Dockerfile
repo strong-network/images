@@ -11,7 +11,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x > node_setup.sh && \
     /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && rm yarn.gpg.key && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh > install_nvm.sh && \
-    /validate_file_hash 2ed5e94ba12434370f0358800deb69f514e8bce90f13beb0e1b241d42c6abafd install_nvm.sh && cat install_nvm.sh | bash && rm install_nvm.sh && \
+    /validate_file_hash cb54df444735afe64bbffc48d005070548dcd632f37bc8cff58a322dddc5f339 install_nvm.sh && cat install_nvm.sh | bash && rm install_nvm.sh && \
     export NVM_DIR="$HOME/.nvm" && \
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \ 
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && \ 
