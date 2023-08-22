@@ -21,31 +21,31 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash b9385dabb7931636a3afc0aee94625ebff3bb29584493a87804afb6ebaf2d916 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash f45e4cb687df8b48a57f656097ce7175fa8e8bef70be407b011e29ff663f475f /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz && \
-    /validate_file_hash 2b6efaa009891d3703869f4be80ab86faa33fa83d9d5ff2f6492a8aebe97b219 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz && \
+    /validate_file_hash 1b2313cd198d45eab00cc37c38f6b1ca0a948ba279c29e322bdf426d406129b5 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.27.3/bin/linux/amd64/kubectl && \
-    /validate_file_hash fba6c062e754a120bc8105cde1344de200452fe014a8759e06e4eec7ed258a09 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.0/bin/linux/amd64/kubectl && \
+    /validate_file_hash 4717660fd1466ec72d59000bb1d9f5cdc91fac31d491043ca62b34398e0799ce kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.97.1/doctl-1.97.1-linux-amd64.tar.gz && \
-    /validate_file_hash eb0a94b1a4dd5a10c769c2cae06028ea1c0d2d9af5add469432169fbdbf1295b doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.98.0/doctl-1.98.0-linux-amd64.tar.gz && \
+    /validate_file_hash b26b6710330a53dde0250d960fac731fceb5075f711c7a31617a2324caff253a doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.3.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 25a81479d3a00c7875a98a7fe341d4c924d030f04c042fa6deebe3e499fa0d1d awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.11.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 8e2146b409a3c840524cca52f221437d1c31d90242dbd772ed835d6b870952ac awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \ 
@@ -79,7 +79,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     apt-get update && \
     apt-get install terraform -y && \
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash 5ee633b203479338fe5c0bfac6c3a5f9d3da3760c4ed431d339d24f365ff4465 terrascan.tar.gz && \
+    /validate_file_hash 7d8f634136f58f694326c834ff58db3ccdf5dfe7b651966a5665d8253d04f7dc terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
@@ -127,7 +127,7 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
     cd /tmp &&\
-    /validate_file_hash 90c479163dfc65f0319e6e87d1450e2445f52e3d5209e851d73156f4a2ad356e install_sdkman.sh &&\
+    /validate_file_hash daedb4ed91044634df8b5b0781d3cda41006355ab39db9b2ceff95bffb85d979 install_sdkman.sh &&\
     export SDKMAN_DIR=/tmp/sdkman &&\
     bash /tmp/install_sdkman.sh &&\
     bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
