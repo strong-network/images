@@ -91,7 +91,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
 # Setup environment for developers
     # install general packages related to development
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh && \
-    /validate_file_hash 7f8dbaec3dc92b978e971d63da1d5873b3ba3d5e4a07c944e1c609371bfad301 install_nodejs.sh && \
+    /validate_file_hash 4729f9e71ada90e6dec459238de5f796c8c46f080886aed820eb0c98e63c19e6 install_nodejs.sh && \
     cat install_nodejs.sh | sudo -E bash && rm install_nodejs.sh && \
     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
     /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && \
