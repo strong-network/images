@@ -12,6 +12,7 @@ JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
 PYCHARM_IMAGE_NAME=sn_pycharm
 PHPSTORM_IMAGE_NAME=sn_phpstorm
+NO_VNC_IMAGE_NAME=no_vnc
 ANDROID_STUDIO_IMAGE_NAME=sn_android_studio
 INTELLIJ_ULTIMATE_IMAGE_NAME=sn_intellij_ultimate
 WEBSTORM_IMAGE_NAME=sn_webstorm
@@ -51,6 +52,10 @@ pycharm: base_image
 phpstorm: base_image
 	@docker build -t  ${PHPSTORM_IMAGE_NAME}:${VERSION} phpstorm
 
+.PHONY: no_vnc
+no_vnc: 
+	@docker build -t  ${NO_VNC_IMAGE_NAME}:${VERSION} no_vnc
+
 .PHONY: android_studio 
 android_studio: base_image
 	@docker build -t ${ANDROID_STUDIO_IMAGE_NAME}:${VERSION} android_studio
@@ -89,6 +94,10 @@ get_goland_image:
 .PHONY: get_pycharm_image
 get_pycharm_image:
 	@echo ${PYCHARM_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_no_vnc_image
+get_no_vnc_image:
+	@echo ${NO_VNC_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_phpstorm_image
 get_phpstorm_image:

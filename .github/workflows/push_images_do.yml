@@ -26,6 +26,7 @@ jobs:
           echo PYCHARM_IMAGE_URL=$REGISTRY_URL/pycharm_python:$VERSION >>  $GITHUB_ENV
           echo PHPSTORM_IMAGE_URL=$REGISTRY_URL/phpstorm_php:$VERSION >>  $GITHUB_ENV
           echo ANDROID_IMAGE_URL=$REGISTRY_URL/android_studio:$VERSION >>  $GITHUB_ENV
+          echo NO_VNC_IMAGE_URL=$REGISTRY_URL/no_vnc:$VERSION >>  $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
           echo WEBSTORM_IMAGE_URL=$REGISTRY_URL/webstorm_image:$VERSION >> $GITHUB_ENV
           echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
@@ -105,10 +106,17 @@ jobs:
           image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
 
       # Push webstorm image
-
       - uses: ./.github/actions/push-image
         name: push webstorm image
         with:
           image-name: ${{ env.WEBSTORM_IMAGE_NAME }}
           make-command: webstorm_image
           image-url: ${{ env.WEBSTORM_IMAGE_URL }}
+      
+       # Build NoVNC image
+      - uses: ./.github/actions/push-image
+        name: push no vnc image
+        with:
+          image-name: ${{ env.NO_VNC_IMAGE_NAME }}
+          make-command: no_vnc
+          image-url: ${{ env.NO_VNC_IMAGE_URL }}
