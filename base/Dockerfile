@@ -21,8 +21,8 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.20.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash f45e4cb687df8b48a57f656097ce7175fa8e8bef70be407b011e29ff663f475f /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 08e549924823e97a3ea303c2309b812dfd5223b8be5ff96fe41bf75181ce0977 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
@@ -33,19 +33,19 @@ RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash 4717660fd1466ec72d59000bb1d9f5cdc91fac31d491043ca62b34398e0799ce kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.1/bin/linux/amd64/kubectl && \
+    /validate_file_hash e7a7d6f9d06fab38b4128785aa80f65c54f6675a0d2abef655259ddd852274e1 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.98.0/doctl-1.98.0-linux-amd64.tar.gz && \
-    /validate_file_hash b26b6710330a53dde0250d960fac731fceb5075f711c7a31617a2324caff253a doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.98.1/doctl-1.98.1-linux-amd64.tar.gz && \
+    /validate_file_hash c48c9b3922d6339aca919b7e4b966740d40d0fca7e0695ec5eb466097d5f1ac5 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.11.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 8e2146b409a3c840524cca52f221437d1c31d90242dbd772ed835d6b870952ac awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.17.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 3d4424d91341e9f3d3a0d5bc8cd444b1917bc1b1af67c7c7da55eba2f7503dd7 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \ 
@@ -90,9 +90,9 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
 
 # Setup environment for developers
     # install general packages related to development
-RUN curl -fsSL https://deb.nodesource.com/setup_19.x > install_nodejs.sh && \
-    /validate_file_hash 7f8dbaec3dc92b978e971d63da1d5873b3ba3d5e4a07c944e1c609371bfad301 install_nodejs.sh && \
-    cat install_nodejs.sh | sudo -E bash && rm install_nodejs.sh && \
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && apt-get install nodejs -y && \
     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
     /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
