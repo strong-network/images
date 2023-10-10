@@ -7,6 +7,7 @@ PYTHON_DATASCIENCE_IMAGE_NAME=sn_python_datascience
 PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
+GENERIC_JFROG_IMAGE_NAME=sn_generic_jfrog
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
@@ -33,6 +34,7 @@ golang_image: base_image
 	@docker build -t ${GOLANG_IMAGE_NAME}:${VERSION} golang
 
 generic_image: base_image
+	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME} 
 	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
 
 .PHONY: java_intellij
@@ -62,6 +64,10 @@ intellij_ultimate: base_image
 .PHONY: webstorm_image
 webstorm_image: base_image
 	@docker build -t ${WEBSTORM_IMAGE_NAME}:${VERSION} webstorm
+
+.PHONY: generic_jfrog_image
+generic_jfrog_image: generic_image
+	@docker build -t ${GENERIC_JFROG_IMAGE_NAME}:${VERSION} generic_jfrog
 
 .PHONY: all
 all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image
@@ -105,3 +111,7 @@ get_intellij_ultimate_image:
 .PHONY: get_webstorm_image
 get_webstorm_image:
 	@echo ${WEBSTORM_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_generic_jfrog_image
+get_generic_jfrog_image:
+	@echo ${GENERIC_JFROG_IMAGE_NAME}:${VERSION}
