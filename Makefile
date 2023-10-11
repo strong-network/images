@@ -34,8 +34,8 @@ golang_image: base_image
 	@docker build -t ${GOLANG_IMAGE_NAME}:${VERSION} golang
 
 generic_image: base_image
-	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME} 
 	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
+	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME} 
 
 .PHONY: java_intellij
 java_intellij: base_image
