@@ -21,31 +21,31 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 08e549924823e97a3ea303c2309b812dfd5223b8be5ff96fe41bf75181ce0977 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.22.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash e849450f1c5c20123aa7d63291e2a818b7a117f2e03e432853ece463dd09e67a /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz && \
-    /validate_file_hash 1b2313cd198d45eab00cc37c38f6b1ca0a948ba279c29e322bdf426d406129b5 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.0-linux-amd64.tar.gz && \
+    /validate_file_hash 138676351483e61d12dfade70da6c03d471bbdcac84eaadeb5e1d06fa114a24f helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash e7a7d6f9d06fab38b4128785aa80f65c54f6675a0d2abef655259ddd852274e1 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.2/bin/linux/amd64/kubectl && \
+    /validate_file_hash c922440b043e5de1afa3c1382f8c663a25f055978cbc6e8423493ec157579ec5 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.98.1/doctl-1.98.1-linux-amd64.tar.gz && \
-    /validate_file_hash c48c9b3922d6339aca919b7e4b966740d40d0fca7e0695ec5eb466097d5f1ac5 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.99.0/doctl-1.99.0-linux-amd64.tar.gz && \
+    /validate_file_hash 3ed966007fad507bb78ead1a5b653d216b3b6d5c1ed836c44a7d3ed339b3d5b0 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.17.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 3d4424d91341e9f3d3a0d5bc8cd444b1917bc1b1af67c7c7da55eba2f7503dd7 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.25.zip" -o "awscliv2.zip" && \
+    /validate_file_hash b73bc4821fc674120ccf299848fc586e12297456273c509c66f3b168a28338f8 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -59,8 +59,8 @@ RUN mkdir -p /etc/apt/keyrings && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell_7.3.6-1.deb_amd64.deb && \
-    /validate_file_hash 9219bc276da261d6fd1bce5dcbf898466e70682ea2f17eabff85841fbe6c9e57 powershell.tar.gz && \
+    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.8/powershell_7.3.8-1.deb_amd64.deb && \
+    /validate_file_hash c4ddfbad0231ba18ad70571c4c5d69f5a2dd5f7834054737ac6bb4089d83317e powershell.tar.gz && \
     dpkg -i powershell.tar.gz && \
     apt-get install -f && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
