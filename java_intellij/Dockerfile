@@ -1,7 +1,7 @@
 FROM sn_base
 
-RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/idea/ideaIC-2021.3.2.tar.gz && \
-    /validate_file_hash 99e2225846d118e3190023abc65c8b2c62a1d1463f601c79a20b9494c54a08c9  ide.tar.gz && \
+RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/idea/ideaIC-2021.3.3.tar.gz && \
+    /validate_file_hash 38ba4721d459efc55b83bbffdcd3888b2eb9d98ef3226967fb05ffc5fbcc96e5  ide.tar.gz && \
     /unzip_ide.sh && \
     chown -R developer:developer /ide/bin
 
