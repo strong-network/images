@@ -1,7 +1,7 @@
 FROM sn_base
 
-RUN wget -O /ide.tar.gz https://download.jetbrains.com/idea/ideaIU-2022.1.4.tar.gz && \
-    /validate_file_hash f9e9389f0184306cae8d8b464a7c9b5baabb3a10a526a76fa7f0e3b44a158b8d  ide.tar.gz && \
+RUN wget -O /ide.tar.gz https://download.jetbrains.com/idea/ideaIU-2022.3.3.tar.gz && \
+    /validate_file_hash c302bd84b48a56ef1b0f033e8e93a0da5590f80482eae172db6130da035314a6  ide.tar.gz && \
     /unzip_ide.sh && \
     chown -R developer:developer /ide/bin
 
