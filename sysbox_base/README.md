@@ -7,7 +7,7 @@ minikube start
 ``` 
 This image provides _minikube_  v1.30.1.
 
-If you're working with _minikube_ release __version 1.31.0 or higher__ https://github.com/kubernetes/minikube/releases, we need to set the container runtime for our cluster, by using the following command: 
+If you're working with _minikube_ release __version 1.31.0 or higher__ https://github.com/kubernetes/minikube/releases, container runtime needs to be set for cluster:
 ```bash
 minikube start --container-runtime=containerd
 ``` 

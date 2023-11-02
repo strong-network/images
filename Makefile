@@ -9,7 +9,6 @@ PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
 SYSBOX_GENERIC_IMAGE_NAME=sn_sysbox_generic
-SYSBOX_SYSTEMD_IMAGE_NAME=sn_sysbox_systemd
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
@@ -38,26 +37,9 @@ golang_image: base_image
 generic_image: base_image
 	docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic; 
 
-# IN_DEV
-.PHONY generic_sysbox_image: 
-generic_sysbox_image: sysbox_base_image
-	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
-
-
 .PHONY: java_intellij
 java_intellij: base_image
 	@docker build -t ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION} java_intellij
-
-# # IN_DEV
-.PHONY: sysbox_base_image
-sysbox_base_image: base_image
-	@echo ${VERSION}
-	@docker build -t ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} sysbox_base
-	@docker tag ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} ${SYSBOX_BASE_IMAGE_NAME}
-
-.PHONY: sysbox_systemd
-sysbox_systemd: sysbox_base_image
-	@docker build -t ${SYSBOX_SYSTEMD_IMAGE_NAME}:${VERSION} sysbox_systemd
 
 .PHONY: goland
 goland: base_image
@@ -83,6 +65,18 @@ intellij_ultimate: base_image
 webstorm_image: base_image
 	@docker build -t ${WEBSTORM_IMAGE_NAME}:${VERSION} webstorm
 
+# Sysbox
+# IN_DEV
+.PHONY: sysbox_base_image
+sysbox_base_image: base_image
+	@docker build -t ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} sysbox_base
+	@docker tag ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} ${SYSBOX_BASE_IMAGE_NAME}
+
+# IN_DEV
+.PHONY: generic_sysbox_image: 
+generic_sysbox_image: sysbox_base_image
+	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
+
 .PHONY: all
 all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image
 
@@ -94,24 +88,9 @@ get_version:
 get_base_image:
 	@echo ${BASE_IMAGE_NAME}:${VERSION}
 
-# IN_DEV
-.PHONY: get_sysbox_base_image
-get_sysbox_base_image:
-	@echo ${SYSBOX_BASE_IMAGE_NAME}:${VERSION}
-
 .PHONY: get_generic_image
 get_generic_image:
 	@echo ${GENERIC_IMAGE_NAME}:${VERSION}
-
-# IN_DEV
-.PHONY: get_sysbox_generic_image
-get_sysbox_generic_image:
-	@echo ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION}
-
-# IN_DEV
-.PHONY: get_sysbox_systemd_image
-get_sysbox_systemd_image:
-	@echo ${SYSBOX_SYSTEMD_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_java_intellij_image
 get_java_intellij_image:
@@ -140,3 +119,13 @@ get_intellij_ultimate_image:
 .PHONY: get_webstorm_image
 get_webstorm_image:
 	@echo ${WEBSTORM_IMAGE_NAME}:${VERSION}
+
+# IN_DEV
+.PHONY: get_sysbox_base_image
+get_sysbox_base_image:
+	@echo ${SYSBOX_BASE_IMAGE_NAME}:${VERSION}
+
+# IN_DEV
+.PHONY: get_sysbox_generic_image
+get_sysbox_generic_image:
+	@echo ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION}
