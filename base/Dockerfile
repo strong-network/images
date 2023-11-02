@@ -21,36 +21,36 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.21.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 08e549924823e97a3ea303c2309b812dfd5223b8be5ff96fe41bf75181ce0977 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 6e06123399e5428fbd603564afdac74821fa0a7b4465e8a1a2359b362fc42fc4 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz && \
-    /validate_file_hash 1b2313cd198d45eab00cc37c38f6b1ca0a948ba279c29e322bdf426d406129b5 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.1-linux-amd64.tar.gz && \
+    /validate_file_hash 98c363564d00afd0cc3088e8f830f2a0eeb5f28755b3d8c48df89866374a1ed0 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash e7a7d6f9d06fab38b4128785aa80f65c54f6675a0d2abef655259ddd852274e1 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.3/bin/linux/amd64/kubectl && \
+    /validate_file_hash 0c680c90892c43e5ce708e918821f92445d1d244f9b3d7513023bcae9a6246d1 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.98.1/doctl-1.98.1-linux-amd64.tar.gz && \
-    /validate_file_hash c48c9b3922d6339aca919b7e4b966740d40d0fca7e0695ec5eb466097d5f1ac5 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.100.0/doctl-1.100.0-linux-amd64.tar.gz && \
+    /validate_file_hash 9c2b3991d699e322b65c495768f2a3b9d7581c330cb0c3669eef0fb60124fc42 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.17.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 3d4424d91341e9f3d3a0d5bc8cd444b1917bc1b1af67c7c7da55eba2f7503dd7 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.21.zip" -o "awscliv2.zip" && \
+    /validate_file_hash fa5efe6e3871625d57f784253fc0ea5bba74567453c2773c088b574c86559754 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
-    rm awscliv2.zip && \ 
+    rm awscliv2.zip && \
     rm -rf aws
-    
+
 # Install  Azure CLi
 RUN mkdir -p /etc/apt/keyrings && \
     curl -sLS https://packages.microsoft.com/keys/microsoft.asc > microsoft.asc && \
@@ -59,8 +59,8 @@ RUN mkdir -p /etc/apt/keyrings && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell_7.3.6-1.deb_amd64.deb && \
-    /validate_file_hash 9219bc276da261d6fd1bce5dcbf898466e70682ea2f17eabff85841fbe6c9e57 powershell.tar.gz && \
+    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/powershell_7.3.9-1.deb_amd64.deb && \
+    /validate_file_hash 8ec60ee3bd4721f5097f7faf55c1aabf984118821ed78baca70be3612516cc9b powershell.tar.gz && \
     dpkg -i powershell.tar.gz && \
     apt-get install -f && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
@@ -85,7 +85,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
     /validate_file_hash 45c0ecd6271b259e50dc095449f2005a999f4232ca8ef8779ccf935e9e9aaa35 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
     curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
-    /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh 
+    /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh
 
 
 # Setup environment for developers
@@ -103,7 +103,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     zsh  jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
     # install networking related packages
-    ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools && \ 
+    ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools && \
     apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt
@@ -111,7 +111,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
 # Create the developer user and set permissions
 RUN chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
-    mkdir -p /usr/bin/strong_network_startup && \
+    mkdir -p /usr/bin/strong_network_startup/vscode_extensions && \
     adduser --gecos '' --disabled-password developer && \
     echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd && \
     # Change permissions of /usr/local
@@ -119,8 +119,8 @@ RUN chsh -s /bin/bash && \
     chmod -R g+w /usr/local && \
     mkdir -p /home/developer && \
     chown -R developer /home/developer && \
-    chmod -R 770 /home/developer
-
+    chmod -R 770 /home/developer && \
+    chmod 777 /usr/bin/strong_network_startup/vscode_extensions && chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 

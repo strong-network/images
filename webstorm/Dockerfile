@@ -5,9 +5,7 @@ RUN wget -O /ide.tar.gz https://download.jetbrains.com/webstorm/WebStorm-2022.2.
     /unzip_ide.sh && \
     chown -R developer:developer /ide/bin
 
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x > node_setup.sh && \
-    cat node_setup.sh | bash - && rm node_setup.sh && \
-    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
     /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && rm yarn.gpg.key && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh > install_nvm.sh && \

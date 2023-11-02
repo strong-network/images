@@ -8,7 +8,11 @@ PYTHON_DATASCIENCE_IMAGE_NAME=sn_python_datascience
 PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
+<<<<<<< HEAD
 SYSBOX_GENERIC_IMAGE_NAME=sn_sysbox_generic
+=======
+GENERIC_JFROG_IMAGE_NAME=sn_generic_jfrog
+>>>>>>> f9a76fabae4f3f0cfece5019d0f9985eb289ba95
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
@@ -35,7 +39,12 @@ golang_image: base_image
 	@docker build -t ${GOLANG_IMAGE_NAME}:${VkERSION} golang
 
 generic_image: base_image
+<<<<<<< HEAD
 	docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic; 
+=======
+	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
+	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME} 
+>>>>>>> f9a76fabae4f3f0cfece5019d0f9985eb289ba95
 
 .PHONY: java_intellij
 java_intellij: base_image
@@ -65,14 +74,15 @@ intellij_ultimate: base_image
 webstorm_image: base_image
 	@docker build -t ${WEBSTORM_IMAGE_NAME}:${VERSION} webstorm
 
-# Sysbox
-# IN_DEV
+.PHONY: generic_jfrog_image
+generic_jfrog_image: generic_image
+	@docker build -t ${GENERIC_JFROG_IMAGE_NAME}:${VERSION} generic_jfrog
+
 .PHONY: sysbox_base_image
 sysbox_base_image: base_image
 	@docker build -t ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} sysbox_base
 	@docker tag ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} ${SYSBOX_BASE_IMAGE_NAME}
 
-# IN_DEV
 .PHONY: generic_sysbox_image: 
 generic_sysbox_image: sysbox_base_image
 	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
@@ -120,12 +130,14 @@ get_intellij_ultimate_image:
 get_webstorm_image:
 	@echo ${WEBSTORM_IMAGE_NAME}:${VERSION}
 
-# IN_DEV
+.PHONY: get_generic_jfrog_image
+get_generic_jfrog_image:
+	@echo ${GENERIC_JFROG_IMAGE_NAME}:${VERSION}
+
 .PHONY: get_sysbox_base_image
 get_sysbox_base_image:
 	@echo ${SYSBOX_BASE_IMAGE_NAME}:${VERSION}
 
-# IN_DEV
 .PHONY: get_sysbox_generic_image
 get_sysbox_generic_image:
 	@echo ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION}
