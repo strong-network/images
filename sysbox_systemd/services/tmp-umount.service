@@ -1,0 +1,9 @@
+[Unit]
+Description=Unmount tmpfs from /tmp dir
+Before=strong-setup.service
+
+[Service]
+ExecStart=/bin/bash -c 'umount -l /tmp'
+
+[Install]
+WantedBy=multi-user.target

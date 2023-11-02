@@ -1,0 +1,12 @@
+[Unit]
+Description=Entrypoint for running Strong Network workspace
+
+[Service]
+User=developer
+Group=developer
+ExecStart=/usr/bin/strong_setup.sh
+StandardOutput=kmsg+console
+StandardError=kmsg+console
+
+[Install]
+WantedBy=multi-user.target
