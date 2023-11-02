@@ -40,7 +40,7 @@ generic_image: base_image
 	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME} 
 
 .PHONY: java_intellij
-java_intellij: base_image
+java_intellij: base_image                    
 	@docker build -t ${JAVA_INTELLIJ_IMAGE_NAME}:${VERSION} java_intellij
 
 .PHONY: goland

@@ -1,6 +1,3 @@
-#
-# Select base image to build from
-#
 ARG BASE_IMAGE=sn_base
 FROM ${BASE_IMAGE}
 
