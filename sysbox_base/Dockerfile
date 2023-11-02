@@ -7,8 +7,8 @@ FROM sn_base
 
 RUN apt-get update      &&  \
     apt-get install -y      \
-	wget                    \
-	iptables                \
+    wget                    \
+    iptables                \
     iproute2
 
 # Install Docker and it's missing tools
