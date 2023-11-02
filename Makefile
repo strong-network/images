@@ -76,7 +76,7 @@ sysbox_base_image: base_image
 	@docker build -t ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} sysbox_base
 	@docker tag ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} ${SYSBOX_BASE_IMAGE_NAME}
 
-.PHONY: generic_sysbox_image: 
+.PHONY: generic_sysbox_image
 generic_sysbox_image: sysbox_base_image
 	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
 
