@@ -29,6 +29,7 @@ jobs:
           echo ANDROID_IMAGE_URL=$REGISTRY_URL/android_studio:$VERSION >>  $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
           echo WEBSTORM_IMAGE_URL=$REGISTRY_URL/webstorm_image:$VERSION >> $GITHUB_ENV
+          echo SYSBOX_GENERIC_IMAGE_URL=$REGISTRY_URL/sysbox_generic:$VERSION >> $GITHUB_ENV
           echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_NAME=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_NAME=$(make get_java_intellij_image) >> $GITHUB_ENV
@@ -37,6 +38,7 @@ jobs:
           echo PHPSTORM_IMAGE_NAME=$(make get_phpstorm_image) >> $GITHUB_ENV
           echo WEBSTORM_IMAGE_NAME=$(make get_webstorm_image) >> $GITHUB_ENV
           echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
+          echo SYSBOX_GENERIC_IMAGE_NAME=$(make get_sysbox_generic_image) >> $GITHUB_ENV
 
       - name: Setup Google cloud SDK
         uses: google-github-actions/setup-gcloud@v0

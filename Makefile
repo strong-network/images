@@ -8,11 +8,8 @@ PYTHON_DATASCIENCE_IMAGE_NAME=sn_python_datascience
 PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
-<<<<<<< HEAD
-SYSBOX_GENERIC_IMAGE_NAME=sn_sysbox_generic
-=======
 GENERIC_JFROG_IMAGE_NAME=sn_generic_jfrog
->>>>>>> f9a76fabae4f3f0cfece5019d0f9985eb289ba95
+SYSBOX_GENERIC_IMAGE_NAME=sn_sysbox_generic
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
@@ -39,12 +36,8 @@ golang_image: base_image
 	@docker build -t ${GOLANG_IMAGE_NAME}:${VkERSION} golang
 
 generic_image: base_image
-<<<<<<< HEAD
-	docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic; 
-=======
 	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
 	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME} 
->>>>>>> f9a76fabae4f3f0cfece5019d0f9985eb289ba95
 
 .PHONY: java_intellij
 java_intellij: base_image
