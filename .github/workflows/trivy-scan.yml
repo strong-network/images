@@ -137,3 +137,22 @@ jobs:
         with:
           image-name: ${{ env.WEBSTORM_IMAGE }}
           make-command: webstorm_image
+  
+  scan-sysbox-generic:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make generic sysbox env
+        run: |
+          echo SYSBOX_GENERIC_IMAGE=$(make get_sysbox_generic_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        name: scan image
+        with:
+          image-name: ${{ env.SYSBOX_GENERIC_IMAGE }}
+          make-command: generic_sysbox_image
+  
+
+  

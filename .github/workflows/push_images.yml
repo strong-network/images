@@ -125,3 +125,12 @@ jobs:
           image-name: ${{ env.WEBSTORM_IMAGE_NAME }}
           make-command: webstorm_image
           image-url: ${{ env.WEBSTORM_IMAGE_URL }}
+
+      # Push sysbox generic image
+
+      - uses: ./.github/actions/push-image
+        name: push sysbox image
+        with:
+          image-name: ${{ env.SYSBOX_GENERIC_IMAGE_NAME }}
+          make-command: generic_sysbox_image
+          image-url: ${{ env.SYSBOX_GENERIC_IMAGE_URL }}
