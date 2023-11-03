@@ -1,4 +1,6 @@
-FROM sn_base
+ARG BASE_IMAGE=sn_base
+FROM ${BASE_IMAGE}
+
 
 ENV GOPATH /home/developer/go
 ENV PATH /usr/local/go/bin:/home/developer/go/bin:${PATH}

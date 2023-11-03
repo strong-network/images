@@ -1,5 +1,6 @@
 GIT_ROOT=$(shell git rev-parse --show-toplevel)
 BASE_IMAGE_NAME=sn_base
+SYSBOX_BASE_IMAGE_NAME=sn_sysbox_base
 GOLANG_IMAGE_NAME=sn_golang
 GOLANG_1.17_IMAGE_NAME=sn_golang_1.17
 PYTHON_SPARK_IMAGE_NAME=sn_python_spark
@@ -8,6 +9,7 @@ PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
 GENERIC_JFROG_IMAGE_NAME=sn_generic_jfrog
+SYSBOX_GENERIC_IMAGE_NAME=sn_sysbox_generic
 FLUTTER_IMAGE_NAME=sn_flutter
 JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
@@ -69,6 +71,15 @@ webstorm_image: base_image
 generic_jfrog_image: generic_image
 	@docker build -t ${GENERIC_JFROG_IMAGE_NAME}:${VERSION} generic_jfrog
 
+.PHONY: sysbox_base_image
+sysbox_base_image: base_image
+	@docker build -t ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} sysbox_base
+	@docker tag ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} ${SYSBOX_BASE_IMAGE_NAME}
+
+.PHONY: generic_sysbox_image
+generic_sysbox_image: sysbox_base_image
+	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
+
 .PHONY: all
 all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image
 
@@ -115,3 +126,11 @@ get_webstorm_image:
 .PHONY: get_generic_jfrog_image
 get_generic_jfrog_image:
 	@echo ${GENERIC_JFROG_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_sysbox_base_image
+get_sysbox_base_image:
+	@echo ${SYSBOX_BASE_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_sysbox_generic_image
+get_sysbox_generic_image:
+	@echo ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION}
