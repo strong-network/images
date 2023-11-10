@@ -27,8 +27,8 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.1-linux-amd64.tar.gz && \
-    /validate_file_hash 98c363564d00afd0cc3088e8f830f2a0eeb5f28755b3d8c48df89866374a1ed0 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz && \
+    /validate_file_hash 55a8e6dce87a1e52c61e0ce7a89bf85b38725ba3e8deb51d4a08ade8a2c70b2d helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
@@ -44,8 +44,8 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.21.zip" -o "awscliv2.zip" && \
-    /validate_file_hash fa5efe6e3871625d57f784253fc0ea5bba74567453c2773c088b574c86559754 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.31.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 94ab2f9dd53b994cd8429b7a9e47a0ab7222d8b600a35031cde9faa669b4b592 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
