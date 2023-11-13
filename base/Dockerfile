@@ -8,7 +8,7 @@ COPY validate_file_hash.sh /validate_file_hash
 
 # Install base packages for other applications and update the package repository
 RUN apt-get update && \
-    apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev kali-linux-large \
+    apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev kali-linux-headless \
     libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo software-properties-common \
     libkrb5-dev libssl-dev build-essential clang-format clang dirmngr lsb-release && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip libxext6 libxrender1 libxtst6 libxi6 libfreetype6 && \
