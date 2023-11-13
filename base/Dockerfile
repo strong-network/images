@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM kalilinux/kali-last-release:latest
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -8,7 +8,7 @@ COPY validate_file_hash.sh /validate_file_hash
 
 # Install base packages for other applications and update the package repository
 RUN apt-get update && \
-    apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
+    apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev kali-linux-large \
     libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo software-properties-common \
     libkrb5-dev libssl-dev build-essential clang-format clang dirmngr lsb-release && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip libxext6 libxrender1 libxtst6 libxi6 libfreetype6 && \
@@ -51,42 +51,6 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     rm awscliv2.zip && \
     rm -rf aws
 
-# Install  Azure CLi
-RUN mkdir -p /etc/apt/keyrings && \
-    curl -sLS https://packages.microsoft.com/keys/microsoft.asc > microsoft.asc && \
-    cat microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null && \
-    cat microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/powershell.gpg > /dev/null && \
-    chmod go+r /etc/apt/keyrings/microsoft.gpg && \
-    /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
-    AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/powershell_7.3.9-1.deb_amd64.deb && \
-    /validate_file_hash 8ec60ee3bd4721f5097f7faf55c1aabf984118821ed78baca70be3612516cc9b powershell.tar.gz && \
-    dpkg -i powershell.tar.gz && \
-    apt-get install -f && \
-    echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
-    apt-get update && \
-    apt-get install -y azure-cli && \
-    rm powershell.tar.gz && \
-    rm -rf /etc/apt/sources.list.d/azure-cl.list && \
-    apt-get update
-
-# Install hashcorp/terraform tools
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
-    /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029 hashicorp.key && \
-    cat hashicorp.key | apt-key add - && \
-    rm hashicorp.key && \
-    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
-    apt-get update && \
-    apt-get install terraform -y && \
-    curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash 7d8f634136f58f694326c834ff58db3ccdf5dfe7b651966a5665d8253d04f7dc terrascan.tar.gz && \
-    tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
-    install terrascan /usr/local/bin && rm terrascan && \
-    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
-    /validate_file_hash 45c0ecd6271b259e50dc095449f2005a999f4232ca8ef8779ccf935e9e9aaa35 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
-    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
-    /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh
-
 
 # Setup environment for developers
     # install general packages related to development
@@ -98,7 +62,6 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get -y install gcc g++ make yarn && \
     # script is to have the latest available version of git-lfs
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && \
     apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
     zsh  jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
