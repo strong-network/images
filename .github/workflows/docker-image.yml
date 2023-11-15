@@ -72,3 +72,10 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build strong network generic jfrog image
         run: make generic_jfrog_image && docker inspect --type=image $(make get_generic_jfrog_image) > /dev/null
+
+  build_novnc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network novnc image
+        run: make no_vnc && docker inspect --type=image $(make get_no_vnc_image) > /dev/null
