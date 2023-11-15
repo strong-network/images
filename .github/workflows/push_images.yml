@@ -67,6 +67,15 @@ jobs:
           make-command: generic_image
           image-url: ${{ env.GENERIC_IMAGE_URL }}
 
+      # Push novnc image
+
+      - uses: ./.github/actions/push-image
+        name: push novnc image
+        with:
+          image-name: ${{ env.NOVNC_IMAGE_NAME }}
+          make-command: no_vnc
+          image-url: ${{ env.NOVNC_IMAGE_URL }}
+
         # Build Java Intellij image
 
       - uses: ./.github/actions/push-image
@@ -138,12 +147,3 @@ jobs:
           image-name: ${{ env.SYSBOX_GENERIC_IMAGE_NAME }}
           make-command: generic_sysbox_image
           image-url: ${{ env.SYSBOX_GENERIC_IMAGE_URL }}
-
-      # Push novnc generic image
-
-      - uses: ./.github/actions/push-image
-        name: push novnc image
-        with:
-          image-name: ${{ env.NOVNC_IMAGE_NAME }}
-          make-command: no_vnc
-          image-url: ${{ env.NOVNC_IMAGE_URL }}
