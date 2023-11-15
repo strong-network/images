@@ -51,13 +51,6 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     rm awscliv2.zip && \
     rm -rf aws
 
-RUN wget https://gitlab.com/kalilinux/recipes/kali-scripts/-/raw/main/xfce4.sh && \
-    chmod +x xfce4.sh && \
-    ./xfce4.sh && \
-    mkdir -p ~/.vnc/ && \
-    wget https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project/-/raw/master/nethunter-fs/profiles/xstartup -O ~/.vnc/xstartup && \
-    chmod +X ~/.vnc/xstartup
-
 # Setup environment for developers
     # install general packages related to development
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
@@ -92,6 +85,13 @@ RUN chsh -s /bin/bash && \
     chmod 777 /usr/bin/strong_network_startup/vscode_extensions && chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
+
+RUN wget https://gitlab.com/kalilinux/recipes/kali-scripts/-/raw/main/xfce4.sh && \
+    chmod +x xfce4.sh && \
+    ./xfce4.sh && \
+    mkdir -p /home/developer/.vnc/ && \
+    wget https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project/-/raw/master/nethunter-fs/profiles/xstartup -O /home/developer/.vnc/xstartup && \
+    chmod 777 /home/developer/.vnc/xstartup
 
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
