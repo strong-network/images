@@ -91,7 +91,8 @@ RUN wget https://gitlab.com/kalilinux/recipes/kali-scripts/-/raw/main/xfce4.sh &
     ./xfce4.sh && \
     mkdir -p /home/developer/.vnc/ && \
     wget https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project/-/raw/master/nethunter-fs/profiles/xstartup -O /home/developer/.vnc/xstartup && \
-    chmod 777 /home/developer/.vnc/xstartup
+    chmod 777 /home/developer/.vnc/xstartup && \
+    cp /usr/share/novnc/vnc_auto.html /usr/share/novnc/index.html
 
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
