@@ -55,17 +55,17 @@ jobs:
 
       # Build the base image
 
-      - name: Build the base image
-        run: make base_image
+      # - name: Build the base image
+      #   run: make base_image
 
-      # Build the generic cloud editor image 
+      # # Build the generic cloud editor image 
 
-      - uses: ./.github/actions/push-image
-        name: push generic image image
-        with:
-          image-name: ${{ env.GENERIC_IMAGE_NAME }}
-          make-command: generic_image
-          image-url: ${{ env.GENERIC_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push generic image image
+      #   with:
+      #     image-name: ${{ env.GENERIC_IMAGE_NAME }}
+      #     make-command: generic_image
+      #     image-url: ${{ env.GENERIC_IMAGE_URL }}
 
       # Push novnc image
 
@@ -78,72 +78,72 @@ jobs:
 
         # Build Java Intellij image
 
-      - uses: ./.github/actions/push-image
-        name: push java intellij image
-        with:
-          image-name: ${{ env.JAVA_INTELLIJ_IMAGE_NAME }}
-          make-command: java_intellij
-          image-url: ${{ env.JAVA_INTELLIJ_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push java intellij image
+      #   with:
+      #     image-name: ${{ env.JAVA_INTELLIJ_IMAGE_NAME }}
+      #     make-command: java_intellij
+      #     image-url: ${{ env.JAVA_INTELLIJ_IMAGE_URL }}
 
-      # build Goland image
+      # # build Goland image
 
-      - uses: ./.github/actions/push-image
-        name: push goland image
-        with:
-          image-name: ${{ env.GOLAND_IMAGE_NAME }}
-          make-command: goland
-          image-url: ${{ env.GOLAND_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push goland image
+      #   with:
+      #     image-name: ${{ env.GOLAND_IMAGE_NAME }}
+      #     make-command: goland
+      #     image-url: ${{ env.GOLAND_IMAGE_URL }}
 
-      # Build Pycharm image
+      # # Build Pycharm image
 
-      - uses: ./.github/actions/push-image
-        name: push pycharm image
-        with:
-          image-name: ${{ env.PYCHARM_IMAGE_NAME }}
-          make-command: pycharm
-          image-url: ${{ env.PYCHARM_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push pycharm image
+      #   with:
+      #     image-name: ${{ env.PYCHARM_IMAGE_NAME }}
+      #     make-command: pycharm
+      #     image-url: ${{ env.PYCHARM_IMAGE_URL }}
 
-      # Build phpstorm
+      # # Build phpstorm
 
-      - uses: ./.github/actions/push-image
-        name: push phpstorm image
-        with:
-          image-name: ${{ env.PHPSTORM_IMAGE_NAME }}
-          make-command: phpstorm
-          image-url: ${{ env.PHPSTORM_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push phpstorm image
+      #   with:
+      #     image-name: ${{ env.PHPSTORM_IMAGE_NAME }}
+      #     make-command: phpstorm
+      #     image-url: ${{ env.PHPSTORM_IMAGE_URL }}
       
-      # Build Android studio
+      # # Build Android studio
 
-      - uses: ./.github/actions/push-image
-        name: push android studio image
-        with:
-          image-name: ${{ env.ANDROID_IMAGE_NAME }}
-          make-command: android_studio
-          image-url: ${{ env.ANDROID_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push android studio image
+      #   with:
+      #     image-name: ${{ env.ANDROID_IMAGE_NAME }}
+      #     make-command: android_studio
+      #     image-url: ${{ env.ANDROID_IMAGE_URL }}
 
-      # Build Intellij Ultimate
+      # # Build Intellij Ultimate
 
-      - uses: ./.github/actions/push-image
-        name: push intellij ultimate image
-        with:
-          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE_NAME }}
-          make-command: intellij_ultimate
-          image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push intellij ultimate image
+      #   with:
+      #     image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE_NAME }}
+      #     make-command: intellij_ultimate
+      #     image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
 
-      # Push webstorm image
+      # # Push webstorm image
 
-      - uses: ./.github/actions/push-image
-        name: push webstorm image
-        with:
-          image-name: ${{ env.WEBSTORM_IMAGE_NAME }}
-          make-command: webstorm_image
-          image-url: ${{ env.WEBSTORM_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push webstorm image
+      #   with:
+      #     image-name: ${{ env.WEBSTORM_IMAGE_NAME }}
+      #     make-command: webstorm_image
+      #     image-url: ${{ env.WEBSTORM_IMAGE_URL }}
 
-      # Push sysbox generic image
+      # # Push sysbox generic image
 
-      - uses: ./.github/actions/push-image
-        name: push sysbox image
-        with:
-          image-name: ${{ env.SYSBOX_GENERIC_IMAGE_NAME }}
-          make-command: generic_sysbox_image
-          image-url: ${{ env.SYSBOX_GENERIC_IMAGE_URL }}
+      # - uses: ./.github/actions/push-image
+      #   name: push sysbox image
+      #   with:
+      #     image-name: ${{ env.SYSBOX_GENERIC_IMAGE_NAME }}
+      #     make-command: generic_sysbox_image
+      #     image-url: ${{ env.SYSBOX_GENERIC_IMAGE_URL }}
