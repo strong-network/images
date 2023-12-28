@@ -27,25 +27,25 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz && \
-    /validate_file_hash 55a8e6dce87a1e52c61e0ce7a89bf85b38725ba3e8deb51d4a08ade8a2c70b2d helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.3-linux-amd64.tar.gz && \
+    /validate_file_hash bbb6e7c6201458b235f335280f35493950dcd856825ddcfd1d3b40ae757d5c7d helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.3/bin/linux/amd64/kubectl && \
-    /validate_file_hash 0c680c90892c43e5ce708e918821f92445d1d244f9b3d7513023bcae9a6246d1 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.29.0/bin/linux/amd64/kubectl && \
+    /validate_file_hash 0e03ab096163f61ab610b33f37f55709d3af8e16e4dcc1eb682882ef80f96fd5 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.100.0/doctl-1.100.0-linux-amd64.tar.gz && \
-    /validate_file_hash 9c2b3991d699e322b65c495768f2a3b9d7581c330cb0c3669eef0fb60124fc42 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.102.0/doctl-1.102.0-linux-amd64.tar.gz && \
+    /validate_file_hash 03c95fb65a30a606d3fcc4d9b27466b26d07bc51dc329aed74a3ac3d3a646a99 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.31.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 94ab2f9dd53b994cd8429b7a9e47a0ab7222d8b600a35031cde9faa669b4b592 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.5.zip" -o "awscliv2.zip" && \
+    /validate_file_hash c2758413f86f4e9cd729a8cc2d2f60b590b22e1935c42809d115e616a276d50c awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -79,7 +79,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     apt-get update && \
     apt-get install terraform -y && \
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash 4443a8bba7116e9888ce250ea6d5e0498973d34b6d2dbfc41a002468a5f29110 terrascan.tar.gz && \
+    /validate_file_hash acdb77e0581fd37e4200d716d69616d1794dced16dca1bb0a898605810cfff7a terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
