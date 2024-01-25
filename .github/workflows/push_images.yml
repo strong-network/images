@@ -51,12 +51,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Build the base image
-
       - name: Build the base image
         run: make base_image
 
       # Build the generic cloud editor image 
-
       - uses: ./.github/actions/push-image
         name: push generic image image
         with:
@@ -72,7 +70,15 @@ jobs:
           make-command: no_vnc
           image-url: ${{ env.NOVNC_IMAGE_URL }}
 
-        # Build Java Intellij image
+      # Push JFrog image
+      - uses: ./.github/actions/push-image
+        name: push generic image image JFROG
+        with:
+          image-name: ${{ env.JFROG_GENERIC_IMAGE_NAME }}
+          make-command: generic_jfrog_image
+          image-url: ${{ env.JFROG_GENERIC_IMAGE_URL }}
+
+      # Build Java Intellij image
       - uses: ./.github/actions/push-image
         name: push java intellij image
         with:
