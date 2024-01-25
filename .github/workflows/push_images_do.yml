@@ -21,6 +21,7 @@ jobs:
           GIT_ROOT=$(git rev-parse --show-toplevel)
           VERSION=$(awk NF ${GIT_ROOT}/VERSION)
           echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
+          echo JFROG_GENERIC_IMAGE_URL=$REGISTRY_URL/jfrog_generic:$VERSION >>  $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_URL=$REGISTRY_URL/intellij_java:$VERSION >>  $GITHUB_ENV
           echo GOLAND_IMAGE_URL=$REGISTRY_URL/goland_go:$VERSION >>  $GITHUB_ENV
           echo PYCHARM_IMAGE_URL=$REGISTRY_URL/pycharm_python:$VERSION >>  $GITHUB_ENV
@@ -40,6 +41,7 @@ jobs:
           echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_NAME=$(make get_sysbox_generic_image) >> $GITHUB_ENV
           echo NOVNC_IMAGE_NAME=$(make get_no_vnc_image) >> $GITHUB_ENV
+          echo JFROG_GENERIC_IMAGE_NAME=$(make get_generic_jfrog_image) >> $GITHUB_ENV
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -69,6 +71,13 @@ jobs:
           make-command: no_vnc
           image-url: ${{ env.NOVNC_IMAGE_URL }}
           
+      - uses: ./.github/actions/push-image
+        name: push generic image image JFROG
+        with:
+          image-name: ${{ env.JFROG_GENERIC_IMAGE_NAME }}
+          make-command: generic_jfrog_image
+          image-url: ${{ env.JFROG_GENERIC_IMAGE_URL }}
+
       # Build Java Intellij image
       - uses: ./.github/actions/push-image
         name: push java intellij image

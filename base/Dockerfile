@@ -21,31 +21,31 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 6e06123399e5428fbd603564afdac74821fa0a7b4465e8a1a2359b362fc42fc4 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash d350bbbd1c74c0a8542193bd41881afea534b141c6a9d9a27b2f217e51d5c48c /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.3-linux-amd64.tar.gz && \
-    /validate_file_hash bbb6e7c6201458b235f335280f35493950dcd856825ddcfd1d3b40ae757d5c7d helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.14.0-linux-amd64.tar.gz && \
+    /validate_file_hash f43e1c3387de24547506ab05d24e5309c0ce0b228c23bd8aa64e9ec4b8206651 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.29.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash 0e03ab096163f61ab610b33f37f55709d3af8e16e4dcc1eb682882ef80f96fd5 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.29.1/bin/linux/amd64/kubectl && \
+    /validate_file_hash 69ab3a931e826bf7ac14d38ba7ca637d66a6fcb1ca0e3333a2cafdf15482af9f kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.102.0/doctl-1.102.0-linux-amd64.tar.gz && \
-    /validate_file_hash 03c95fb65a30a606d3fcc4d9b27466b26d07bc51dc329aed74a3ac3d3a646a99 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.103.0/doctl-1.103.0-linux-amd64.tar.gz && \
+    /validate_file_hash 14c9f6984299a80ad3fbe8e9711d503667c203e2768c04cdcde8dcf4a61ca8fe doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.5.zip" -o "awscliv2.zip" && \
-    /validate_file_hash c2758413f86f4e9cd729a8cc2d2f60b590b22e1935c42809d115e616a276d50c awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.12.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 81077b6920d9163df429f27f28b53af534c98e6f823a496cc11cab75eec78ab4 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -59,8 +59,8 @@ RUN mkdir -p /etc/apt/keyrings && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/powershell_7.3.9-1.deb_amd64.deb && \
-    /validate_file_hash 8ec60ee3bd4721f5097f7faf55c1aabf984118821ed78baca70be3612516cc9b powershell.tar.gz && \
+    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell_7.4.0-1.deb_amd64.deb && \
+    /validate_file_hash 550331e243a7311e1bf0ca83d8c96c5e78ba82a765c4a9ba34aa0db6eb9a9f22 powershell.tar.gz && \
     dpkg -i powershell.tar.gz && \
     apt-get install -f && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
@@ -127,7 +127,7 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
     cd /tmp &&\
-    /validate_file_hash 8782c29feec0d745edd9607598fe781b3912edd721301fbc7a0ebe09bf71c905 install_sdkman.sh &&\
+    /validate_file_hash 9be925ee0b858cf9df8dbdb028c30aca961c585b4835caef3d6350de3166779c install_sdkman.sh &&\
     export SDKMAN_DIR=/tmp/sdkman &&\
     bash /tmp/install_sdkman.sh &&\
     bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
