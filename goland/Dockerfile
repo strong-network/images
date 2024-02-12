@@ -11,8 +11,8 @@ RUN wget -O /ide.tar.gz https://download.jetbrains.com/go/goland-2021.3.5.tar.gz
 
 RUN npm install -g npm-check-updates && \
     npm install -g handlebars diff && \
-    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.21.6.linux-amd64.tar.gz && \
-    /validate_file_hash 3f934f40ac360b9c01f616a9aa1796d227d8b0328bf64cb045c7b8c4ee9caea4 golang_sdk-linux-amd64.tar.gz && \
+    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.22.0.linux-amd64.tar.gz && \
+    /validate_file_hash f6c8a87aa03b92c4b0bf3d558e28ea03006eb29db78917daec5cfb6ec1046265 golang_sdk-linux-amd64.tar.gz && \
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz && \
     rm golang_sdk-linux-amd64.tar.gz && \
     rm -rf /var/lib/apt/lists/* && \
