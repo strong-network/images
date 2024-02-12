@@ -21,8 +21,8 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash d350bbbd1c74c0a8542193bd41881afea534b141c6a9d9a27b2f217e51d5c48c /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 94355be1d1d395040bbda1490f98d5c7627c30798a7955e1f2a78fda33a4b3e1 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
@@ -39,13 +39,13 @@ RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.14.0-linux-amd64.tar.gz && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.103.0/doctl-1.103.0-linux-amd64.tar.gz && \
-    /validate_file_hash 14c9f6984299a80ad3fbe8e9711d503667c203e2768c04cdcde8dcf4a61ca8fe doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.104.0/doctl-1.104.0-linux-amd64.tar.gz && \
+    /validate_file_hash f758b0c2fb7857db2bd00439155154f2ab8bee71c4f3640f90f64ec35256ca53 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.12.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 81077b6920d9163df429f27f28b53af534c98e6f823a496cc11cab75eec78ab4 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.19.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 5808037a8b66e1078c8b43be08e0d1bd6d57423379bf6e95b1dc48fedc0f6055 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -83,7 +83,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
-    /validate_file_hash 45c0ecd6271b259e50dc095449f2005a999f4232ca8ef8779ccf935e9e9aaa35 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
+    /validate_file_hash 3f435468083426b8161306ccb6bd267b1cc82045c205be330ae157a75251a87c install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
     curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
     /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh
 
