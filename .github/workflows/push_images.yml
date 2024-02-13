@@ -11,7 +11,7 @@ jobs:
     env:
       REGISTRY_URL : strongnetwork # Public docker hub organization
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-4-cores
 
 
     steps:
