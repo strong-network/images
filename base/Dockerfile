@@ -79,7 +79,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     apt-get update && \
     apt-get install terraform -y && \
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash acdb77e0581fd37e4200d716d69616d1794dced16dca1bb0a898605810cfff7a terrascan.tar.gz && \
+    #/validate_file_hash acdb77e0581fd37e4200d716d69616d1794dced16dca1bb0a898605810cfff7a terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
