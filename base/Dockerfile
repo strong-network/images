@@ -21,20 +21,20 @@ RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 94355be1d1d395040bbda1490f98d5c7627c30798a7955e1f2a78fda33a4b3e1 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.26.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 59c6b262bedc4a02f46c8400e830e660935684899c770c3f5e804a2b7079fc16 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.14.0-linux-amd64.tar.gz && \
-    /validate_file_hash f43e1c3387de24547506ab05d24e5309c0ce0b228c23bd8aa64e9ec4b8206651 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.14.3-linux-amd64.tar.gz && \
+    /validate_file_hash 3c90f24e180f8c207b8a18e5ec82cb0fa49858a7a0a86e4ed52a98398681e00b helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.29.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash 69ab3a931e826bf7ac14d38ba7ca637d66a6fcb1ca0e3333a2cafdf15482af9f kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.29.3/bin/linux/amd64/kubectl && \
+    /validate_file_hash 89c0435cec75278f84b62b848b8c0d3e15897d6947b6c59a49ddccd93d7312bf kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
@@ -44,8 +44,8 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.19.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 5808037a8b66e1078c8b43be08e0d1bd6d57423379bf6e95b1dc48fedc0f6055 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.32.zip" -o "awscliv2.zip" && \
+    /validate_file_hash e3e67df01ec76719a5880d7bfdb7d87822512784ce7ee60d86e9b9c110622d9a awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -59,8 +59,8 @@ RUN mkdir -p /etc/apt/keyrings && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell_7.4.0-1.deb_amd64.deb && \
-    /validate_file_hash 550331e243a7311e1bf0ca83d8c96c5e78ba82a765c4a9ba34aa0db6eb9a9f22 powershell.tar.gz && \
+    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/powershell_7.4.1-1.deb_amd64.deb && \
+    /validate_file_hash 625b7ee0b71147421723cb6022a41b5d8fc0d6e19df25b1240008ee491bf6997 powershell.tar.gz && \
     dpkg -i powershell.tar.gz && \
     apt-get install -f && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
@@ -79,7 +79,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     apt-get update && \
     apt-get install terraform -y && \
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash acdb77e0581fd37e4200d716d69616d1794dced16dca1bb0a898605810cfff7a terrascan.tar.gz && \
+    /validate_file_hash e931556f8c8a9e5b67bd6c0d378b5c1e3210bfe6466d6205164e919b66d4906a terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
