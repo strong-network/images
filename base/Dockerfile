@@ -4,18 +4,31 @@ ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-COPY validate_file_hash.sh /validate_file_hash
-
-# Install base packages for other applications and update the package repository
 RUN apt-get update && \
-    apt-get install -y git wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
+    apt-get install -y git locales wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
     libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo software-properties-common \
     libkrb5-dev libssl-dev build-essential clang-format clang dirmngr lsb-release && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install unzip libxext6 libxrender1 libxtst6 libxi6 libfreetype6 && \
-    chmod +x /validate_file_hash
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash &&  apt-get update && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs less locales man nano  ssh tmux vim emacs asciinema \
+    unzip libxext6 libxrender1 libxtst6 \ 
+    libxi6 libfreetype6 && \
+    chsh -s /bin/bash && \
+    sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
+    mkdir -p /usr/bin/strong_network_startup/vscode_extensions && \
+    adduser --gecos '' --disabled-password developer && \
+    echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd && \
+    # Change permissions of /usr/local
+    chgrp -R developer /usr/local && \
+    chmod -R g+w /usr/local && \
+    mkdir -p /home/developer && \
+    chown -R developer /home/developer && \
+    chmod -R 770 /home/developer && \
+    chmod 777 /usr/bin/strong_network_startup/vscode_extensions && chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions
+
+COPY validate_file_hash.sh /validate_file_hash
 
 # Download docker tools
-RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.tgz -O docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.tgz -O docker.tar.gz && \
     /validate_file_hash ab91092320a87691a1eaf0225b48585db9c69cff0ed4b0f569f744ff765515e3 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
@@ -98,8 +111,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get -y install gcc g++ make yarn && \
     # script is to have the latest available version of git-lfs
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash && \
-    apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
+    apt-get install -y htop \
     zsh  jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
     # install networking related packages
