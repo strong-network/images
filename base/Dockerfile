@@ -4,6 +4,7 @@ ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
+# The minimum requirements to run a Strong Network workspace
 RUN apt-get update && \
     apt-get install -y git locales wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
     libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo software-properties-common \
@@ -24,6 +25,7 @@ RUN apt-get update && \
     chown -R developer /home/developer && \
     chmod -R 770 /home/developer && \
     chmod 777 /usr/bin/strong_network_startup/vscode_extensions && chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions
+# End of minimum requirements to run a Strong Network workspace
 
 COPY validate_file_hash.sh /validate_file_hash
 
