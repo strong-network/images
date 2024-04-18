@@ -9,8 +9,8 @@ ENV GO111MODULE on
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y rlwrap && \
-    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.21.4.linux-amd64.tar.gz && \
-    /validate_file_hash 73cac0215254d0c7d1241fa40837851f3b9a8a742d0b54714cbdfb3feaf8f0af golang_sdk-linux-amd64.tar.gz && \
+    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.22.1.linux-amd64.tar.gz && \
+    /validate_file_hash aab8e15785c997ae20f9c88422ee35d962c4562212bb0f879d052a35c8307c7f golang_sdk-linux-amd64.tar.gz && \
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz && \
     rm golang_sdk-linux-amd64.tar.gz && \
     # Install vscode deps

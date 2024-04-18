@@ -34,31 +34,31 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
-    wget https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 6e06123399e5428fbd603564afdac74821fa0a7b4465e8a1a2359b362fc42fc4 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.26.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 59c6b262bedc4a02f46c8400e830e660935684899c770c3f5e804a2b7079fc16 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.13.2-linux-amd64.tar.gz && \
-    /validate_file_hash 55a8e6dce87a1e52c61e0ce7a89bf85b38725ba3e8deb51d4a08ade8a2c70b2d helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.14.3-linux-amd64.tar.gz && \
+    /validate_file_hash 3c90f24e180f8c207b8a18e5ec82cb0fa49858a7a0a86e4ed52a98398681e00b helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.28.3/bin/linux/amd64/kubectl && \
-    /validate_file_hash 0c680c90892c43e5ce708e918821f92445d1d244f9b3d7513023bcae9a6246d1 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.29.3/bin/linux/amd64/kubectl && \
+    /validate_file_hash 89c0435cec75278f84b62b848b8c0d3e15897d6947b6c59a49ddccd93d7312bf kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.100.0/doctl-1.100.0-linux-amd64.tar.gz && \
-    /validate_file_hash 9c2b3991d699e322b65c495768f2a3b9d7581c330cb0c3669eef0fb60124fc42 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.104.0/doctl-1.104.0-linux-amd64.tar.gz && \
+    /validate_file_hash f758b0c2fb7857db2bd00439155154f2ab8bee71c4f3640f90f64ec35256ca53 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.31.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 94ab2f9dd53b994cd8429b7a9e47a0ab7222d8b600a35031cde9faa669b4b592 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.32.zip" -o "awscliv2.zip" && \
+    /validate_file_hash e3e67df01ec76719a5880d7bfdb7d87822512784ce7ee60d86e9b9c110622d9a awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -72,8 +72,8 @@ RUN mkdir -p /etc/apt/keyrings && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.3.9/powershell_7.3.9-1.deb_amd64.deb && \
-    /validate_file_hash 8ec60ee3bd4721f5097f7faf55c1aabf984118821ed78baca70be3612516cc9b powershell.tar.gz && \
+    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/powershell_7.4.1-1.deb_amd64.deb && \
+    /validate_file_hash 625b7ee0b71147421723cb6022a41b5d8fc0d6e19df25b1240008ee491bf6997 powershell.tar.gz && \
     dpkg -i powershell.tar.gz && \
     apt-get install -f && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
@@ -92,11 +92,11 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     apt-get update && \
     apt-get install terraform -y && \
     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash 7d8f634136f58f694326c834ff58db3ccdf5dfe7b651966a5665d8253d04f7dc terrascan.tar.gz && \
+    /validate_file_hash e931556f8c8a9e5b67bd6c0d378b5c1e3210bfe6466d6205164e919b66d4906a terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
-    /validate_file_hash 45c0ecd6271b259e50dc095449f2005a999f4232ca8ef8779ccf935e9e9aaa35 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
+    /validate_file_hash 3f435468083426b8161306ccb6bd267b1cc82045c205be330ae157a75251a87c install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
     curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
     /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh
 
@@ -139,7 +139,7 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
     cd /tmp &&\
-    /validate_file_hash 8782c29feec0d745edd9607598fe781b3912edd721301fbc7a0ebe09bf71c905 install_sdkman.sh &&\
+    /validate_file_hash 9be925ee0b858cf9df8dbdb028c30aca961c585b4835caef3d6350de3166779c install_sdkman.sh &&\
     export SDKMAN_DIR=/tmp/sdkman &&\
     bash /tmp/install_sdkman.sh &&\
     bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\

@@ -1,4 +1,4 @@
-name: Push images to gcloud
+name: Push images to dockerhub
 
 on:
   workflow_dispatch:
@@ -9,9 +9,9 @@ jobs:
     
     environment: production
     env:
-      REGISTRY_URL : ${{ secrets.REGISTRY }}
+      REGISTRY_URL : strongnetwork # Public docker hub organization
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-4-cores
 
 
     steps:
@@ -22,6 +22,7 @@ jobs:
           GIT_ROOT=$(git rev-parse --show-toplevel)
           VERSION=$(awk NF ${GIT_ROOT}/VERSION)
           echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
+          echo JFROG_GENERIC_IMAGE_URL=$REGISTRY_URL/jfrog_generic:$VERSION >>  $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_URL=$REGISTRY_URL/intellij_java:$VERSION >>  $GITHUB_ENV
           echo GOLAND_IMAGE_URL=$REGISTRY_URL/goland_go:$VERSION >>  $GITHUB_ENV
           echo PYCHARM_IMAGE_URL=$REGISTRY_URL/pycharm_python:$VERSION >>  $GITHUB_ENV
@@ -30,6 +31,7 @@ jobs:
           echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
           echo WEBSTORM_IMAGE_URL=$REGISTRY_URL/webstorm_image:$VERSION >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_URL=$REGISTRY_URL/sysbox_generic:$VERSION >> $GITHUB_ENV
+          echo KALI_LINUX_IMAGE_URL=$REGISTRY_URL/generic_kali_linux:$VERSION >> $GITHUB_ENV
           echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
           echo INTELLIJ_ULTIMATE_IMAGE_NAME=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
           echo JAVA_INTELLIJ_IMAGE_NAME=$(make get_java_intellij_image) >> $GITHUB_ENV
@@ -39,25 +41,20 @@ jobs:
           echo WEBSTORM_IMAGE_NAME=$(make get_webstorm_image) >> $GITHUB_ENV
           echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_NAME=$(make get_sysbox_generic_image) >> $GITHUB_ENV
+          echo KALI_LINUX_IMAGE_NAME=$(make get_no_vnc_image) >> $GITHUB_ENV
+          echo JFROG_GENERIC_IMAGE_NAME=$(make get_generic_jfrog_image) >> $GITHUB_ENV
 
-      - name: Setup Google cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-      
-      - name: Configure gcloud with docker
-        run: |
-          gcloud auth configure-docker -q ${{ secrets.REGISTRY_DOMAIN }} 
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # Build the base image
-
       - name: Build the base image
         run: make base_image
 
       # Build the generic cloud editor image 
-
       - uses: ./.github/actions/push-image
         name: push generic image image
         with:
@@ -65,8 +62,23 @@ jobs:
           make-command: generic_image
           image-url: ${{ env.GENERIC_IMAGE_URL }}
 
-        # Build Java Intellij image
+      # Push kali linux novnc image
+      - uses: ./.github/actions/push-image
+        name: push kali linux novnc image
+        with:
+          image-name: ${{ env.KALI_LINUX_IMAGE_NAME }}
+          make-command: no_vnc
+          image-url: ${{ env.KALI_LINUX_IMAGE_URL }}
 
+      # Push JFrog image
+      - uses: ./.github/actions/push-image
+        name: push generic image image JFROG
+        with:
+          image-name: ${{ env.JFROG_GENERIC_IMAGE_NAME }}
+          make-command: generic_jfrog_image
+          image-url: ${{ env.JFROG_GENERIC_IMAGE_URL }}
+
+      # Build Java Intellij image
       - uses: ./.github/actions/push-image
         name: push java intellij image
         with:
@@ -75,7 +87,6 @@ jobs:
           image-url: ${{ env.JAVA_INTELLIJ_IMAGE_URL }}
 
       # build Goland image
-
       - uses: ./.github/actions/push-image
         name: push goland image
         with:
@@ -84,7 +95,6 @@ jobs:
           image-url: ${{ env.GOLAND_IMAGE_URL }}
 
       # Build Pycharm image
-
       - uses: ./.github/actions/push-image
         name: push pycharm image
         with:
@@ -93,7 +103,6 @@ jobs:
           image-url: ${{ env.PYCHARM_IMAGE_URL }}
 
       # Build phpstorm
-
       - uses: ./.github/actions/push-image
         name: push phpstorm image
         with:
@@ -102,7 +111,6 @@ jobs:
           image-url: ${{ env.PHPSTORM_IMAGE_URL }}
       
       # Build Android studio
-
       - uses: ./.github/actions/push-image
         name: push android studio image
         with:
@@ -111,7 +119,6 @@ jobs:
           image-url: ${{ env.ANDROID_IMAGE_URL }}
 
       # Build Intellij Ultimate
-
       - uses: ./.github/actions/push-image
         name: push intellij ultimate image
         with:
@@ -120,7 +127,6 @@ jobs:
           image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
 
       # Push webstorm image
-
       - uses: ./.github/actions/push-image
         name: push webstorm image
         with:
@@ -129,7 +135,6 @@ jobs:
           image-url: ${{ env.WEBSTORM_IMAGE_URL }}
 
       # Push sysbox generic image
-
       - uses: ./.github/actions/push-image
         name: push sysbox image
         with:
