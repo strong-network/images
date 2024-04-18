@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get install -y git locales sudo curl \
     libkrb5-dev libssl-dev && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs less ssh && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs ssh && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
     mkdir -p /usr/bin/strong_network_startup && chmod 644 /usr/bin/strong_network_startup && \
@@ -25,7 +25,7 @@ COPY validate_file_hash.sh /validate_file_hash
 # Install user space packages
 RUN apt-get install -y wget python2 python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
     build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \ 
-    libxi6 libfreetype6 dirmngr lsb-release && \
+    libxi6 libfreetype6 dirmngr lsb-release less && \
     mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
     chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions && \
     mkdir -p /home/developer && \
