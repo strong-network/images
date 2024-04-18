@@ -6,28 +6,32 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # The minimum requirements to run a Strong Network workspace
 RUN apt-get update && \
-    apt-get install -y git locales wget python2 python3-dev python3-pip python3-venv curl libffi-dev \
-    libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync sudo software-properties-common \
-    libkrb5-dev libssl-dev build-essential clang-format clang dirmngr lsb-release && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash &&  apt-get update && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs less locales man nano  ssh tmux vim emacs asciinema \
+    apt-get install -y git locales sudo curl \
+    libkrb5-dev libssl-dev dirmngr lsb-release && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs less ssh \
     unzip libxext6 libxrender1 libxtst6 \ 
     libxi6 libfreetype6 && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
-    mkdir -p /usr/bin/strong_network_startup/vscode_extensions && \
+    mkdir -p /usr/bin/strong_network_startup && chmod 644 /usr/bin/strong_network_startup && \
     adduser --gecos '' --disabled-password developer && \
-    echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd && \
     # Change permissions of /usr/local
     chgrp -R developer /usr/local && \
     chmod -R g+w /usr/local && \
-    mkdir -p /home/developer && \
-    chown -R developer /home/developer && \
-    chmod -R 770 /home/developer && \
-    chmod 777 /usr/bin/strong_network_startup/vscode_extensions && chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions
+    echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd
 # End of minimum requirements to run a Strong Network workspace
 
 COPY validate_file_hash.sh /validate_file_hash
+
+# Install user space packages
+RUN apt-get install -y wget python2 python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
+    build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync && \
+    mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
+    chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions && \
+    mkdir -p /home/developer && \
+    chown -R developer /home/developer && \
+    chmod -R 770 /home/developer
 
 # Download docker tools
 RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.tgz -O docker.tar.gz && \
