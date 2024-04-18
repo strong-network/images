@@ -12,7 +12,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs ssh && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
-    mkdir -p /usr/bin/strong_network_startup && chmod 644 /usr/bin/strong_network_startup && \
+    mkdir -p /usr/bin/strong_network_startup && chmod 777 /usr/bin/strong_network_startup && \
     adduser --gecos '' --disabled-password developer && \
     # Change permissions of /usr/local
     chgrp -R developer /usr/local && \
