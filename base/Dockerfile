@@ -42,7 +42,7 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
     wget https://github.com/docker/buildx/releases/download/v0.14.0/buildx-v0.14.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
-    chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
+    chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
     wget https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
     /validate_file_hash f3ba3bf1e4ab18e96c2d36526a075a02a78fb5f8e80d3e3ca9c5bf256d81d0a0 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
