@@ -1,7 +1,7 @@
 FROM sn_generic
 
-RUN wget -O jfrog.vsix https://open-vsx.org/api/JFrog/jfrog-vscode-extension/2.8.1/file/JFrog.jfrog-vscode-extension-2.8.1.vsix && \
-    /validate_file_hash 8e7dbfc2c63c4405ee89ef5578ad4db1a119200664f717fba2f736439f5ff03b  jfrog.vsix && \
+RUN wget -O jfrog.vsix https://open-vsx.org/api/JFrog/jfrog-vscode-extension/2.10.1/file/JFrog.jfrog-vscode-extension-2.10.1.vsix && \
+    /validate_file_hash 8b0dc85a4e1f8c19f0bf44dc8cc3d809e6ede854b2f3d7d1562c3cfee9d3ec44  jfrog.vsix && \
     mv jfrog.vsix /usr/bin/strong_network_startup/vscode_extensions
 
 
