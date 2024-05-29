@@ -49,5 +49,29 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
+# Install and setup chromium and dependencies
+RUN add-apt-repository ppa:xtradeb/apps -y && \
+    apt-get update && apt-get install -y xvfb chromium libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 xauth 
+
+ADD xvfb-chromium /usr/bin/xvfb-chromium
+
+RUN chmod +x /usr/bin/xvfb-chromium && \
+    ln -s /usr/bin/xvfb-chromium /usr/bin/google-chrome && \
+    ln -s /usr/bin/xvfb-chromium /usr/bin/chromium-browser
+
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && apt-get install nodejs -y && \
+    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
+    /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update && apt-get -y install make yarn && \
+    apt-get install -y htop zsh jq zip shellcheck tree nodejs \
+    # install networking related packages
+    ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools && \
+    apt-get update && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/apt
+
 USER 1000
 WORKDIR /home/developer
