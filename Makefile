@@ -42,7 +42,7 @@ base16_image:
 	@docker build -t ${BASE16_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_ubuntu16
 	@docker tag ${BASE16_IMAGE_NAME}:${VERSION} ${BASE16_IMAGE_NAME}
 
-.PHONY: centos_base_image:
+.PHONY: centos_base_image
 centos_base_image:
 	@echo ${VERSION}
 	@docker build -t ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_centos7
