@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -14,6 +14,7 @@ RUN apt-get update && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
     mkdir -p /usr/bin/strong_network_startup && chmod 777 /usr/bin/strong_network_startup && \
+    usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && \
     adduser --gecos '' --disabled-password developer && \
     # Change permissions of /usr/local
     chgrp -R developer /usr/local && \
@@ -24,7 +25,7 @@ RUN apt-get update && \
 COPY validate_file_hash.sh /validate_file_hash
 
 # Install user space packages
-RUN apt-get install -y wget python2 python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
+RUN apt-get install -y wget python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
     build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \ 
     libxi6 libfreetype6 dirmngr lsb-release less && \
     mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
@@ -34,8 +35,8 @@ RUN apt-get install -y wget python2 python3-dev python3-pip python3-venv softwar
     chmod -R 770 /home/developer
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-26.1.1.tgz -O docker.tar.gz && \
-    /validate_file_hash c0ef0ee7d00deb803a6f5fa78d83ec8cbe1848eaaea9fb7071364d526624278f docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-26.1.3.tgz -O docker.tar.gz && \
+    /validate_file_hash a50076d372d3bbe955664707af1a4ce4f5df6b2d896e68b12ecc74e724d1db31 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
@@ -49,14 +50,14 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.14.4-linux-amd64.tar.gz && \
-    /validate_file_hash a5844ef2c38ef6ddf3b5a8f7d91e7e0e8ebc39a38bb3fc8013d629c1ef29c259 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz && \
+    /validate_file_hash a74747ac40777b86d3ff6f1be201504bba65ca46cd68b5fe25d3c394d0dcf745 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.30.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash 7c3807c0f5c1b30110a2ff1e55da1d112a6d0096201f1beb81b269f582b5d1c5 kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.30.1/bin/linux/amd64/kubectl && \
+    /validate_file_hash 5b86f0b06e1a5ba6f8f00e2b01e8ed39407729c4990aeda961f83a586f975e8a kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
@@ -77,18 +78,12 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
 RUN mkdir -p /etc/apt/keyrings && \
     curl -sLS https://packages.microsoft.com/keys/microsoft.asc > microsoft.asc && \
     cat microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null && \
-    cat microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/powershell.gpg > /dev/null && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
-    wget -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v7.4.2/powershell_7.4.2-1.deb_amd64.deb && \
-    /validate_file_hash 3ef8bcad31ff05925a11cefcc007c82a5bb8e669970d2d91f9214bf19fefab6a powershell.tar.gz && \
-    dpkg -i powershell.tar.gz && \
-    apt-get install -f && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
     apt-get update && \
     apt-get install -y azure-cli && \
-    rm powershell.tar.gz && \
     rm -rf /etc/apt/sources.list.d/azure-cl.list && \
     apt-get update
 
