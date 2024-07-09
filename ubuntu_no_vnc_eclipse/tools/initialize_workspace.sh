@@ -34,7 +34,7 @@ find /tmp -name ".X[1-6]-lock" | xargs rm -rf
 find /tmp/.X11-unix -name "X[1-6]" | xargs rm -rf
 cp $HOME/.vnc/xstartup.xfce4 $HOME/.vnc/xstartup
 chmod +x $HOME/.vnc/xstartup
-vncserver -geometry 1440x900
+vncserver -geometry 1920x1080 -randr 1600x1200,1440x900,1024x768
 
 # start novnc
 /usr/share/novnc/utils/launch.sh --listen 8081 --vnc localhost:5901

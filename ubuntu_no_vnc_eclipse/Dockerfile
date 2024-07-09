@@ -7,6 +7,7 @@ ARG group=developer
 ARG uid=1000
 ARG gid=1000
 
+
 RUN groupadd -g ${gid} ${group}
 RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sn_user' --disabled-password ${user}
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -37,8 +38,19 @@ RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
     rm microsoft.gpg
 # install vsCode
 RUN apt-get update && \
-    apt-get install -y code
+    apt-get install -y code 
 #### #### VSCode #### ###
+
+
+#### #### Setup Eclipse #### ####
+ARG eclipseVersion=2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
+COPY tools/eclipse.desktop /opt/eclipse.desktop
+RUN sudo apt-get install -y desktop-file-utils
+# RUN echo http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/${eclipseVersion}
+RUN wget -O eclipse.tar.gz http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/${eclipseVersion} && \
+    tar -xvzf eclipse.tar.gz --directory /opt && \
+    desktop-file-install /opt/eclipse.desktop && rm eclipse.tar.gz
+#### #### Setup Eclipse #### ####
 
 
 #### #### NoVNC #### ####
@@ -49,19 +61,6 @@ RUN apt-get install -y xfce4 xfce4-goodies
 # install novnc and tightvnc
 # we opt for TightVNC over TigerVNC because TightVNC offers robust support for both GNOME and XFCE4 desktop environments on Ubuntu 22.04.
 RUN apt-get install -y novnc tightvncserver
-# install python3 and chrome
-RUN apt-get install -y python3-dev python3-pip
-RUN python3 -m pip install --upgrade pip
-RUN apt-get install -y wget
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
-    rm google-chrome-stable_current_amd64.deb
-
-# Setup Eclipse
-COPY tools/eclipse.desktop /opt/eclipse.desktop
-RUN wget http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz && \
-    tar -xvzf eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz --directory /opt && \
-    desktop-file-install /opt/eclipse.desktop && rm eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
 
 # copy vnc startup scripts
 RUN  mkdir -p /usr/bin/strong_network_startup/xstartup && chmod 777 /usr/bin/strong_network_startup/xstartup
@@ -73,6 +72,14 @@ COPY tools/xstartup.xfce4          /usr/bin/strong_network_startup/xstartup/xsta
 RUN chmod +x /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
 #### #### NoVNC #### ####
 
+
+# # install python3 and chrome
+# RUN apt-get install -y python3-dev python3-pip
+# RUN python3 -m pip install --upgrade pip
+# RUN apt-get install -y wget
+# RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+#     sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
+#     rm google-chrome-stable_current_amd64.deb
 
 USER ${user}
 WORKDIR /home/developer
