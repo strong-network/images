@@ -62,8 +62,7 @@ RUN apt-get install -y wget vim
 COPY tools/eclipse.desktop /opt/eclipse.desktop
 RUN wget http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz && \
     tar -xvzf eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz --directory /opt && \
-    desktop-file-install /opt/eclipse.desktop && mkdir /home/developer/Desktop && cp /opt/eclipse.desktop /home/developer/Desktop/eclipse.desktop && \
-    chmod +x /home/developer/Desktop/eclipse.desktop && rm eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
+    desktop-file-install /opt/eclipse.desktop && rm eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
 
 # copy vnc startup scripts
 RUN  mkdir -p /usr/bin/strong_network_startup/xstartup && chmod 777 /usr/bin/strong_network_startup/xstartup
