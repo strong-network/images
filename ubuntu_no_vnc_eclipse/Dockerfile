@@ -54,14 +54,6 @@ RUN apt-get install -y python3-dev python3-pip  wget vim
 RUN python3 -m pip install --upgrade pip
 RUN apt-get install -y wget vim
 
-
-# # Setup Eclipse
-# COPY tools/eclipse.desktop /opt/eclipse.desktop
-# RUN wget http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz && \
-#     tar -xvzf eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz --directory /opt && \
-#     desktop-file-install /opt/eclipse.desktop && mkdir /home/developer/Desktop && cp /opt/eclipse.desktop /home/developer/Desktop/eclipse.desktop && \
-#     chmod +x /home/developer/Desktop/eclipse.desktop && rm eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
-
 # copy vnc startup scripts
 RUN  mkdir -p /usr/bin/strong_network_startup/xstartup && chmod 777 /usr/bin/strong_network_startup/xstartup
 COPY tools/index.html /usr/share/novnc/index.html
@@ -92,5 +84,6 @@ RUN python3 -m pip install --upgrade pip
 # RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
 #     sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
 #     rm google-chrome-stable_current_amd64.deb
+
 USER ${user}
 WORKDIR /home/developer
