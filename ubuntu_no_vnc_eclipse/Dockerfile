@@ -11,7 +11,6 @@ RUN groupadd -g ${gid} ${group}
 RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sn_user' --disabled-password ${user}
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-
 #### #### Strong Network #### ####
 RUN apt-get update && \
     apt-get install -y git locales sudo curl wget make build-essential gawk bison \
@@ -39,7 +38,6 @@ RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
 RUN apt-get update && \
     apt-get install -y code
 #### #### VSCode #### ###
-
 
 #### #### NoVNC #### ####
 # install gnome desktop
@@ -84,6 +82,9 @@ RUN python3 -m pip install --upgrade pip
 # RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
 #     sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
 #     rm google-chrome-stable_current_amd64.deb
+
+# Install SVN
+RUN apt-get install -y subversion
 
 USER ${user}
 WORKDIR /home/developer
