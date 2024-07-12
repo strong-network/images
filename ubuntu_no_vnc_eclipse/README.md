@@ -9,4 +9,4 @@ This page will cover the basic information and how to start using the ubuntu ima
 ``` 
 /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
 ```
-4. Open the workspace app, the password is "vncpassword" which can be changed in the initialize_workspace script
+4. Open the workspace app, you should see your desktop.
