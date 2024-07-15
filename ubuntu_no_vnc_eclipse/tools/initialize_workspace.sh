@@ -36,5 +36,8 @@ cp $HOME/.vnc/xstartup.xfce4 $HOME/.vnc/xstartup
 chmod +x $HOME/.vnc/xstartup
 vncserver -geometry 1920x1080 -depth 24
 
+cp /opt/eclipse.desktop /home/developer/Desktop/eclipse.desktop 
+sudo chmod +x /home/developer/Desktop/eclipse.desktop
+
 # start novnc
 /usr/share/novnc/utils/launch.sh --listen 8081 --vnc localhost:5901

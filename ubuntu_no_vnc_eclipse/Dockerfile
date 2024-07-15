@@ -65,11 +65,10 @@ RUN update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrappe
 
 #### #### Setup Eclipse #### ####
 ARG eclipseVersion=2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
-COPY tools/eclipse.desktop /opt/eclipse.desktop
 RUN wget -O eclipse.tar.gz http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/${eclipseVersion}
-RUN tar -xvzf eclipse.tar.gz --directory /opt
-RUN desktop-file-install /opt/eclipse.desktop && mkdir /home/developer/Desktop && cp /opt/eclipse.desktop /home/developer/Desktop/eclipse.desktop
-RUN chmod +x /home/developer/Desktop/eclipse.desktop && rm eclipse.tar.gz
+RUN tar -xvzf eclipse.tar.gz --directory /opt && rm eclipse.tar.gz
+COPY tools/eclipse.desktop /opt/eclipse.desktop
+RUN desktop-file-install /opt/eclipse.desktop
 #### #### Setup Eclipse #### ####
 
 # Install python3
