@@ -60,6 +60,7 @@ RUN chmod +x /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
 
 # Remove power manager to remove the dialog first run
 RUN apt-get remove -y xfce4-power-manager xfce4-power-manager-data
+RUN update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrapper
 #### #### NoVNC #### ####
 
 #### #### Setup Eclipse #### ####
