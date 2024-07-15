@@ -146,6 +146,11 @@
             },
             false
             );
+            rfb.addEventListener('clipboard', function(e) {
+                console.log(e.detail.text);
+                navigator.clipboard.setText(e.detail.text);
+            });
+
             // rfb.clipboardPasteFrom("test222222");
 
 
