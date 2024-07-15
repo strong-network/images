@@ -141,6 +141,7 @@
             // });
             document.body.addEventListener('click',() => {
                 navigator.clipboard.readText().then(async text => {
+                    console.log('paste', text);
                     rfb.clipboardPasteFrom(text);
                 });
             },
@@ -148,7 +149,7 @@
             );
             rfb.addEventListener('clipboard', function(e) {
                 console.log(e.detail.text);
-                navigator.clipboard.setText(e.detail.text);
+                navigator.clipboard.writeText(e.detail.text);
             });
 
             // rfb.clipboardPasteFrom("test222222");
