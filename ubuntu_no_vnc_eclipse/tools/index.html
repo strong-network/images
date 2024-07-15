@@ -133,8 +133,23 @@
             document.getElementById('noVNC_status_bar').className = "noVNC_status_" + level;
             document.getElementById('noVNC_status').textContent = text;
         }
-
         function connected(e) {
+            console.log('testttttt');
+            // document.body.addEventListener('paste', () => {
+            //     console.log('test');
+            //     rfb.clipboardPasteFrom("test");
+            // });
+            document.body.addEventListener('click',() => {
+                navigator.clipboard.readText().then(async text => {
+                    rfb.clipboardPasteFrom(text);
+                });
+            },
+            false
+            );
+            // rfb.clipboardPasteFrom("test222222");
+
+
+
             document.getElementById('sendCtrlAltDelButton').disabled = false;
             if (WebUtil.getConfigVar('encrypt',
                                      (window.location.protocol === "https:"))) {

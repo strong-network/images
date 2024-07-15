@@ -10,4 +10,5 @@ unset DBUS_SESSION_BUS_ADDRESS
 vncconfig -iconic &
 
 export XKL_XMODMAP_DISABLE=1
+autocutsel -fork
 /etc/X11/Xsession /usr/bin/startxfce4

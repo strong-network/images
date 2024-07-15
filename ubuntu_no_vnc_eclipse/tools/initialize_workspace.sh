@@ -36,6 +36,7 @@ cp $HOME/.vnc/xstartup.xfce4 $HOME/.vnc/xstartup
 chmod +x $HOME/.vnc/xstartup
 vncserver -geometry 1920x1080 -depth 24
 
+mkdir -p /home/developer/Desktop
 cp /opt/eclipse.desktop /home/developer/Desktop/eclipse.desktop 
 sudo chmod +x /home/developer/Desktop/eclipse.desktop
 
