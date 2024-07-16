@@ -63,6 +63,7 @@ RUN chmod +x /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
 # Remove power manager to remove the dialog first run
 RUN apt-get remove -y xfce4-power-manager xfce4-power-manager-data
 RUN update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrapper
+ENV vnc_ready=true
 #### #### NoVNC #### ####
 
 #### #### Setup Eclipse #### ####
@@ -78,9 +79,9 @@ RUN apt-get install -y python3-dev python3-pip
 RUN python3 -m pip install --upgrade pip
 
 # Install Chrome
-# RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-#     sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
-#     rm google-chrome-stable_current_amd64.deb
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
+    rm google-chrome-stable_current_amd64.deb
 
 # Install SVN
 RUN apt-get install -y subversion
