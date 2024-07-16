@@ -53,6 +53,7 @@ RUN apt-get install autocutsel
 # copy vnc startup scripts
 RUN  mkdir -p /usr/bin/strong_network_startup/xstartup && chmod 777 /usr/bin/strong_network_startup/xstartup
 COPY tools/index.html /usr/share/novnc/index.html
+COPY tools/favicon.png /usr/share/novnc/app/images/icons/favicon.png
 COPY tools/initialize_workspace.sh /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
 COPY tools/xstartup.gnome          /usr/bin/strong_network_startup/xstartup/xstartup.gnome
 COPY tools/xstartup.xfce4          /usr/bin/strong_network_startup/xstartup/xstartup.xfce4
