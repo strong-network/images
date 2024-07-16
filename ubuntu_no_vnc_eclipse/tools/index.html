@@ -94,31 +94,9 @@
             form.innerHTML = '<label></label>';
             form.innerHTML += '<input type=password size=10 id="password_input">';
             form.onsubmit = setPassword;
-
-            // bypass status() because it sets text content
-            document.getElementById('noVNC_status_bar').setAttribute("class", "noVNC_status_warn");
-            document.getElementById('noVNC_status').innerHTML = '';
-            document.getElementById('noVNC_status').appendChild(form);
-            document.getElementById('noVNC_status').querySelector('label').textContent = 'Password Required: ';
         }
         function setPassword() {
             rfb.sendCredentials({ password: document.getElementById('password_input').value });
-            return false;
-        }
-        function sendCtrlAltDel() {
-            rfb.sendCtrlAltDel();
-            return false;
-        }
-        function machineShutdown() {
-            rfb.machineShutdown();
-            return false;
-        }
-        function machineReboot() {
-            rfb.machineReboot();
-            return false;
-        }
-        function machineReset() {
-            rfb.machineReset();
             return false;
         }
         function status(text, level) {
@@ -130,26 +108,21 @@
                 default:
                     level = "warn";
             }
-            document.getElementById('noVNC_status_bar').className = "noVNC_status_" + level;
-            document.getElementById('noVNC_status').textContent = text;
         }
         function connected(e) {
             console.log('testttttt');
-            document.body.addEventListener('click', async() => {
-                navigator.clipboard.readText().then(async text => {
+            window.onfocus = function (ev) {
+                console.log("gained focus");
+                navigator.clipboard.readText().then(text => {
                     console.log('paste', text);
                     rfb.clipboardPasteFrom(text);
                 });
-            },
-            false
-            );
+            };
             rfb.addEventListener('clipboard', function(e) {
                 console.log(e.detail.text);
                 navigator.clipboard.writeText(e.detail.text);
             });
 
-
-            document.getElementById('sendCtrlAltDelButton').disabled = false;
             if (WebUtil.getConfigVar('encrypt',
                                      (window.location.protocol === "https:"))) {
                 status("Connected (encrypted) to " + desktopName, "normal");
@@ -159,31 +132,15 @@
         }
 
         function disconnected(e) {
-            document.getElementById('sendCtrlAltDelButton').disabled = true;
-            updatePowerButtons();
             if (e.detail.clean) {
                 status("Disconnected", "normal");
             } else {
                 status("Something went wrong, connection is closed", "error");
             }
             // Try to reconnect
-            connect()
+            connectWs()
         }
 
-        function updatePowerButtons() {
-            var powerbuttons; 
-            powerbuttons = document.getElementById('noVNC_power_buttons');
-            if (rfb.capabilities.power) {
-                powerbuttons.className= "noVNC_shown";
-            } else {
-                powerbuttons.className = "noVNC_hidden";
-            }
-        }
-
-        document.getElementById('sendCtrlAltDelButton').onclick = sendCtrlAltDel;
-        document.getElementById('machineShutdownButton').onclick = machineShutdown;
-        document.getElementById('machineRebootButton').onclick = machineReboot;
-        document.getElementById('machineResetButton').onclick = machineReset;
 
         WebUtil.init_logging(WebUtil.getConfigVar('logging', 'warn'));
         document.title = WebUtil.getConfigVar('title', 'noVNC');
@@ -214,10 +171,8 @@
 
             WebUtil.createCookie('token', token, 1)
         }
-
-        (function connect() {
-
-            status("Connecting", "normal");
+        function connectWs(){
+             status("Connecting", "normal");
 
             if ((!host) || (!port)) {
                 status('Must specify host and port in URL', 'error');
@@ -226,7 +181,7 @@
             var url;
 
             if (WebUtil.getConfigVar('encrypt',
-                                     (window.location.protocol === "https:"))) {
+                                    (window.location.protocol === "https:"))) {
                 url = 'wss';
             } else {
                 url = 'ws';
@@ -239,7 +194,7 @@
             url += '/' + path;
 
             rfb = new RFB(document.body, url,
-                          { repeaterID: WebUtil.getConfigVar('repeaterID', ''),
+                        { repeaterID: WebUtil.getConfigVar('repeaterID', ''),
                             shared: WebUtil.getConfigVar('shared', true),
                             credentials: { password: password } });
             rfb.viewOnly = WebUtil.getConfigVar('view_only', false);
@@ -250,26 +205,12 @@
             rfb.addEventListener("desktopname", updateDesktopName);
             rfb.scaleViewport = true;
             rfb.resizeSession = true;
-        })();
+        }
+
+        connectWs()  
     </script>
 </head>
 
 <body>
-  <div id="noVNC_status_bar">
-    <div id="noVNC_left_dummy_elem"></div>
-    <div id="noVNC_status">Loading</div>
-    <div id="noVNC_buttons">
-      <input type=button value="Send CtrlAltDel"
-             id="sendCtrlAltDelButton" class="noVNC_shown">
-      <span id="noVNC_power_buttons" class="noVNC_hidden">
-        <input type=button value="Shutdown"
-               id="machineShutdownButton">
-        <input type=button value="Reboot"
-               id="machineRebootButton">
-        <input type=button value="Reset"
-               id="machineResetButton">
-      </span>
-    </div>
-  </div>
 </body>
 </html>
