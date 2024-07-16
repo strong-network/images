@@ -135,11 +135,7 @@
         }
         function connected(e) {
             console.log('testttttt');
-            // document.body.addEventListener('paste', () => {
-            //     console.log('test');
-            //     rfb.clipboardPasteFrom("test");
-            // });
-            document.body.addEventListener('click',() => {
+            document.body.addEventListener('click', async() => {
                 navigator.clipboard.readText().then(async text => {
                     console.log('paste', text);
                     rfb.clipboardPasteFrom(text);
@@ -151,9 +147,6 @@
                 console.log(e.detail.text);
                 navigator.clipboard.writeText(e.detail.text);
             });
-
-            // rfb.clipboardPasteFrom("test222222");
-
 
 
             document.getElementById('sendCtrlAltDelButton').disabled = false;
@@ -173,6 +166,8 @@
             } else {
                 status("Something went wrong, connection is closed", "error");
             }
+            // Try to reconnect
+            connect()
         }
 
         function updatePowerButtons() {
@@ -220,7 +215,7 @@
             WebUtil.createCookie('token', token, 1)
         }
 
-        (function() {
+        (function connect() {
 
             status("Connecting", "normal");
 
