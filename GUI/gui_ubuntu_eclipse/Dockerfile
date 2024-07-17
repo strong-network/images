@@ -1,4 +1,4 @@
-FROM ubuntu_minimal_vnc
+FROM sn_gui_ubuntu
 ARG user=developer
 
 USER root

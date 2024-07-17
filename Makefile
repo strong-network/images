@@ -95,7 +95,7 @@ generic_sysbox_image: sysbox_base_image
 
 .PHONY: gui_ubuntu_eclipse_image
 gui_ubuntu_eclipse_image: gui_ubuntu_base_image
-	@docker build -t ${GUI_UBUNTU_ECLIPSE}:${VERSION} gui_ubuntu_eclipse
+	@docker build -t ${GUI_UBUNTU_ECLIPSE}:${VERSION} ${GIT_ROOT}/GUI/gui_ubuntu_eclipse
 
 .PHONY: all
 all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image gui_ubuntu_base_image gui_ubuntu_eclipse_image
