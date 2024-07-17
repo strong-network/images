@@ -19,6 +19,8 @@ NO_VNC_IMAGE_NAME=sn_no_vnc
 ANDROID_STUDIO_IMAGE_NAME=sn_android_studio
 INTELLIJ_ULTIMATE_IMAGE_NAME=sn_intellij_ultimate
 WEBSTORM_IMAGE_NAME=sn_webstorm
+GUI_UBUNTU_BASE=sn_gui_ubuntu
+GUI_UBUNTU_ECLIPSE=sn_gui_ubuntu_eclipse
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -26,6 +28,12 @@ base_image:
 	@echo ${VERSION}
 	@docker build -t ${BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base
 	@docker tag ${BASE_IMAGE_NAME}:${VERSION} ${BASE_IMAGE_NAME}
+
+.PHONY: gui_ubuntu_base_image
+gui_ubuntu_base_image:
+	@echo ${VERSION}
+	@docker build -t ${GUI_UBUNTU_BASE}:${VERSION} ${GIT_ROOT}/GUI/gui_ubuntu_base
+	@docker tag ${GUI_UBUNTU_BASE}:${VERSION} ${GUI_UBUNTU_BASE}
 
 .PHONY: base_image_rm
 remove_base_image:
@@ -85,8 +93,12 @@ sysbox_base_image: base_image
 generic_sysbox_image: sysbox_base_image
 	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
 
+.PHONY: gui_ubuntu_eclipse_image
+gui_ubuntu_eclipse_image: gui_ubuntu_base_image
+	@docker build -t ${GUI_UBUNTU_ECLIPSE}:${VERSION} gui_ubuntu_eclipse
+
 .PHONY: all
-all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image
+all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image gui_ubuntu_base_image gui_ubuntu_eclipse_image
 
 .PHONY: get_version
 get_version:
