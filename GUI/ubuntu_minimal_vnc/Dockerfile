@@ -27,18 +27,6 @@ RUN apt-get update && \
     echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd
 #### #### Strong Network #### ####
 
-
-#### #### VSCode #### ####
-# add microsoft's gpg key and the vscode repository
-RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
-    install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
-    sh -c 'echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' && \
-    rm microsoft.gpg
-# install vsCode
-RUN apt-get update && \
-    apt-get install -y code
-#### #### VSCode #### ###
-
 #### #### NoVNC #### ####
 # install gnome desktop
 RUN apt-get install -y ubuntu-desktop ubuntu-gnome-desktop gnome-core gnome-panel gnome-tweaks
@@ -57,34 +45,47 @@ COPY tools/favicon.png /usr/share/novnc/app/images/icons/favicon.png
 COPY tools/initialize_workspace.sh /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
 COPY tools/xstartup.gnome          /usr/bin/strong_network_startup/xstartup/xstartup.gnome
 COPY tools/xstartup.xfce4          /usr/bin/strong_network_startup/xstartup/xstartup.xfce4
-
 RUN chmod +x /usr/bin/strong_network_startup/xstartup/initialize_workspace.sh
-
 # Remove power manager to remove the dialog first run
 RUN apt-get remove -y xfce4-power-manager xfce4-power-manager-data
 RUN update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrapper
 ENV vnc_ready=true
 #### #### NoVNC #### ####
 
-#### #### Setup Eclipse #### ####
-ARG eclipseVersion=2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
-RUN wget -O eclipse.tar.gz http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/${eclipseVersion}
-RUN tar -xvzf eclipse.tar.gz --directory /opt && rm eclipse.tar.gz
-COPY tools/eclipse.desktop /opt/eclipse.desktop
-RUN desktop-file-install /opt/eclipse.desktop
-#### #### Setup Eclipse #### ####
+# #### #### Eclipse #### ####
+# ARG eclipseVersion=2024-06/R/eclipse-committers-2024-06-R-linux-gtk-x86_64.tar.gz
+# RUN wget -O eclipse.tar.gz http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/${eclipseVersion}
+# RUN tar -xvzf eclipse.tar.gz --directory /opt && rm eclipse.tar.gz
+# COPY tools/eclipse.desktop /opt/eclipse.desktop
+# RUN desktop-file-install /opt/eclipse.desktop
+# #### #### Eclipse #### ####
 
-# Install python3
-RUN apt-get install -y python3-dev python3-pip
-RUN python3 -m pip install --upgrade pip
+# #### #### VSCode #### ####
+# # add microsoft's gpg key and the vscode repository
+# RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
+#     install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
+#     sh -c 'echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' && \
+#     rm microsoft.gpg
+# # install vsCode
+# RUN apt-get update && \
+#     apt-get install -y code
+# #### #### VSCode #### ###
 
-# Install Chrome
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
-    rm google-chrome-stable_current_amd64.deb
+# #### #### Python3 #### ###
+# RUN apt-get install -y python3-dev python3-pip
+# RUN python3 -m pip install --upgrade pip
+# #### ####  Python3 #### ###
 
-# Install SVN
-RUN apt-get install -y subversion
+# #### ####  Chrome #### ###
+# RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+#     sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
+#     rm google-chrome-stable_current_amd64.deb
+# #### ####  Chrome #### ###
+
+# #### ####  SVN #### ###
+# RUN apt-get install -y subversion
+# #### ####  SVN #### ###
+
 
 USER ${user}
 WORKDIR /home/developer
