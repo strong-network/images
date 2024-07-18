@@ -15,11 +15,7 @@ RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && \ 
     nvm install 18.10.0 && \
     nvm use 18.10.0 && \
-    wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    /validate_file_hash b8713c36d3e6f6b2520830180cf6b5779e48410ad5d5e1b192635b0c7359fcc6 packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    rm packages-microsoft-prod.deb && \
-    apt-get update && apt-get install -y dotnet-sdk-7.0 && \
+    apt-get update && apt-get install -y dotnet-sdk-8.0 && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get install php libapache2-mod-php -y && \
     # clean apt to reduce image size
     rm -rf /var/lib/apt/lists/* && \
