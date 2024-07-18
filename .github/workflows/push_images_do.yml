@@ -40,7 +40,7 @@ jobs:
           echo WEBSTORM_IMAGE_NAME=$(make get_webstorm_image) >> $GITHUB_ENV
           echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_NAME=$(make get_sysbox_generic_image) >> $GITHUB_ENV
-          echo NOVNC_IMAGE_NAME=$(make get_no_vnc_image) >> $GITHUB_ENV
+          echo NOVNC_IMAGE_NAME=$(make get_gui_debian_image) >> $GITHUB_ENV
           echo JFROG_GENERIC_IMAGE_NAME=$(make get_generic_jfrog_image) >> $GITHUB_ENV
 
       - name: Install doctl

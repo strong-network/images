@@ -15,10 +15,10 @@ JAVA_INTELLIJ_IMAGE_NAME=sn_java_intellij
 GOLAND_IMAGE_NAME=sn_goland
 PYCHARM_IMAGE_NAME=sn_pycharm
 PHPSTORM_IMAGE_NAME=sn_phpstorm
-NO_VNC_IMAGE_NAME=sn_no_vnc
 ANDROID_STUDIO_IMAGE_NAME=sn_android_studio
 INTELLIJ_ULTIMATE_IMAGE_NAME=sn_intellij_ultimate
 WEBSTORM_IMAGE_NAME=sn_webstorm
+GUI_DEBIAN=sn_gui_debian
 GUI_UBUNTU_BASE=sn_gui_ubuntu
 GUI_UBUNTU_ECLIPSE=sn_gui_ubuntu_eclipse
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
@@ -28,12 +28,6 @@ base_image:
 	@echo ${VERSION}
 	@docker build -t ${BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base
 	@docker tag ${BASE_IMAGE_NAME}:${VERSION} ${BASE_IMAGE_NAME}
-
-.PHONY: gui_ubuntu_base_image
-gui_ubuntu_base_image:
-	@echo ${VERSION}
-	@docker build -t ${GUI_UBUNTU_BASE}:${VERSION} ${GIT_ROOT}/GUI/gui_ubuntu_base
-	@docker tag ${GUI_UBUNTU_BASE}:${VERSION} ${GUI_UBUNTU_BASE}
 
 .PHONY: base_image_rm
 remove_base_image:
@@ -64,9 +58,19 @@ pycharm: base_image
 phpstorm: base_image
 	@docker build -t  ${PHPSTORM_IMAGE_NAME}:${VERSION} phpstorm
 
-.PHONY: no_vnc
-no_vnc: 
-	@docker build -t  ${NO_VNC_IMAGE_NAME}:${VERSION} no_vnc
+.PHONY: gui_debian
+gui_debian: 
+	@docker build -t  ${GUI_DEBIAN}:${VERSION} gui_debian
+
+.PHONY: gui_ubuntu_base_image
+gui_ubuntu_base_image:
+	@echo ${VERSION}
+	@docker build -t ${GUI_UBUNTU_BASE}:${VERSION} ${GIT_ROOT}/GUI/gui_ubuntu_base
+	@docker tag ${GUI_UBUNTU_BASE}:${VERSION} ${GUI_UBUNTU_BASE}
+
+.PHONY: gui_ubuntu_eclipse_image
+gui_ubuntu_eclipse_image: gui_ubuntu_base_image
+	@docker build -t ${GUI_UBUNTU_ECLIPSE}:${VERSION} ${GIT_ROOT}/GUI/gui_ubuntu_eclipse
 
 .PHONY: android_studio 
 android_studio: base_image
@@ -93,12 +97,8 @@ sysbox_base_image: base_image
 generic_sysbox_image: sysbox_base_image
 	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
 
-.PHONY: gui_ubuntu_eclipse_image
-gui_ubuntu_eclipse_image: gui_ubuntu_base_image
-	@docker build -t ${GUI_UBUNTU_ECLIPSE}:${VERSION} ${GIT_ROOT}/GUI/gui_ubuntu_eclipse
-
 .PHONY: all
-all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image gui_ubuntu_base_image gui_ubuntu_eclipse_image
+all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image gui_debian gui_ubuntu_base_image gui_ubuntu_eclipse_image
 
 .PHONY: get_version
 get_version:
@@ -124,9 +124,17 @@ get_goland_image:
 get_pycharm_image:
 	@echo ${PYCHARM_IMAGE_NAME}:${VERSION}
 
-.PHONY: get_no_vnc_image
-get_no_vnc_image:
-	@echo ${NO_VNC_IMAGE_NAME}:${VERSION}
+.PHONY: get_gui_debian_image
+get_gui_debian_image:
+	@echo ${GUI_DEBIAN}:${VERSION}
+
+.PHONY: get_gui_ubuntu_base_image
+get_gui_ubuntu_base_image:
+	@echo ${GUI_UBUNTU_BASE}:${VERSION}
+
+.PHONY: get_gui_ubuntu_eclipse_image
+get_gui_ubuntu_eclipse_image:
+	@echo ${GUI_UBUNTU_ECLIPSE}:${VERSION}
 
 .PHONY: get_phpstorm_image
 get_phpstorm_image:
