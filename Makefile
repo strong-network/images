@@ -59,8 +59,8 @@ phpstorm: base_image
 	@docker build -t  ${PHPSTORM_IMAGE_NAME}:${VERSION} phpstorm
 
 .PHONY: gui_debian
-gui_debian: 
-	@docker build -t  ${GUI_DEBIAN}:${VERSION} gui_debian
+gui_debian:
+	@docker build -t ${GUI_DEBIAN}:${VERSION} ${GIT_ROOT}/GUI/gui_debian
 
 .PHONY: gui_ubuntu_base_image
 gui_ubuntu_base_image:
