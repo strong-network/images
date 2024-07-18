@@ -1,4 +1,4 @@
-FROM kalilinux/kali-rolling:latest
+FROM kalilinux/kali-last-release:latest
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -86,12 +86,12 @@ RUN chsh -s /bin/bash && \
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 
+COPY xstartup /xstartup
+COPY setup_vnc.sh /usr/bin/strong_network_startup/setup_vnc.sh
+
 RUN wget https://gitlab.com/kalilinux/recipes/kali-scripts/-/raw/main/xfce4.sh && \
     chmod +x xfce4.sh && \
     ./xfce4.sh && \
-    mkdir -p /home/developer/.vnc/ && \
-    wget https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project/-/raw/master/nethunter-fs/profiles/xstartup -O /home/developer/.vnc/xstartup && \
-    chmod 777 /home/developer/.vnc/xstartup && \
     cp /usr/share/novnc/vnc_auto.html /usr/share/novnc/index.html
 
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
