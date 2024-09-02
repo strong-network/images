@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -14,6 +14,7 @@ RUN apt-get update && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
     mkdir -p /usr/bin/strong_network_startup && chmod 777 /usr/bin/strong_network_startup && \
+    usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && \
     adduser --gecos '' --disabled-password developer && \
     # Change permissions of /usr/local
     chgrp -R developer /usr/local && \
@@ -24,7 +25,7 @@ RUN apt-get update && \
 COPY validate_file_hash.sh /validate_file_hash
 
 # Install user space packages
-RUN apt-get install -y wget python2 python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
+RUN apt-get install -y wget python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
     build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \ 
     libxi6 libfreetype6 dirmngr lsb-release less && \
     mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
@@ -77,7 +78,6 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
 RUN mkdir -p /etc/apt/keyrings && \
     curl -sLS https://packages.microsoft.com/keys/microsoft.asc > microsoft.asc && \
     cat microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null && \
-    cat microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/powershell.gpg > /dev/null && \
     chmod go+r /etc/apt/keyrings/microsoft.gpg && \
     /validate_file_hash b4dcc2fb98c13b5fc96aee6cd7e3c1e82516f57fab40df83f57dfed1820cb981  /etc/apt/keyrings/microsoft.gpg && \
     AZ_REPO=$(lsb_release -cs) && \
@@ -88,7 +88,6 @@ RUN mkdir -p /etc/apt/keyrings && \
     echo "deb [arch=`dpkg --print-architecture` signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list && \
     apt-get update && \
     apt-get install -y azure-cli && \
-    rm powershell.tar.gz && \
     rm -rf /etc/apt/sources.list.d/azure-cl.list && \
     apt-get update
 

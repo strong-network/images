@@ -7,7 +7,7 @@ RUN wget -O /ide.tar.gz https://download-cf.jetbrains.com/python/pycharm-communi
 
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 10 && \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10 && \
-    pip install pylint autopep8 python-language-server && \
+    pip3 install pylint autopep8 python-language-server --break-system-packages && \
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /var/cache/apt
 
