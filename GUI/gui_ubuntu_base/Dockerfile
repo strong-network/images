@@ -38,6 +38,8 @@ RUN apt-get install -y novnc tightvncserver
 RUN apt-get install -y vim
 # To get clipboard support
 RUN apt-get install autocutsel
+# Mesa OpenGL
+RUN apt-get install libglu1-mesa-dev mesa-utils 
 # copy vnc startup scripts
 RUN  mkdir -p /usr/bin/strong_network_startup/xstartup && chmod 777 /usr/bin/strong_network_startup/xstartup
 COPY tools/index.html /usr/share/novnc/index.html
