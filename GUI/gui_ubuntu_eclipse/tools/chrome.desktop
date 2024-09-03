@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Google Chrome
+GenericName=Web Browser
+Comment=Access the Internet
+Type=Application
+Exec=google-chrome --no-first-run=true --no-default-browser-check=true --no-sandbox=true --disable-cookie-encryption=true --password-store=basic
+Terminal=false
+Icon=google-chrome
+NoDisplay=false
+MimeType=text/html;text/xml;application/xhtml_xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;
+Categories=Network;WebBrowser;

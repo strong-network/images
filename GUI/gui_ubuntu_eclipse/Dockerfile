@@ -33,6 +33,9 @@ RUN python3 -m pip install --upgrade pip
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     sudo apt install -y ./google-chrome-stable_current_amd64.deb && \
     rm google-chrome-stable_current_amd64.deb
+
+COPY tools/chrome.desktop /opt/chrome.desktop
+RUN desktop-file-install /opt/chrome.desktop
 #### ####  Chrome #### ###
 
 #### ####  SVN #### ###
