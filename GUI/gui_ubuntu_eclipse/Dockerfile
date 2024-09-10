@@ -25,8 +25,10 @@ RUN apt-get update && \
 #### #### VSCode #### ###
 
 #### #### Python3 #### ###
-RUN apt-get install -y python3-dev python3-pip
-RUN python3 -m pip install --upgrade pip
+RUN apt-get install -y python3-dev python3-pip python3-venv && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 10 && \
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 10 && \
+    pip3 install pylint autopep8 python-language-server --break-system-packages
 #### ####  Python3 #### ###
 
 #### ####  Chrome #### ###

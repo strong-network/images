@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG BASE_IMAGE=ubuntu:22.04
+ARG BASE_IMAGE=ubuntu:24.04
 FROM ${BASE_IMAGE}
 
 ARG user=developer
@@ -7,15 +7,16 @@ ARG group=developer
 ARG uid=1000
 ARG gid=1000
 
-RUN groupadd -g ${gid} ${group}
-RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sn_user' --disabled-password ${user}
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-
 #### #### Strong Network #### ####
 RUN apt-get update && \
-    apt-get install -y git locales sudo curl wget make build-essential gawk bison \
-    libkrb5-dev libssl-dev && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
+    apt-get install -y git locales sudo curl \
+    libkrb5-dev libssl-dev
+
+RUN usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && groupadd -g ${gid} ${group} && \
+    adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sn_user' --disabled-password ${user} && \
+    echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs ssh && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     chsh -s /bin/bash && \
@@ -39,7 +40,7 @@ RUN apt-get install -y vim
 # To get clipboard support
 RUN apt-get install autocutsel
 # Mesa OpenGL
-RUN apt-get install -y libglu1-mesa-dev mesa-utils 
+RUN apt-get install -y --no-install-recommends libglu1-mesa-dev mesa-utils dbus-x11 gstreamer1.0-tools libpci-dev libx11-dev
 # copy vnc startup scripts
 RUN  mkdir -p /usr/bin/strong_network_startup/xstartup && chmod 777 /usr/bin/strong_network_startup/xstartup
 COPY tools/index.html /usr/share/novnc/index.html

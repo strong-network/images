@@ -43,4 +43,4 @@ cp /opt/chrome.desktop /home/developer/Desktop/chrome.desktop
 sudo chmod +x /home/developer/Desktop/chrome.desktop
 
 # start novnc
-/usr/share/novnc/utils/launch.sh --listen 8081 --vnc localhost:5901
+/usr/share/novnc/utils/novnc_proxy --listen 8081 --vnc localhost:5901
