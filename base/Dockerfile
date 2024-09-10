@@ -35,40 +35,40 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
     chmod -R 770 /home/developer
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-26.1.3.tgz -O docker.tar.gz && \
-    /validate_file_hash a50076d372d3bbe955664707af1a4ce4f5df6b2d896e68b12ecc74e724d1db31 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-27.2.0.tgz -O docker.tar.gz && \
+    /validate_file_hash 3bd24d57ad188013d3ea3cc9366055452bf7a6e21756fdc0a682e80779d3c3bc docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.14.0/buildx-v0.14.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    wget https://github.com/docker/buildx/releases/download/v0.16.2/buildx-v0.16.2.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash f3ba3bf1e4ab18e96c2d36526a075a02a78fb5f8e80d3e3ca9c5bf256d81d0a0 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash d037bd4937bf18fba67cff4366e084ee125a3e15c25657ee1aeceff8db3672b4 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz && \
-    /validate_file_hash a74747ac40777b86d3ff6f1be201504bba65ca46cd68b5fe25d3c394d0dcf745 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.15.4-linux-amd64.tar.gz && \
+    /validate_file_hash 11400fecfc07fd6f034863e4e0c4c4445594673fd2a129e701fe41f31170cfa9 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.30.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash 5b86f0b06e1a5ba6f8f00e2b01e8ed39407729c4990aeda961f83a586f975e8a kubectl && \
+    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.31.0/bin/linux/amd64/kubectl && \
+    /validate_file_hash 7c27adc64a84d1c0cc3dcf7bf4b6e916cc00f3f576a2dbac51b318d926032437 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.106.0/doctl-1.106.0-linux-amd64.tar.gz && \
-    /validate_file_hash dd336962c8516c92e42a132b9a50c92d564cbf8ba507e69d02b699de600d53f0 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.111.0/doctl-1.111.0-linux-amd64.tar.gz && \
+    /validate_file_hash 85abc391224c192cd351c16cde2e7092607650089de3f3aa4f2571d7074bdee6 doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.45.zip" -o "awscliv2.zip" && \
-    /validate_file_hash f0ad72133b124beccbdde145e91e6be6c5c66f9d222fece3c3a75637cf2376f9 awscliv2.zip && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.17.42.zip" -o "awscliv2.zip" && \
+    /validate_file_hash 3c068f4cdd885968ac087b3d121a4df99ba6ddf7a8a552dbd0e9bd5a1dc25d4d awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
