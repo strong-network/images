@@ -10,10 +10,12 @@ WORKDIR /
 
 USER 0
 
-RUN wget -qO jfrog_public_gpg.key https://releases.jfrog.io/artifactory/jfrog-gpg-public/jfrog_public_gpg.key && \
-    /validate_file_hash e4faf9f9ecdc803b3a1803df0474651607779336eda04bb1dbcc9fdab0e474cf  jfrog_public_gpg.key && \
-    cat jfrog_public_gpg.key | apt-key add - && rm jfrog_public_gpg.key && \
-    echo "deb https://releases.jfrog.io/artifactory/jfrog-debs xenial contrib" | tee -a /etc/apt/sources.list && apt update && \
+RUN mkdir -p /etc/apt/keyrings && \
+    wget -qO - https://releases.jfrog.io/artifactory/api/gpg/key/public | gpg --batch --yes --dearmor -o /etc/apt/keyrings/jfrog.gpg && \
+    wget -qO - https://releases.jfrog.io/artifactory/api/security/keypair/public/repositories/jfrog-debs | gpg --batch --yes --dearmor -o /etc/apt/keyrings/jfrog-archive.gpg && \
+    chmod a+r /etc/apt/keyrings/jfrog.gpg /etc/apt/keyrings/jfrog-archive.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/jfrog.gpg,/etc/apt/keyrings/jfrog-archive.gpg] https://releases.jfrog.io/artifactory/jfrog-debs xenial contrib" | tee /etc/apt/sources.list.d/jfrog.list && \
+    apt update && \
     apt install -y jfrog-cli-v2-jf
 
 WORKDIR /home/developer
