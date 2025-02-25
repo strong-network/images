@@ -100,7 +100,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && rm terrascan && \
     curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
-    /validate_file_hash 2ad093a9b22cd785745ee253b6463d8f89af2abffe1268869814c2f1cfa1b9e5 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
+    /validate_file_hash f88067494f42a63652ff3c50453b4476a6614184cb3af3deb3c0e778ccc3d8a7 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
     curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
     /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh
 

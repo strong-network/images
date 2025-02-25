@@ -4,13 +4,10 @@ on:
   workflow_dispatch:
 
 jobs:
-
   scan-base:
-
     runs-on: ubuntu-22.04
 
     steps:
-
       - uses: actions/checkout@v3
 
       - name: Make base image env
@@ -24,7 +21,6 @@ jobs:
           make-command: base_image
 
   scan-generic:
-
     runs-on: ubuntu-22.04
 
     steps:
@@ -34,112 +30,12 @@ jobs:
         run: |
           echo GENERIC_IMAGE=$(make get_generic_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
-
         name: scan image
         with:
           image-name: ${{ env.GENERIC_IMAGE }}
           make-command: generic_image
 
-  scan-intellij-ultimate:
-
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make intellij image env
-        run: |
-          echo JAVA_INTELLIJ_IMAGE=$(make get_java_intellij_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.JAVA_INTELLIJ_IMAGE }}
-          make-command: java_intellij
-
-  scan-java-intellij:
-
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make intellij image env
-        run: |
-          echo INTELLIJ_ULTIMATE_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE }}
-          make-command: intellij_ultimate
-
-  scan-goland:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make goland env
-        run: |
-          echo GOLAND_IMAGE=$(make get_goland_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.GOLAND_IMAGE }}
-          make-command: goland
-
-  scan-android-studio:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make android studio env
-        run: |
-          echo ANDROID_STUDIO_IMAGE=$(make get_android_studio_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.ANDROID_STUDIO_IMAGE }}
-          make-command: android_studio
-
-  scan-phpstorm:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make phpstorm env
-        run: |
-          echo PHPSTORM_IMAGE=$(make get_phpstorm_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.PHPSTORM_IMAGE }}
-          make-command: phpstorm
-
-  scan-webstorm:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make webstorm env
-        run: |
-          echo WEBSTORM_IMAGE=$(make get_webstorm_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.WEBSTORM_IMAGE }}
-          make-command: webstorm_image
-
   scan-generic-jfrog:
-
     runs-on: ubuntu-22.04
 
     steps:
@@ -149,7 +45,6 @@ jobs:
         run: |
           echo GENERIC_JFROG_IMAGE=$(make get_generic_jfrog_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
-
         name: scan image
         with:
           image-name: ${{ env.GENERIC_JFROG_IMAGE }}
@@ -170,5 +65,3 @@ jobs:
         with:
           image-name: ${{ env.SYSBOX_GENERIC_IMAGE }}
           make-command: generic_sysbox_image
-  
-
