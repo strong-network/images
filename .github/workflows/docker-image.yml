@@ -2,69 +2,25 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build_base:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the base image
-      run: make base_image
-  
+      - uses: actions/checkout@v3
+      - name: Build the base image
+        run: make base_image
+
   build_generic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Build strong network generic image
         run: make generic_image && docker inspect --type=image $(make get_generic_image) > /dev/null
-
-  build_java_intellij:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build strong network java with intellij image
-        run: make java_intellij && docker inspect --type=image $(make get_java_intellij_image) > /dev/null
-
-  build_goland:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build strong network java with intellij image
-        run: make goland && docker inspect --type=image $(make get_goland_image) > /dev/null
-
-  build_pycharm:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3 
-      - name: Build strong network pycharm image
-        run: make pycharm && docker inspect --type=image $(make get_pycharm_image) > /dev/null
-
-  build_phpstorm:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build strong network phpstorm image
-        run: make phpstorm && docker inspect --type=image $(make get_phpstorm_image) > /dev/null
-  
-  build_android_studio:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build strong network android studio image
-        run: make android_studio && docker inspect --type=image $(make get_android_studio_image) > /dev/null
-
-  build_webstorm:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build strong network webstorm image
-        run: make webstorm_image && docker inspect --type=image $(make get_webstorm_image) > /dev/null
 
   build_generic_jfrog:
     runs-on: ubuntu-latest
