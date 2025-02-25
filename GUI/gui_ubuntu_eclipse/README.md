@@ -4,7 +4,7 @@ This page will cover the basic information and how to start using the ubuntu ima
 
 ## Information
 
-This image it's built on top of the Ubuntu minimal VNC an installs additional tools: Python 3, Eclipse, VSCode and SVN.
+This image is built on top of the Ubuntu minimal VNC an installs additional tools: Python 3, Eclipse, VSCode and SVN.
 
 ## Instructions
 

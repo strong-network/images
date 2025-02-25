@@ -21,6 +21,7 @@ WEBSTORM_IMAGE_NAME=sn_webstorm
 GUI_DEBIAN=sn_gui_debian
 GUI_UBUNTU_BASE=sn_gui_ubuntu
 GUI_UBUNTU_ECLIPSE=sn_gui_ubuntu_eclipse
+GUI_DEBIAN_POSTMAN=sn_gui_debian_postman
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -62,6 +63,10 @@ phpstorm: base_image
 gui_debian:
 	@docker build -t ${GUI_DEBIAN}:${VERSION} ${GIT_ROOT}/GUI/gui_debian
 
+.PHONY: gui_debian_postman
+gui_debian_postman:
+	@docker build -t ${GUI_DEBIAN_POSTMAN}:${VERSION} ${GIT_ROOT}/GUI/gui_debian_postman
+
 .PHONY: gui_ubuntu_base_image
 gui_ubuntu_base_image:
 	@echo ${VERSION}
@@ -98,7 +103,7 @@ generic_sysbox_image: sysbox_base_image
 	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
 
 .PHONY: all
-all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image gui_debian gui_ubuntu_base_image gui_ubuntu_eclipse_image
+all: base_image generic_image java_intellij intellij_ultimate goland pycharm phpstorm android_studio webstorm_image gui_debian gui_ubuntu_base_image gui_ubuntu_eclipse_image gui_debian_postman
 
 .PHONY: get_version
 get_version:
