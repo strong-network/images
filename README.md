@@ -13,7 +13,7 @@ These container images cover typical environment needs to develop in languages s
 
 ## IDE Compatibility
 
-Images built with the provided docker files can be used with Visual Studio Code and the terminal (vim, emacs, etcl) without the need to embed the IDE as part of the image. For JetBrains IDEs, the IDE has to be embedded in the image. You can find image files here that embed Intellij and that can be used as examples to embed other IDEs from JetBrain.
+Images built with the provided docker files can be used with Visual Studio Code and the terminal (vim, emacs, etcl) without the need to embed the IDE as part of the image.
 
 ## How to build the images
 
