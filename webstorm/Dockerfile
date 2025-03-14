@@ -9,7 +9,7 @@ RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
     /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && rm yarn.gpg.key && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh > install_nvm.sh && \
-    /validate_file_hash f9df422782cec4a82e1ec0e38fd4ca72112766cbddfa95eafa54a64b12a71fc6 install_nvm.sh && cat install_nvm.sh | bash && rm install_nvm.sh && \
+    /validate_file_hash a909fdd01765379ebc5983674adafb8bc9de6d928bfa188761309d4a0c36be0f install_nvm.sh && cat install_nvm.sh | bash && rm install_nvm.sh && \
     export NVM_DIR="$HOME/.nvm" && \
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" && \
