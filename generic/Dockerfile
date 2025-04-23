@@ -2,9 +2,9 @@ ARG BASE_IMAGE=sn_base
 FROM ${BASE_IMAGE}
 
 
-ENV GOPATH /home/developer/go
-ENV PATH /usr/local/go/bin:/home/developer/go/bin:${PATH}
-ENV GO111MODULE on
+ENV GOPATH=/home/developer/go
+ENV PATH=/usr/local/go/bin:/home/developer/go/bin:${PATH}
+ENV GO111MODULE=on
 
 RUN apt-get update && \
     apt-get -y upgrade && \
@@ -27,7 +27,7 @@ RUN apt-get update && \
     dpkg -i jq*.deb && rm *.deb && \
     npm install -g npm && \
     curl -O https://download.clojure.org/install/linux-install-1.11.1.1224.sh && \
-    /validate_file_hash 3bbab4d253eda43e3122fd5705014a69c44944a6dee8ea4d7d567afe157eb4ef linux-install-1.11.1.1224.sh && \ 
+    /validate_file_hash 3bbab4d253eda43e3122fd5705014a69c44944a6dee8ea4d7d567afe157eb4ef linux-install-1.11.1.1224.sh && \
     chmod +x linux-install-1.11.1.1224.sh && \
     ./linux-install-1.11.1.1224.sh ; rm -f linux-install-1.11.1.1224.sh
 
