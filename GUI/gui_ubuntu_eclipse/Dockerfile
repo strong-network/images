@@ -15,10 +15,10 @@ RUN desktop-file-install /opt/eclipse.desktop
 
 #### #### VSCode #### ####
 # add microsoft's gpg key and the vscode repository
-RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
-    install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
-    sh -c 'echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' && \
-    rm microsoft.gpg
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc -o microsoft.asc && \
+    gpg --dearmor < microsoft.asc > /usr/share/keyrings/microsoft-archive-keyring.gpg && \
+    echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list && \
+    rm microsoft.asc
 # install vsCode
 RUN apt-get update && \
     apt-get install -y code
