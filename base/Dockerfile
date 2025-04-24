@@ -116,7 +116,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     apt-get update && apt-get -y install gcc g++ make yarn && \
     # script is to have the latest available version of git-lfs
     apt-get install -y htop \
-    zsh  jq zip shellcheck tree \
+    zsh jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
     # install networking related packages
     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools && \
@@ -130,7 +130,7 @@ COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_sta
 RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
     curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
     cd /tmp &&\
-    /validate_file_hash 6641ce61cc3f3337b34c13304a7db20268ac17d3a1c6fe5c4864ec5fffe217dd install_sdkman.sh &&\
+    /validate_file_hash 63af2d288adb6e4fdad84e83aca03d33cea9380bfe872bbec5353561081eb692 install_sdkman.sh &&\
     export SDKMAN_DIR=/tmp/sdkman &&\
     bash /tmp/install_sdkman.sh &&\
     bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
