@@ -35,35 +35,35 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
     chmod -R 770 /home/developer
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-26.1.3.tgz -O docker.tar.gz && \
-    /validate_file_hash a50076d372d3bbe955664707af1a4ce4f5df6b2d896e68b12ecc74e724d1db31 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-28.2.2.tgz -O docker.tar.gz && \
+    /validate_file_hash 53dc06dc3f775282ddff93b2d0974bbe6480761018c61e7a797342a9c7f14e23 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.14.0/buildx-v0.14.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    wget https://github.com/docker/buildx/releases/download/v0.24.0/buildx-v0.24.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash f3ba3bf1e4ab18e96c2d36526a075a02a78fb5f8e80d3e3ca9c5bf256d81d0a0 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.37.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash e6e471b1e7bf0443592d3987dea6073f08db3e48ba0580199109aa7a44257e54 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz && \
-    /validate_file_hash a74747ac40777b86d3ff6f1be201504bba65ca46cd68b5fe25d3c394d0dcf745 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz && \
+    /validate_file_hash c5deada86fe609deefdf40e9cbbe3da2f8cf3f6a4551a0ebe7886dc8fcf98bce helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://storage.googleapis.com/kubernetes-release/release/v1.30.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash 5b86f0b06e1a5ba6f8f00e2b01e8ed39407729c4990aeda961f83a586f975e8a kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.33.1/bin/linux/amd64/kubectl && \
+    /validate_file_hash 5de4e9f2266738fd112b721265a0c1cd7f4e5208b670f811861f699474a100a3 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.106.0/doctl-1.106.0-linux-amd64.tar.gz && \
-    /validate_file_hash dd336962c8516c92e42a132b9a50c92d564cbf8ba507e69d02b699de600d53f0 doctl.tar.gz && \
+RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.129.0/doctl-1.129.0-linux-amd64.tar.gz && \
+    /validate_file_hash b0e6a4ef32c0931ca910098b51491340d41b62c3e46bb7b1191549cd759e0bde doctl.tar.gz && \
     tar -C /usr/local/bin -xzf doctl.tar.gz && \
     rm doctl.tar.gz && \
     # Install AWS cli
@@ -94,15 +94,7 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
     rm hashicorp.key && \
     apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
     apt-get update && \
-    apt-get install terraform -y && \
-    curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz  && \
-    /validate_file_hash 9275d75210b7df52f8870252035803288646674f5701ced82812037700a39670 terrascan.tar.gz && \
-    tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
-    install terrascan /usr/local/bin && rm terrascan && \
-    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh > install_tflint.sh && \
-    /validate_file_hash f88067494f42a63652ff3c50453b4476a6614184cb3af3deb3c0e778ccc3d8a7 install_tflint.sh && cat install_tflint.sh | bash && rm install_tflint.sh && \
-    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh > install_tfsec.sh && \
-    /validate_file_hash c6621a5be84cdecc292cee9745470519dbc1cf38637525f4dc3310ea9101ec90 install_tfsec.sh && cat install_tfsec.sh | bash && rm install_tfsec.sh
+    apt-get install terraform -y
 
 
 # Setup environment for developers
