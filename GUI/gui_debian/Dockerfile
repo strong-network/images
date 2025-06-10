@@ -96,21 +96,7 @@ RUN wget https://gitlab.com/kalilinux/recipes/kali-scripts/-/raw/main/xfce4.sh &
     ./xfce4.sh && \
     cp /usr/share/novnc/vnc_auto.html /usr/share/novnc/index.html
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
-    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
-    cd /tmp &&\
-    /validate_file_hash 63af2d288adb6e4fdad84e83aca03d33cea9380bfe872bbec5353561081eb692 install_sdkman.sh &&\
-    export SDKMAN_DIR=/tmp/sdkman &&\
-    bash /tmp/install_sdkman.sh &&\
-    bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
-    echo '#!/bin/bash\n\
-    if ! grep -q SDKMAN_DIR "/home/developer/.bashrc" ; then\n\
-        cp -r /tmp/sdkman /home/developer/.sdkman\n\
-        echo "SDKMAN_DIR=/home/developer/.sdkman" >> ~/.bashrc\n\
-        echo "[[ -s $HOME/.sdkman/bin/sdkman-init.sh ]] && source     $HOME/.sdkman/bin/sdkman-init.sh" >> $HOME/.bashrc  \n\
-    fi \n' > /usr/bin/strong_network_startup/add_sdk.sh &&\
-    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh &&\
-    chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh
 
 WORKDIR /home/developer
 
