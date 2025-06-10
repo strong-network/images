@@ -119,18 +119,4 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
-    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
-    cd /tmp &&\
-    /validate_file_hash a0dc77874a5e1fc7aee4c573f8dd39e17efeb6e130163f1d49e84a4b9a381069 install_sdkman.sh &&\
-    export SDKMAN_DIR=/tmp/sdkman &&\
-    bash /tmp/install_sdkman.sh &&\
-    bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
-    echo '#!/bin/bash\n\
-    if ! grep -q SDKMAN_DIR "/home/developer/.bashrc" ; then\n\
-        cp -r /tmp/sdkman /home/developer/.sdkman\n\
-        echo "SDKMAN_DIR=/home/developer/.sdkman" >> ~/.bashrc\n\
-        echo "[[ -s $HOME/.sdkman/bin/sdkman-init.sh ]] && source     $HOME/.sdkman/bin/sdkman-init.sh" >> $HOME/.bashrc  \n\
-    fi \n' > /usr/bin/strong_network_startup/add_sdk.sh &&\
-    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh &&\
-    chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh
