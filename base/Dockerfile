@@ -50,24 +50,19 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.18.2-linux-amd64.tar.gz && \
-    /validate_file_hash c5deada86fe609deefdf40e9cbbe3da2f8cf3f6a4551a0ebe7886dc8fcf98bce helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v3.18.3-linux-amd64.tar.gz && \
+    /validate_file_hash 6ec85f306dd8fe9eb05c61ba4593182b2afcfefb52f21add3fe043ebbdc48e39 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.33.1/bin/linux/amd64/kubectl && \
-    /validate_file_hash 5de4e9f2266738fd112b721265a0c1cd7f4e5208b670f811861f699474a100a3 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.33.2/bin/linux/amd64/kubectl && \
+    /validate_file_hash 33d0cdec6967817468f0a4a90f537dfef394dcf815d91966ca651cc118393eea kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download/v1.129.0/doctl-1.129.0-linux-amd64.tar.gz && \
-    /validate_file_hash b0e6a4ef32c0931ca910098b51491340d41b62c3e46bb7b1191549cd759e0bde doctl.tar.gz && \
-    tar -C /usr/local/bin -xzf doctl.tar.gz && \
-    rm doctl.tar.gz && \
-    # Install AWS cli
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.45.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.45.zip" -o "awscliv2.zip" && \
     /validate_file_hash f0ad72133b124beccbdde145e91e6be6c5c66f9d222fece3c3a75637cf2376f9 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
