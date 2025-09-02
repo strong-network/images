@@ -2,11 +2,12 @@ name: Run trivy scans
 
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: "0 7 * * 1"
+    
 jobs:
   scan-base:
     runs-on: ubuntu-22.04
-
     steps:
       - uses: actions/checkout@v3
 

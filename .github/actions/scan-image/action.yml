@@ -7,6 +7,9 @@ inputs:
   make-command:
     description: 'which make command to run'
     required: true
+  upload-data:
+    description: Decide if we want to call a webhook
+    default: 'false'
 
 runs:
   using: "composite"
@@ -18,7 +21,8 @@ runs:
         make ${{ inputs.make-command }}
         docker save -o image.tar ${{ inputs.image-name }}
 
-    - name: Run Trivy vulnerability scanner
+    - if: ${{ inputs.upload-data == 'false' }}
+      name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
         format: 'table'
@@ -26,3 +30,23 @@ runs:
         input: image.tar
         scan-type: image
         security-checks: vuln
+
+    - if: ${{ inputs.upload-data == 'true' }}
+      name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        format: 'json'
+        ignore-unfixed: true
+        input: image.tar
+        scan-type: image
+        security-checks: vuln
+        output:  ${{ inputs.image-name}}.json
+        severity: 'CRITICAL,HIGH'
+
+    - if: ${{ inputs.upload-data == 'true' }}
+      name: Call webhook with json
+      shell: bash
+      run: |
+        echo "Results:\n"
+        cat ${{ inputs.friendly-name}}.json
+        curl -X POST https://hooks.zapier.com/hooks/catch/14226593/3xgk2p7/?name=${{ inputs.image-name}} -d @${{ inputs.image-name}}.json
