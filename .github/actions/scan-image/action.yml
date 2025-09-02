@@ -41,12 +41,27 @@ runs:
         scan-type: image
         security-checks: vuln
         output:  ${{ inputs.image-name}}.json
+        exit-code: '1'
         severity: 'CRITICAL,HIGH'
+      continue-on-error: true
 
-    - if: ${{ inputs.upload-data == 'true' }}
-      name: Call webhook with json
-      shell: bash
-      run: |
-        echo "Results:\n"
-        cat ${{ inputs.friendly-name}}.json
-        curl -X POST https://hooks.zapier.com/hooks/catch/14226593/3xgk2p7/?name=${{ inputs.image-name}} -d @${{ inputs.image-name}}.json
+    - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
+      name: Create Jira Ticket on Failure
+      uses: atlassian/gajira-create@v3
+      with:
+        project: PLAT
+        issuetype: 'Bug'
+        summary: 'Security Vulnerabilities Detected in ${{ github.repository }}'
+        description: |
+          A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities.
+
+          *Repository*: ${{ github.repository }}
+          *Commit*: ${{ github.sha }}
+          *Triggered by*: ${{ github.actor }}
+
+          Please review the attached `${{ inputs.image-name}}.json` artifact in the GitHub Actions run for full details.
+
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
