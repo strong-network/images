@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 7 * * 1"
-    
+
 jobs:
   scan-base:
     runs-on: ubuntu-22.04
@@ -20,6 +20,7 @@ jobs:
         with:
           image-name: ${{ env.BASE_IMAGE }}
           make-command: base_image
+          upload-data: ${{ github.event_name == 'schedule' }}
 
   scan-generic:
     runs-on: ubuntu-22.04
@@ -35,6 +36,7 @@ jobs:
         with:
           image-name: ${{ env.GENERIC_IMAGE }}
           make-command: generic_image
+          upload-data: ${{ github.event_name == 'schedule' }}
 
   scan-generic-jfrog:
     runs-on: ubuntu-22.04
@@ -50,6 +52,7 @@ jobs:
         with:
           image-name: ${{ env.GENERIC_JFROG_IMAGE }}
           make-command: generic_jfrog_image
+          upload-data: ${{ github.event_name == 'schedule' }}
 
   scan-sysbox-generic:
     runs-on: ubuntu-22.04
@@ -66,3 +69,4 @@ jobs:
         with:
           image-name: ${{ env.SYSBOX_GENERIC_IMAGE }}
           make-command: generic_sysbox_image
+          upload-data: ${{ github.event_name == 'schedule' }}
