@@ -48,6 +48,12 @@ centos_base_image:
 	@docker build -t ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_centos7
 	@docker tag ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${CENTOS_BASE_IMAGE_NAME}
 
+.PHONY: rhel_base_image
+rhel_base_image:
+	@echo ${VERSION}
+	@docker build -t ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/rhel8
+	@docker tag ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${CENTOS_BASE_IMAGE_NAME}
+
 .PHONY: base_image_rm
 remove_base_image:
 	@docker image rm ${BASE_IMAGE_NAME}:${VERSION}
