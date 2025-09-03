@@ -69,8 +69,102 @@ runs:
             "project": {
               "key": "PLAT"
             },
-            "summary": "Deployment completed for commit ${{ github.sha }}",
-            "description": "A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities.\n\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nActor: ${{ github.actor }}\nPlease review the attached ${{ inputs.image-name}}.json artifact in the GitHub Actions run for full details.",
+            "summary": "Trivy Scan Failed - Critical/High Vulnerabilities Found",
+            "description": {
+              "type": "doc",
+              "version": 1,
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities."
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": []
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Commit: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ github.sha }}",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Branch: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ github.ref_name }}",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Actor: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ github.actor }}",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Please review the attached "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ inputs.image-name }}.json",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "text": " artifact in the GitHub Actions run for full details."
+                    }
+                  ]
+                }
+              ]
+            },
             "issuetype": {
               "name": "Task"
             }
