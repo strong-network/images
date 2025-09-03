@@ -21,6 +21,9 @@ jobs:
           image-name: ${{ env.BASE_IMAGE }}
           make-command: base_image
           upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
 
   scan-generic:
     runs-on: ubuntu-22.04
@@ -37,6 +40,9 @@ jobs:
           image-name: ${{ env.GENERIC_IMAGE }}
           make-command: generic_image
           upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
 
   scan-generic-jfrog:
     runs-on: ubuntu-22.04
@@ -53,6 +59,9 @@ jobs:
           image-name: ${{ env.GENERIC_JFROG_IMAGE }}
           make-command: generic_jfrog_image
           upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
 
   scan-sysbox-generic:
     runs-on: ubuntu-22.04
@@ -70,3 +79,6 @@ jobs:
           image-name: ${{ env.SYSBOX_GENERIC_IMAGE }}
           make-command: generic_sysbox_image
           upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}

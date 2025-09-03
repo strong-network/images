@@ -10,6 +10,15 @@ inputs:
   upload-data:
     description: Decide if we want to call a webhook
     default: 'false'
+  jira-base-url:
+    description: 'URL of the Jira instance'
+    required: true
+  jira-user-email:
+    description: 'Email for Jira authentication'
+    required: true
+  jira-api-token:
+    description: 'API token for Jira authentication'
+    required: true
 
 runs:
   using: "composite"
@@ -62,6 +71,6 @@ runs:
           Please review the attached `${{ inputs.image-name}}.json` artifact in the GitHub Actions run for full details.
 
       env:
-        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        JIRA_BASE_URL: ${{ inputs.jira-base-url }}
+        JIRA_USER_EMAIL: ${{ inputs.jira-user-email }}
+        JIRA_API_TOKEN: ${{ inputs.jira-api-token }}
