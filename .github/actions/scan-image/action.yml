@@ -19,6 +19,9 @@ inputs:
   jira-api-token:
     description: 'API token for Jira authentication'
     required: true
+  slack-webhook-url:
+    description: 'Slack Webhook'
+    required: true
 
 runs:
   using: "composite"
@@ -184,6 +187,6 @@ runs:
     - if: ${{ inputs.upload-data == 'false' }}
       uses: act10ns/slack@v2
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
       with:
         status: ${{ job.status }}
