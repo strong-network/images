@@ -23,7 +23,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-
     - name: build base
       shell: bash
       run: |
@@ -179,3 +178,12 @@ runs:
           -d @jira_payload.json \
           "$JIRA_BASE_URL/rest/api/3/issue" \
           --fail --show-error
+          - name: Notify slack channel, job finished
+
+    # - if: ${{ inputs.upload-data == 'true' }}
+    - if: ${{ inputs.upload-data == 'false' }}
+      uses: act10ns/slack@v2
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      with:
+        status: ${{ job.status }}
