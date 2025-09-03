@@ -56,21 +56,25 @@ runs:
     # - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
     - if: inputs.upload-data == 'false'
       name: Create Jira Ticket on Failure
-      uses: atlassian/gajira-create@v3
-      with:
-        project: PLAT
-        issuetype: 'Bug'
-        summary: 'Security Vulnerabilities Detected in ${{ github.repository }}'
-        description: |
-          A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities.
-
-          *Repository*: ${{ github.repository }}
-          *Commit*: ${{ github.sha }}
-          *Triggered by*: ${{ github.actor }}
-
-          Please review the attached `${{ inputs.image-name}}.json` artifact in the GitHub Actions run for full details.
-
       env:
         JIRA_BASE_URL: ${{ inputs.jira-base-url }}
         JIRA_USER_EMAIL: ${{ inputs.jira-user-email }}
         JIRA_API_TOKEN: ${{ inputs.jira-api-token }}
+      shell: bash
+      run: |
+        curl -X POST \
+          -H "Content-Type: application/json" \
+          -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
+          -d '{
+            "fields": {
+              "project": {
+                "key": "PLAT"
+              },
+              "summary": "Deployment completed for commit ${{ github.sha }}",
+              "description": "A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities.\n\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nActor: ${{ github.actor }}\nPlease review the attached `${{ inputs.image-name}}.json` artifact in the GitHub Actions run for full details.",
+              "issuetype": {
+                "name": "Task"
+              }
+            }
+          }' \
+          "$JIRA_BASE_URL/rest/api/3/issue"
