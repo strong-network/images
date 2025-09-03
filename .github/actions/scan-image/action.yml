@@ -30,16 +30,17 @@ runs:
         make ${{ inputs.make-command }}
         docker save -o image.tar ${{ inputs.image-name }}
 
-    - if: ${{ inputs.upload-data == 'false' }}
-      name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        format: 'table'
-        ignore-unfixed: true
-        input: image.tar
-        scan-type: image
+    # - if: ${{ inputs.upload-data == 'false' }}
+    #   name: Run Trivy vulnerability scanner
+    #   uses: aquasecurity/trivy-action@master
+    #   with:
+    #     format: 'table'
+    #     ignore-unfixed: true
+    #     input: image.tar
+    #     scan-type: image
 
-    - if: ${{ inputs.upload-data == 'true' }}
+    # - if: ${{ inputs.upload-data == 'true' }}
+    - if: ${{ inputs.upload-data == 'false' }}
       name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
@@ -53,7 +54,7 @@ runs:
       continue-on-error: true
 
     # - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
-    - if: inputs.upload-data == 'true'
+    - if: inputs.upload-data == 'false'
       name: Create Jira Ticket on Failure
       uses: atlassian/gajira-create@v3
       with:
