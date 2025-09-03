@@ -62,19 +62,26 @@ runs:
         JIRA_API_TOKEN: ${{ inputs.jira-api-token }}
       shell: bash
       run: |
+        # Create JSON payload file
+        cat > jira_payload.json << EOF
+        {
+          "fields": {
+            "project": {
+              "key": "PLAT"
+            },
+            "summary": "Deployment completed for commit ${{ github.sha }}",
+            "description": "A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities.\n\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nActor: ${{ github.actor }}\nPlease review the attached ${{ inputs.image-name}}.json artifact in the GitHub Actions run for full details.",
+            "issuetype": {
+              "name": "Task"
+            }
+          }
+        }
+        EOF
+        
+        # Make API call
         curl -X POST \
           -H "Content-Type: application/json" \
-          -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-          -d '{
-            "fields": {
-              "project": {
-                "key": "PLAT"
-              },
-              "summary": "Deployment completed for commit ${{ github.sha }}",
-              "description": "A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities.\n\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nActor: ${{ github.actor }}\nPlease review the attached `${{ inputs.image-name}}.json` artifact in the GitHub Actions run for full details.",
-              "issuetype": {
-                "name": "Task"
-              }
-            }
-          }' \
-          "$JIRA_BASE_URL/rest/api/3/issue"
+          -u "$JIRA_USER_EMAIL:$JIRA_API_TOKEN" \
+          -d @jira_payload.json \
+          "$JIRA_BASE_URL/rest/api/3/issue" \
+          --fail --show-error
