@@ -19,9 +19,6 @@ inputs:
   jira-api-token:
     description: 'API token for Jira authentication'
     required: true
-  slack-webhook-url:
-    description: 'Slack Webhook'
-    required: true
 
 runs:
   using: "composite"
@@ -182,11 +179,3 @@ runs:
           "$JIRA_BASE_URL/rest/api/3/issue" \
           --fail --show-error
           - name: Notify slack channel, job finished
-
-    # - if: ${{ inputs.upload-data == 'true' }}
-    - if: ${{ inputs.upload-data == 'false' }}
-      uses: act10ns/slack@v2
-      env:
-        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
-      with:
-        status: ${{ job.status }}
