@@ -16,6 +16,7 @@ jobs:
           echo BASE_IMAGE=$(make get_base_image) >> $GITHUB_ENV
 
       - uses: ./.github/actions/scan-image
+        id: scan_image_step
         name: scan base image
         with:
           image-name: ${{ env.BASE_IMAGE }}
@@ -30,6 +31,9 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         with:
           status: ${{ job.status }}
+          message: |
+            Trivy scan on workspace image failed 
+            A Jira ticket has been created: ${{ secrets.JIRA_BASE_URL }}/rest/api/3/issue/fromJSON(steps.scan_step.outputs.jira-issue-data).id
 
 
   scan-generic:

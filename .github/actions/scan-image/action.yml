@@ -20,6 +20,11 @@ inputs:
     description: 'API token for Jira authentication'
     required: true
 
+outputs:
+  jira-issue-data:
+    description: "The JSON response from the Jira API call"
+    value: ${{ steps.create_jira_ticket.outputs.issue }}
+
 runs:
   using: "composite"
   steps:
@@ -54,6 +59,7 @@ runs:
 
     # - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
     - if: inputs.upload-data == 'false'
+      id: create_jira_ticket
       name: Create Jira Ticket on Failure
       env:
         JIRA_BASE_URL: ${{ inputs.jira-base-url }}
@@ -172,9 +178,10 @@ runs:
         EOF
         
         # Make API call
-        curl -X POST \
+        echo "issue=$(curl -X POST \
           -H "Content-Type: application/json" \
           -u "$JIRA_USER_EMAIL:$JIRA_API_TOKEN" \
           -d @jira_payload.json \
           "$JIRA_BASE_URL/rest/api/3/issue" \
-          --fail --show-error
+          --fail --show-error \
+        " >> $GITHUB_OUTPUT
