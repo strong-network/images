@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       jira-issue-data2: ${{ steps.scan_image_step.outputs.jira-issue-data }}
+      jira-issue-data3: ${{ steps.output_output.outputs.jira-issue-data3 }}
+      jira-issue-data4: ${{ steps.output_output.outputs.jira-issue-data4 }}
     steps:
       - uses: actions/checkout@v3
 
@@ -27,6 +29,15 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data4<<EOF'
+            echo "${{steps.scan_image_step.outputs.jira-issue-data}}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+          echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
       # - if: ${{ github.event_name == 'schedule' }}
       # - uses: act10ns/slack@v2
       #   env:
@@ -116,11 +127,16 @@ jobs:
 
             - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ${{needs.scan-base.outputs.jira-issue-data2}}
+            ${{needs.scan-base.outputs.jira-issue-data3}}
+            ${{needs.scan-base.outputs.jira-issue-data4}}
+            ${{needs.scan-base.steps.scan_image_step.outputs.jira-issue-data}}
+
+            ${{needs.scan-base.outputs.jira-issue-data}}
             ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data2 && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data2).key) || '' }}
 
             ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
 
             - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            {{needs.scan-generic.outputs.jira-issue-data}}
+            ${{needs.scan-generic.outputs.jira-issue-data}}
 
             ${{ needs.scan-generic.result == 'failure' && needs.scan-generic.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-generic.outputs.jira-issue-data).key) || '' }}
