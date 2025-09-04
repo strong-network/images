@@ -185,9 +185,7 @@ runs:
           -d @jira_payload.json \
           "$JIRA_BASE_URL/rest/api/3/issue" \
           --fail --show-error)
-        # echo "issue=$JIRA_RESPONSE" >> $GITHUB_OUTPUT
 
-        # Set output properly for JSON
         {
           echo 'issue<<EOF'
           echo "$JIRA_RESPONSE"

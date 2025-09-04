@@ -9,9 +9,7 @@ jobs:
   scan-base:
     runs-on: ubuntu-22.04
     outputs:
-      # jira-issue-data2: ${{ steps.scan_image_step.outputs.jira-issue-data }}
-      # jira-issue-data3: ${{ steps.output_output.outputs.jira-issue-data3 }}
-      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data4 }}
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
 
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +32,7 @@ jobs:
         id: output_output
         run: |
           {
-            echo 'jira-issue-data4<<EOF'
+            echo 'jira-issue-data-key<<EOF'
             echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
@@ -72,10 +70,19 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
-
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
   scan-generic-jfrog:
     runs-on: ubuntu-22.04
-
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
     steps:
       - uses: actions/checkout@v3
 
@@ -83,6 +90,7 @@ jobs:
         run: |
           echo GENERIC_JFROG_IMAGE=$(make get_generic_jfrog_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
+        id: scan_image_step
         name: scan image
         with:
           image-name: ${{ env.GENERIC_JFROG_IMAGE }}
@@ -91,10 +99,20 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
 
   scan-sysbox-generic:
     runs-on: ubuntu-22.04
-
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
     steps:
       - uses: actions/checkout@v3
 
@@ -103,6 +121,7 @@ jobs:
           echo SYSBOX_GENERIC_IMAGE=$(make get_sysbox_generic_image) >> $GITHUB_ENV
 
       - uses: ./.github/actions/scan-image
+        id: scan_image_step
         name: scan image
         with:
           image-name: ${{ env.SYSBOX_GENERIC_IMAGE }}
@@ -111,6 +130,16 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
+
 
   slack-summary:
     runs-on: ubuntu-latest
@@ -131,10 +160,15 @@ jobs:
           status: failure # The overall status is failure if any job fails
           message: |
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
-            jira_url="https://strong-network-citrix.atlassian.net"
-            - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
+
+            - *Base Image:* ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-base.outputs.jira-issue-data) || '' }}
 
+            - *Generic Image:* ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-generic.result == 'success' && needs.scan-generic.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-generic.outputs.jira-issue-data) || '' }}
 
-            - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            # ${{needs.scan-generic.outputs.jira-issue-data}}
+            - *Generic JFrog Image:* ${{ needs.scan-generic-jfrog.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-generic-jfrog.result == 'success' && needs.scan-generic-jfrog.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-generic-jfrog.outputs.jira-issue-data) || '' }}
+
+            - *Generic Sysbox Image:* ${{ needs.scan-sysbox-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-sysbox-generic.result == 'success' && needs.scan-sysbox-generic.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-sysbox-generic.outputs.jira-issue-data) || '' }}
