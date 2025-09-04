@@ -37,6 +37,7 @@ jobs:
           {
             echo 'jira-issue-data4<<EOF'
             echo "${{steps.scan_image_step.outputs.jira-issue-data}}"
+            ${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}, fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}
             echo 'EOF'
           } >> $GITHUB_OUTPUT
           # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
