@@ -40,16 +40,16 @@ jobs:
           } >> $GITHUB_OUTPUT
           # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
       # - if: ${{ github.event_name == 'schedule' }}
-      - uses: act10ns/slack@v2
-        env:
-          # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
-        with:
-          status: ${{ job.status }}
-          message: |
-            Trivy scan on workspace image failed.
-            ${{steps.scan_image_step.outputs.jira-issue-data}}
-            A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) }}
+      # - uses: act10ns/slack@v2
+      #   env:
+      #     # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
+      #   with:
+      #     status: ${{ job.status }}
+      #     message: |
+      #       Trivy scan on workspace image failed.
+      #       ${{steps.scan_image_step.outputs.jira-issue-data}}
+      #       A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) }}
 
   scan-generic:
     runs-on: ubuntu-22.04
@@ -120,8 +120,7 @@ jobs:
     steps:
       - name: Test
         run: |
-          echo ${{needs.scan-base.outputs.jira-issue-data4}}
-          echo ${{needs.scan-base.outputs.jira-issue-data5}}
+          echo ${{needs.scan-base.outputs.jira-issue-data}}
       - name: Send Workflow Summary
         uses: act10ns/slack@v2
         with:
@@ -134,9 +133,9 @@ jobs:
             - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ${{needs.scan-base.outputs.jira-issue-data}}
 
-            ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
+            ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, needs.scan-base.outputs.jira-issue-data || '' }}
 
-            ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
+            ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, needs.scan-base.outputs.jira-issue-data).key || '' }}
 
             - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ${{needs.scan-generic.outputs.jira-issue-data}}
