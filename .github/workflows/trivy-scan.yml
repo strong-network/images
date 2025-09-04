@@ -136,7 +136,7 @@ jobs:
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
             jira_url="https://strong-network-citrix.atlassian.net"
             - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            {{ (needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data != '') && ('A Jira ticket has been created: ' + 'https://strong-network-citrix.atlassian.net' + '/browse/' + needs.scan-base.outputs.jira-issue-data) || '' }}
+            {{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data != '' && 'A Jira ticket has been created: ' + 'https://strong-network-citrix.atlassian.net' + '/browse/' + needs.scan-base.outputs.jira-issue-data || '' }}
 
 
             - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
