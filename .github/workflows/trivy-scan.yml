@@ -12,6 +12,8 @@ jobs:
       jira-issue-data2: ${{ steps.scan_image_step.outputs.jira-issue-data }}
       jira-issue-data3: ${{ steps.output_output.outputs.jira-issue-data3 }}
       jira-issue-data4: ${{ steps.output_output.outputs.jira-issue-data4 }}
+      jira-issue-data5: test
+
     steps:
       - uses: actions/checkout@v3
 
@@ -39,15 +41,16 @@ jobs:
           } >> $GITHUB_OUTPUT
           echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
       # - if: ${{ github.event_name == 'schedule' }}
-      # - uses: act10ns/slack@v2
-      #   env:
-      #     # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
-      #   with:
-      #     status: ${{ job.status }}
-      #     message: |
-      #       Trivy scan on workspace image failed.
-      #       A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_step.outputs.jira-issue-data).key) }}
+      - uses: act10ns/slack@v2
+        env:
+          # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
+        with:
+          status: ${{ job.status }}
+          message: |
+            Trivy scan on workspace image failed.
+            ${{steps.scan_image_step.outputs.jira-issue-data}}
+            A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) }}
 
   scan-generic:
     runs-on: ubuntu-22.04
@@ -129,6 +132,8 @@ jobs:
             ${{needs.scan-base.outputs.jira-issue-data2}}
             ${{needs.scan-base.outputs.jira-issue-data3}}
             ${{needs.scan-base.outputs.jira-issue-data4}}
+            ${{needs.scan-base.outputs.jira-issue-data5}}
+            ${{needs.scan-base.outputs}}
             ${{needs.scan-base.steps.scan_image_step.outputs.jira-issue-data}}
 
             ${{needs.scan-base.outputs.jira-issue-data}}
