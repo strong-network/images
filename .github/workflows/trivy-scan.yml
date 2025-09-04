@@ -38,7 +38,6 @@ jobs:
       #       Trivy scan on workspace image failed.
       #       A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_step.outputs.jira-issue-data).key) }}
 
-
   scan-generic:
     runs-on: ubuntu-22.04
     outputs:
@@ -115,9 +114,12 @@ jobs:
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
 
             - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            {{needs.scan-base.outputs.jira-issue-data}}
             ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
 
             ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
 
             - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            {{needs.scan-generic.outputs.jira-issue-data}}
+
             ${{ needs.scan-generic.result == 'failure' && needs.scan-generic.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-generic.outputs.jira-issue-data).key) || '' }}
