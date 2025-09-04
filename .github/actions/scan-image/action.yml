@@ -178,10 +178,10 @@ runs:
         EOF
         
         # Make API call
-        echo "issue=$(curl -X POST \
+        JIRA_RESPONSE=$(curl -X POST \
           -H "Content-Type: application/json" \
           -u "$JIRA_USER_EMAIL:$JIRA_API_TOKEN" \
           -d @jira_payload.json \
           "$JIRA_BASE_URL/rest/api/3/issue" \
-          --fail --show-error \
-        " >> $GITHUB_OUTPUT
+          --fail --show-error)
+        echo "issue=$JIRA_RESPONSE" >> $GITHUB_OUTPUT
