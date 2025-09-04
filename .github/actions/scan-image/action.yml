@@ -1,23 +1,23 @@
 name: Trivy scan image
 description: Scan the specified image with trivy and save the results
 inputs:
-  image-name:  # id of input
-    description: Name of the image 
+  image-name: # id of input
+    description: Name of the image
     required: true
   make-command:
-    description: 'which make command to run'
+    description: "which make command to run"
     required: true
   upload-data:
     description: Decide if we want to call a webhook
-    default: 'false'
+    default: "false"
   jira-base-url:
-    description: 'URL of the Jira instance'
+    description: "URL of the Jira instance"
     required: true
   jira-user-email:
-    description: 'Email for Jira authentication'
+    description: "Email for Jira authentication"
     required: true
   jira-api-token:
-    description: 'API token for Jira authentication'
+    description: "API token for Jira authentication"
     required: true
 
 outputs:
@@ -34,32 +34,29 @@ runs:
         make ${{ inputs.make-command }}
         docker save -o image.tar ${{ inputs.image-name }}
 
-    - if: ${{ inputs.upload-data == 'true' }}
-    # - if: ${{ inputs.upload-data == 'false' }}
-      name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        format: 'table'
-        ignore-unfixed: true
-        input: image.tar
-        scan-type: image
-
-    # - if: ${{ inputs.upload-data == 'true' }}
     - if: ${{ inputs.upload-data == 'false' }}
       name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        format: 'json'
+        format: "table"
         ignore-unfixed: true
         input: image.tar
         scan-type: image
-        scanners: 'vuln,misconfig'
-        output:  ${{ inputs.image-name}}.json
-        severity: 'CRITICAL,HIGH'
+
+    - if: ${{ inputs.upload-data == 'true' }}
+      name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        format: "json"
+        ignore-unfixed: true
+        input: image.tar
+        scan-type: image
+        scanners: "vuln,misconfig"
+        output: ${{ inputs.image-name}}.json
+        severity: "CRITICAL,HIGH"
       continue-on-error: true
 
-    # - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
-    - if: inputs.upload-data == 'false'
+    - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
       id: create_jira_ticket
       name: Create Jira Ticket on Failure
       env:
@@ -177,7 +174,7 @@ runs:
           }
         }
         EOF
-        
+
         # Make API call
         JIRA_RESPONSE=$(curl -X POST \
           -H "Content-Type: application/json" \

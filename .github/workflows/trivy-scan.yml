@@ -140,23 +140,15 @@ jobs:
           } >> $GITHUB_OUTPUT
           # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
 
-
   slack-summary:
     runs-on: ubuntu-latest
     needs: [scan-base, scan-generic, scan-generic-jfrog, scan-sysbox-generic]
-    if: always()
-    # if: always() && github.event_name == 'schedule'
+    if: always() && github.event_name == 'schedule'
     steps:
       - name: Send Workflow Summary
         uses: act10ns/slack@v2
         with:
-          # ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', $jira_url, needs.scan-base.outputs.jira-issue-data) }}
-
-          # ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', "https://strong-network-citrix.atlassian.net", needs.scan-base.outputs.jira-issue-data) }}
-
-          # ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', "https://strong-network-citrix.atlassian.net", needs.scan-base.outputs.jira-issue-data) }}
-          # webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           status: failure # The overall status is failure if any job fails
           message: |
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
