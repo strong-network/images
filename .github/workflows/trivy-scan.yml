@@ -8,6 +8,8 @@ on:
 jobs:
   scan-base:
     runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.scan_image_step.outputs.jira-issue-data }}
     steps:
       - uses: actions/checkout@v3
 
@@ -26,18 +28,21 @@ jobs:
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
       # - if: ${{ github.event_name == 'schedule' }}
-      - uses: act10ns/slack@v2
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        with:
-          status: ${{ job.status }}
-          message: |
-            Trivy scan on workspace image failed 
-            A Jira ticket has been created: ${{ secrets.JIRA_BASE_URL }}/rest/api/3/issue/fromJSON(steps.scan_step.outputs.jira-issue-data).id
+      # - uses: act10ns/slack@v2
+      #   env:
+      #     # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
+      #   with:
+      #     status: ${{ job.status }}
+      #     message: |
+      #       Trivy scan on workspace image failed.
+      #       A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_step.outputs.jira-issue-data).key) }}
 
 
   scan-generic:
     runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.scan_image_step.outputs.jira-issue-data }}
 
     steps:
       - uses: actions/checkout@v3
@@ -93,3 +98,24 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+
+  slack-summary:
+    runs-on: ubuntu-latest
+    needs: [scan-base, scan-generic, scan-generic-jfrog, scan-sysbox-generic]
+    if: always()
+    # if: always() && github.event_name == 'schedule'
+    steps:
+      - name: Send Workflow Summary
+        uses: act10ns/slack@v2
+        with:
+          # webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
+          status: failure # The overall status is failure if any job fails
+          message: |
+            Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
+
+            - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-base.result == 'failure' && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira_ticket_data).key) || '' }}
+
+            - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-generic.result == 'failure' && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-generic.outputs.jira_ticket_data).key) || '' }}
