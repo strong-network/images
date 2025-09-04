@@ -115,7 +115,7 @@ jobs:
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
 
             - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            ${{ needs.scan-base.result == 'failure' && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira_ticket_data).key) || '' }}
+            ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira_ticket_data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira_ticket_data).key) || '' }}
 
             - Generic Image: ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            ${{ needs.scan-generic.result == 'failure' && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-generic.outputs.jira_ticket_data).key) || '' }}
+            ${{ needs.scan-generic.result == 'failure' && needs.scan-generic.outputs.jira_ticket_data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-generic.outputs.jira_ticket_data).key) || '' }}
