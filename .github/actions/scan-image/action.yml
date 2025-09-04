@@ -53,6 +53,7 @@ runs:
         ignore-unfixed: true
         input: image.tar
         scan-type: image
+        scanners: 'vuln,misconfig'
         output:  ${{ inputs.image-name}}.json
         severity: 'CRITICAL,HIGH'
       continue-on-error: true
@@ -184,4 +185,15 @@ runs:
           -d @jira_payload.json \
           "$JIRA_BASE_URL/rest/api/3/issue" \
           --fail --show-error)
-        echo "issue=$JIRA_RESPONSE" >> $GITHUB_OUTPUT
+        # echo "issue=$JIRA_RESPONSE" >> $GITHUB_OUTPUT
+
+        # Debug what we got
+        echo "DEBUG: JIRA_RESPONSE length: ${#JIRA_RESPONSE}"
+        echo "DEBUG: JIRA_RESPONSE preview: ${JIRA_RESPONSE:0:100}..."
+
+        # Set output properly for JSON
+        {
+          echo 'issue<<EOF'
+          echo "$JIRA_RESPONSE"
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT

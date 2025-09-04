@@ -50,6 +50,7 @@ jobs:
         run: |
           echo GENERIC_IMAGE=$(make get_generic_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
+        id: scan_image_step
         name: scan image
         with:
           image-name: ${{ env.GENERIC_IMAGE }}
