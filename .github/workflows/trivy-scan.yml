@@ -9,7 +9,7 @@ jobs:
   scan-base:
     runs-on: ubuntu-22.04
     outputs:
-      jira-issue-data: ${{ steps.scan_image_step.outputs.jira-issue-data }}
+      jira-issue-data2: ${{ steps.scan_image_step.outputs.jira-issue-data }}
     steps:
       - uses: actions/checkout@v3
 
@@ -114,8 +114,8 @@ jobs:
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
 
             - Base Image: ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
-            {{needs.scan-base.outputs.jira-issue-data}}
-            ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
+            ${{needs.scan-base.outputs.jira-issue-data2}}
+            ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data2 && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data2).key) || '' }}
 
             ${{ needs.scan-base.result == 'failure' && needs.scan-base.outputs.jira-issue-data && format('A Jira ticket has been created: {0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(needs.scan-base.outputs.jira-issue-data).key) || '' }}
 

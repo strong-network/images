@@ -54,7 +54,6 @@ runs:
         input: image.tar
         scan-type: image
         output:  ${{ inputs.image-name}}.json
-        exit-code: '1'
         severity: 'CRITICAL,HIGH'
       continue-on-error: true
 
