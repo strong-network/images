@@ -125,6 +125,66 @@ jobs:
             echo 'EOF'
           } >> $GITHUB_OUTPUT
 
+  scan-gui-debian:
+    runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make generic sysbox env
+        run: |
+          echo GUI_DEBIAN_IMAGE=$(make get_gui_debian_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        id: scan_image_step
+        name: scan image
+        with:
+          image-name: ${{ env.GUI_DEBIAN_IMAGE }}
+          make-command: gui_debian
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+  scan-gui-ubuntu:
+    runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make generic sysbox env
+        run: |
+          echo GUI_UBUNTU_IMAGE=$(make get_gui_ubuntu_base_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        id: scan_image_step
+        name: scan image
+        with:
+          image-name: ${{ env.GUI_UBUNTU_IMAGE }}
+          make-command: gui_ubuntu_base_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
   slack-summary:
     runs-on: ubuntu-latest
     needs: [scan-base, scan-generic, scan-generic-jfrog, scan-sysbox-generic]
@@ -149,3 +209,9 @@ jobs:
 
             - *Generic Sysbox Image:* ${{ needs.scan-sysbox-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ${{ needs.scan-sysbox-generic.result == 'success' && needs.scan-sysbox-generic.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-sysbox-generic.outputs.jira-issue-data) || '' }}
+
+            - *GUI Debian Image:* ${{ needs.scan-gui-debian.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-gui-debian.result == 'success' && needs.scan-gui-debian.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-gui-debian.outputs.jira-issue-data) || '' }}
+
+            - *GUI Ubuntu Image:* ${{ needs.scan-gui-ubuntu.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-gui-ubuntu.result == 'success' && needs.scan-gui-ubuntu.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-gui-ubuntu.outputs.jira-issue-data) || '' }}
