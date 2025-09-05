@@ -1,5 +1,7 @@
 GIT_ROOT=$(shell git rev-parse --show-toplevel)
 BASE_IMAGE_NAME=sn_base
+BASE18_IMAGE_NAME=sn_base18
+CENTOS_BASE_IMAGE_NAME=sn_base_centos
 SYSBOX_BASE_IMAGE_NAME=sn_sysbox_base
 GOLANG_IMAGE_NAME=sn_golang
 GOLANG_1.17_IMAGE_NAME=sn_golang_1.17
@@ -25,6 +27,18 @@ base_image:
 	@echo ${VERSION}
 	@docker build -t ${BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base
 	@docker tag ${BASE_IMAGE_NAME}:${VERSION} ${BASE_IMAGE_NAME}
+
+.PHONY: base18_image
+base18_image:
+	@echo ${VERSION}
+	@docker build -t ${BASE18_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_ubuntu18
+	@docker tag ${BASE18_IMAGE_NAME}:${VERSION} ${BASE18_IMAGE_NAME}
+
+.PHONY: centos_base_image
+centos_base_image:
+	@echo ${VERSION}
+	@docker build -t ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_centos7
+	@docker tag ${CENTOS_BASE_IMAGE_NAME}:${VERSION} ${CENTOS_BASE_IMAGE_NAME}
 
 .PHONY: base_image_rm
 remove_base_image:
@@ -84,6 +98,14 @@ get_version:
 .PHONY: get_base_image
 get_base_image:
 	@echo ${BASE_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_base18_image
+get_base18_image:
+	@echo ${BASE18_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_centos_base_image
+get_centos_base_image:
+	@echo ${CENTOS_BASE_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_generic_image
 get_generic_image:

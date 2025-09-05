@@ -50,6 +50,20 @@ jobs:
       - name: Build strong network GUI Ubuntu Eclipse image
         run: make gui_ubuntu_eclipse_image && docker inspect --type=image $(make get_gui_ubuntu_eclipse_image) > /dev/null
 
+  build_ubuntu18_base:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network Ubuntu18 Image
+        run: make base18_image && docker inspect --type=image $(make get_base18_image) > /dev/null
+
+  build_centos_base:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network CentOS Image
+        run: make centos_base_image && docker inspect --type=image $(make get_centos_base_image) > /dev/null
+        
   build_minimal_alpine:
     runs-on: ubuntu-latest
     steps:
