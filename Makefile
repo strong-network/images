@@ -1,7 +1,6 @@
 GIT_ROOT=$(shell git rev-parse --show-toplevel)
 BASE_IMAGE_NAME=sn_base
 BASE18_IMAGE_NAME=sn_base18
-BASE16_IMAGE_NAME=sn_base16
 CENTOS_BASE_IMAGE_NAME=sn_base_centos
 SYSBOX_BASE_IMAGE_NAME=sn_sysbox_base
 GOLANG_IMAGE_NAME=sn_golang
@@ -31,12 +30,6 @@ base18_image:
 	@echo ${VERSION}
 	@docker build -t ${BASE18_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_ubuntu18
 	@docker tag ${BASE18_IMAGE_NAME}:${VERSION} ${BASE18_IMAGE_NAME}
-
-.PHONY: base16_image
-base16_image:
-	@echo ${VERSION}
-	@docker build -t ${BASE16_IMAGE_NAME}:${VERSION} ${GIT_ROOT}/base_ubuntu16
-	@docker tag ${BASE16_IMAGE_NAME}:${VERSION} ${BASE16_IMAGE_NAME}
 
 .PHONY: centos_base_image
 centos_base_image:
@@ -98,10 +91,6 @@ get_base_image:
 .PHONY: get_base18_image
 get_base18_image:
 	@echo ${BASE18_IMAGE_NAME}:${VERSION}
-
-.PHONY: get_base16_image
-get_base16_image:
-	@echo ${BASE16_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_centos_base_image
 get_centos_base_image:
