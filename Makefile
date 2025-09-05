@@ -15,6 +15,9 @@ GUI_DEBIAN=sn_gui_debian
 GUI_UBUNTU_BASE=sn_gui_ubuntu
 GUI_UBUNTU_ECLIPSE=sn_gui_ubuntu_eclipse
 GUI_DEBIAN_POSTMAN=sn_gui_debian_postman
+MINIMAL_ALPINE=sn_minimal_alpine
+MINIMAL_RHEL9=sn_minimal_rhel9
+
 VERSION = $(shell awk NF ${GIT_ROOT}/VERSION)
 
 .PHONY: base_image
@@ -63,8 +66,16 @@ sysbox_base_image: base_image
 generic_sysbox_image: sysbox_base_image
 	@docker build --build-arg BASE_IMAGE=${SYSBOX_BASE_IMAGE_NAME} -t ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION} generic;
 
+.PHONY: minimal_alpine_image
+minimal_alpine_image: minimal_alpine_image
+	@docker build -t ${MINIMAL_ALPINE}:${VERSION} ${GIT_ROOT}/minimal/alpine_320
+
+.PHONY: minimal_rhel9_image
+minimal_rhel9_image: minimal_rhel9_image
+	@docker build -t ${MINIMAL_RHEL9}:${VERSION} ${GIT_ROOT}/minimal/rhel_9
+
 .PHONY: all
-all: base_image generic_image gui_debian gui_ubuntu_base_image gui_ubuntu_eclipse_image gui_debian_postman
+all: base_image generic_image gui_debian gui_ubuntu_base_image gui_ubuntu_eclipse_image gui_debian_postman minimal_alpine_image minimal_rhel9_image
 
 .PHONY: get_version
 get_version:
@@ -101,3 +112,11 @@ get_sysbox_base_image:
 .PHONY: get_sysbox_generic_image
 get_sysbox_generic_image:
 	@echo ${SYSBOX_GENERIC_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_minimal_alpine_image
+get_minimal_alpine_image:
+	@echo ${MINIMAL_ALPINE}:${VERSION}
+
+.PHONY: get_minimal_rhel9_image
+get_minimal_rhel9_image:
+	@echo ${MINIMAL_RHEL9}:${VERSION}
