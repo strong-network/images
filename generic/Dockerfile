@@ -8,21 +8,24 @@ ENV GO111MODULE=on
 
 RUN apt-get update && \
     apt-get -y upgrade && \
-    apt-get install -y rlwrap && \
-    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.24.4.linux-amd64.tar.gz && \
+    apt-get install -y rlwrap
+
+RUN wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.24.4.linux-amd64.tar.gz && \
     /validate_file_hash 77e5da33bb72aeaef1ba4418b6fe511bc4d041873cbf82e5aa6318740df98717 golang_sdk-linux-amd64.tar.gz && \
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz && \
-    rm golang_sdk-linux-amd64.tar.gz && \
-    # Install vscode deps
-    update-alternatives --install /usr/bin/python python /usr/bin/python3 2 && \
-    curl -fsSOL http://http.us.debian.org/debian/pool/main/libo/libonig/libonig5_6.9.1-1_amd64.deb && \
-    /validate_file_hash 0e34268dcb8d037d88d038030e61c89ee7f6d0923ba828574b8acddc19519ff3 libonig5_6.9.1-1_amd64.deb && \
+    rm golang_sdk-linux-amd64.tar.gz
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+
+# Install vscode deps
+RUN curl -fsSOL http://http.us.debian.org/debian/pool/main/libo/libonig/libonig5_6.9.9-1+b1_amd64.deb && \
+    /validate_file_hash 3abee130696244050500bcc7870e3b4cb82ddd87149ece3fd55010c3d4e1d18c libonig5_6.9.9-1+b1_amd64.deb && \
     dpkg -i libonig*.deb && \
-    curl -fsSOL http://http.us.debian.org/debian/pool/main/j/jq/libjq1_1.5+dfsg-2+b1_amd64.deb && \
-    /validate_file_hash 73e222c0920988301d973be4649210f1af37bacee66176353ca1d312ef76cd67 libjq1_1.5+dfsg-2+b1_amd64.deb && \
+    curl -fsSOL http://http.us.debian.org/debian/pool/main/j/jq/libjq1_1.8.1-3_amd64.deb && \
+    /validate_file_hash 7236dd236b1d9d4c6c9ea7c100d25d65004196e281e3f85448018e94508d64a1 libjq1_1.8.1-3_amd64.deb && \
     dpkg -i libjq*.deb && \
-    curl -fsSOL http://http.us.debian.org/debian/pool/main/j/jq/jq_1.5+dfsg-2+b1_amd64.deb && \
-    /validate_file_hash 2ec640d5280101e70b6da3df254e06c10117d7baefdc3878af64e1b0f072fec5 jq_1.5+dfsg-2+b1_amd64.deb && \
+    curl -fsSOL http://http.us.debian.org/debian/pool/main/j/jq/jq_1.8.1-3_amd64.deb && \
+    /validate_file_hash 30bea2a1d2551a1fa91d74bf5784b1dfa7fc99deb37c1e2f8a2d1c9ab934d2e1 jq_1.8.1-3_amd64.deb && \
     dpkg -i jq*.deb && rm *.deb && \
     npm install -g npm && \
     curl -O https://download.clojure.org/install/linux-install-1.11.1.1224.sh && \
