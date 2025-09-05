@@ -2,19 +2,18 @@ ARG BASE_IMAGE=sn_base
 FROM ${BASE_IMAGE}
 
 
-ENV GOPATH /home/developer/go
-ENV PATH /usr/local/go/bin:/home/developer/go/bin:${PATH}
-ENV GO111MODULE on
+ENV GOPATH=/home/developer/go
+ENV PATH=/usr/local/go/bin:/home/developer/go/bin:${PATH}
+ENV GO111MODULE=on
 
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y rlwrap && \
-    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.22.2.linux-amd64.tar.gz && \
-    /validate_file_hash 5901c52b7a78002aeff14a21f93e0f064f74ce1360fce51c6ee68cd471216a17 golang_sdk-linux-amd64.tar.gz && \
+    wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.24.4.linux-amd64.tar.gz && \
+    /validate_file_hash 77e5da33bb72aeaef1ba4418b6fe511bc4d041873cbf82e5aa6318740df98717 golang_sdk-linux-amd64.tar.gz && \
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz && \
     rm golang_sdk-linux-amd64.tar.gz && \
     # Install vscode deps
-    update-alternatives --install /usr/bin/python python /usr/bin/python2 1 && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 2 && \
     curl -fsSOL http://http.us.debian.org/debian/pool/main/libo/libonig/libonig5_6.9.1-1_amd64.deb && \
     /validate_file_hash 0e34268dcb8d037d88d038030e61c89ee7f6d0923ba828574b8acddc19519ff3 libonig5_6.9.1-1_amd64.deb && \
@@ -27,9 +26,9 @@ RUN apt-get update && \
     dpkg -i jq*.deb && rm *.deb && \
     npm install -g npm && \
     curl -O https://download.clojure.org/install/linux-install-1.11.1.1224.sh && \
-    /validate_file_hash 3bbab4d253eda43e3122fd5705014a69c44944a6dee8ea4d7d567afe157eb4ef linux-install-1.11.1.1224.sh && \ 
+    /validate_file_hash 3bbab4d253eda43e3122fd5705014a69c44944a6dee8ea4d7d567afe157eb4ef linux-install-1.11.1.1224.sh && \
     chmod +x linux-install-1.11.1.1224.sh && \
-    ./linux-install-1.11.1.1224.sh ; rm -f linux-install-1.11.1.1224.sh
+    ./linux-install-1.11.1.1224.sh && rm -f linux-install-1.11.1.1224.sh
 
 USER 1000
 

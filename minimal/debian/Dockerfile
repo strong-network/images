@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM debian:bookworm-slim
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -14,7 +14,7 @@ RUN apt-get update && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
     mkdir -p /usr/bin/strong_network_startup && chmod 777 /usr/bin/strong_network_startup && \
-    usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && \
+    # usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && \
     adduser --gecos '' --disabled-password developer && \
     # Change permissions of /usr/local
     chgrp -R developer /usr/local && \

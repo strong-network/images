@@ -1,4 +1,4 @@
-FROM kalilinux/kali-rolling:latest
+FROM kalilinux/kali-last-release:latest
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -57,8 +57,10 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && apt-get install nodejs -y && \
     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
-    /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && \
+    mkdir -p /etc/apt/keyrings && \
+    cat yarn.gpg.key | gpg --dearmor -o /etc/apt/keyrings/yarn.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get -y install gcc g++ make yarn && \
     # script is to have the latest available version of git-lfs
     apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
@@ -86,29 +88,15 @@ RUN chsh -s /bin/bash && \
 COPY unzip_ide.sh /unzip_ide.sh
 COPY --chown=developer:developer install_go_tools.sh /usr/bin/strong_network_startup/install_go_tools.sh
 
+COPY xstartup /xstartup
+COPY setup_vnc.sh /usr/bin/strong_network_startup/setup_vnc.sh
+
 RUN wget https://gitlab.com/kalilinux/recipes/kali-scripts/-/raw/main/xfce4.sh && \
     chmod +x xfce4.sh && \
     ./xfce4.sh && \
-    mkdir -p /home/developer/.vnc/ && \
-    wget https://gitlab.com/kalilinux/nethunter/build-scripts/kali-nethunter-project/-/raw/master/nethunter-fs/profiles/xstartup -O /home/developer/.vnc/xstartup && \
-    chmod 777 /home/developer/.vnc/xstartup && \
     cp /usr/share/novnc/vnc_auto.html /usr/share/novnc/index.html
 
-RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh &&\
-    curl -s https://get.sdkman.io > /tmp/install_sdkman.sh &&\
-    cd /tmp &&\
-    /validate_file_hash 9be925ee0b858cf9df8dbdb028c30aca961c585b4835caef3d6350de3166779c install_sdkman.sh &&\
-    export SDKMAN_DIR=/tmp/sdkman &&\
-    bash /tmp/install_sdkman.sh &&\
-    bash -c "source /tmp/sdkman/bin/sdkman-init.sh && sdk install grails" &&\
-    echo '#!/bin/bash\n\
-    if ! grep -q SDKMAN_DIR "/home/developer/.bashrc" ; then\n\
-        cp -r /tmp/sdkman /home/developer/.sdkman\n\
-        echo "SDKMAN_DIR=/home/developer/.sdkman" >> ~/.bashrc\n\
-        echo "[[ -s $HOME/.sdkman/bin/sdkman-init.sh ]] && source     $HOME/.sdkman/bin/sdkman-init.sh" >> $HOME/.bashrc  \n\
-    fi \n' > /usr/bin/strong_network_startup/add_sdk.sh &&\
-    chown -R developer:developer /usr/bin/strong_network_startup/add_sdk.sh &&\
-    chmod +x  /usr/bin/strong_network_startup/add_sdk.sh
+RUN chmod 4755 /usr/bin/strong_network_startup/install_go_tools.sh && chmod +x /unzip_ide.sh && chmod +x /usr/bin/strong_network_startup/install_go_tools.sh
 
 WORKDIR /home/developer
 

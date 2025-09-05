@@ -1,28 +1,190 @@
 name: Trivy scan image
 description: Scan the specified image with trivy and save the results
 inputs:
-  image-name:  # id of input
-    description: Name of the image 
+  image-name: # id of input
+    description: Name of the image
     required: true
   make-command:
-    description: 'which make command to run'
+    description: "which make command to run"
     required: true
+  upload-data:
+    description: Decide if we want to call a webhook
+    default: "false"
+  jira-base-url:
+    description: "URL of the Jira instance"
+    required: true
+  jira-user-email:
+    description: "Email for Jira authentication"
+    required: true
+  jira-api-token:
+    description: "API token for Jira authentication"
+    required: true
+
+outputs:
+  jira-issue-data:
+    description: "The JSON response from the Jira API call"
+    value: ${{ steps.create_jira_ticket.outputs.issue }}
 
 runs:
   using: "composite"
   steps:
-
     - name: build base
       shell: bash
       run: |
         make ${{ inputs.make-command }}
         docker save -o image.tar ${{ inputs.image-name }}
 
-    - name: Run Trivy vulnerability scanner
+    - if: ${{ inputs.upload-data == 'false' }}
+      name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        format: 'table'
+        format: "table"
         ignore-unfixed: true
         input: image.tar
         scan-type: image
-        security-checks: vuln
+
+    - if: ${{ inputs.upload-data == 'true' }}
+      name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        format: "json"
+        ignore-unfixed: true
+        input: image.tar
+        scan-type: image
+        scanners: "vuln,misconfig"
+        output: ${{ inputs.image-name}}.json
+        severity: "CRITICAL,HIGH"
+      continue-on-error: true
+
+    - if: steps.trivy-scan.outcome == 'failure' && inputs.upload-data == 'true'
+      id: create_jira_ticket
+      name: Create Jira Ticket on Failure
+      env:
+        JIRA_BASE_URL: ${{ inputs.jira-base-url }}
+        JIRA_USER_EMAIL: ${{ inputs.jira-user-email }}
+        JIRA_API_TOKEN: ${{ inputs.jira-api-token }}
+      shell: bash
+      run: |
+        # Create JSON payload file
+        cat > jira_payload.json << EOF
+        {
+          "fields": {
+            "project": {
+              "key": "PLAT"
+            },
+            "summary": "Trivy Scan Failed - Critical/High Vulnerabilities Found",
+            "description": {
+              "type": "doc",
+              "version": 1,
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "A Trivy scan has identified one or more CRITICAL or HIGH severity vulnerabilities."
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": []
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Commit: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ github.sha }}",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Branch: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ github.ref_name }}",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Actor: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ github.actor }}",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Please review the attached "
+                    },
+                    {
+                      "type": "text",
+                      "text": "${{ inputs.image-name }}.json",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "text": " artifact in the GitHub Actions run for full details."
+                    }
+                  ]
+                }
+              ]
+            },
+            "issuetype": {
+              "name": "Task"
+            }
+          }
+        }
+        EOF
+
+        # Make API call
+        JIRA_RESPONSE=$(curl -X POST \
+          -H "Content-Type: application/json" \
+          -u "$JIRA_USER_EMAIL:$JIRA_API_TOKEN" \
+          -d @jira_payload.json \
+          "$JIRA_BASE_URL/rest/api/3/issue" \
+          --fail --show-error)
+
+        {
+          echo 'issue<<EOF'
+          echo "$JIRA_RESPONSE"
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT

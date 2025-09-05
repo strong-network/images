@@ -2,15 +2,16 @@ name: Run trivy scans
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1"
 
 jobs:
-
   scan-base:
-
     runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
 
     steps:
-
       - uses: actions/checkout@v3
 
       - name: Make base image env
@@ -18,14 +19,28 @@ jobs:
           echo BASE_IMAGE=$(make get_base_image) >> $GITHUB_ENV
 
       - uses: ./.github/actions/scan-image
+        id: scan_image_step
         name: scan base image
         with:
           image-name: ${{ env.BASE_IMAGE }}
           make-command: base_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
 
   scan-generic:
-
     runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.scan_image_step.outputs.jira-issue-data }}
 
     steps:
       - uses: actions/checkout@v3
@@ -34,114 +49,27 @@ jobs:
         run: |
           echo GENERIC_IMAGE=$(make get_generic_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
-
+        id: scan_image_step
         name: scan image
         with:
           image-name: ${{ env.GENERIC_IMAGE }}
           make-command: generic_image
-
-  scan-intellij-ultimate:
-
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make intellij image env
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
         run: |
-          echo JAVA_INTELLIJ_IMAGE=$(make get_java_intellij_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.JAVA_INTELLIJ_IMAGE }}
-          make-command: java_intellij
-
-  scan-java-intellij:
-
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make intellij image env
-        run: |
-          echo INTELLIJ_ULTIMATE_IMAGE=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE }}
-          make-command: intellij_ultimate
-
-  scan-goland:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make goland env
-        run: |
-          echo GOLAND_IMAGE=$(make get_goland_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.GOLAND_IMAGE }}
-          make-command: goland
-
-  scan-android-studio:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make android studio env
-        run: |
-          echo ANDROID_STUDIO_IMAGE=$(make get_android_studio_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.ANDROID_STUDIO_IMAGE }}
-          make-command: android_studio
-
-  scan-phpstorm:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make phpstorm env
-        run: |
-          echo PHPSTORM_IMAGE=$(make get_phpstorm_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.PHPSTORM_IMAGE }}
-          make-command: phpstorm
-
-  scan-webstorm:
-    runs-on: ubuntu-22.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Make webstorm env
-        run: |
-          echo WEBSTORM_IMAGE=$(make get_webstorm_image) >> $GITHUB_ENV
-
-      - uses: ./.github/actions/scan-image
-        name: scan image
-        with:
-          image-name: ${{ env.WEBSTORM_IMAGE }}
-          make-command: webstorm_image
-
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
   scan-generic-jfrog:
-
     runs-on: ubuntu-22.04
-
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
     steps:
       - uses: actions/checkout@v3
 
@@ -149,15 +77,28 @@ jobs:
         run: |
           echo GENERIC_JFROG_IMAGE=$(make get_generic_jfrog_image) >> $GITHUB_ENV
       - uses: ./.github/actions/scan-image
-
+        id: scan_image_step
         name: scan image
         with:
           image-name: ${{ env.GENERIC_JFROG_IMAGE }}
           make-command: generic_jfrog_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
 
   scan-sysbox-generic:
     runs-on: ubuntu-22.04
-
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
     steps:
       - uses: actions/checkout@v3
 
@@ -166,9 +107,45 @@ jobs:
           echo SYSBOX_GENERIC_IMAGE=$(make get_sysbox_generic_image) >> $GITHUB_ENV
 
       - uses: ./.github/actions/scan-image
+        id: scan_image_step
         name: scan image
         with:
           image-name: ${{ env.SYSBOX_GENERIC_IMAGE }}
           make-command: generic_sysbox_image
-  
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
 
+  slack-summary:
+    runs-on: ubuntu-latest
+    needs: [scan-base, scan-generic, scan-generic-jfrog, scan-sysbox-generic]
+    if: always() && github.event_name == 'schedule'
+    steps:
+      - name: Send Workflow Summary
+        uses: act10ns/slack@v2
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: failure # The overall status is failure if any job fails
+          message: |
+            Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
+
+            - *Base Image:* ${{ needs.scan-base.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-base.result == 'success' && needs.scan-base.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-base.outputs.jira-issue-data) || '' }}
+
+            - *Generic Image:* ${{ needs.scan-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-generic.result == 'success' && needs.scan-generic.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-generic.outputs.jira-issue-data) || '' }}
+
+            - *Generic JFrog Image:* ${{ needs.scan-generic-jfrog.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-generic-jfrog.result == 'success' && needs.scan-generic-jfrog.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-generic-jfrog.outputs.jira-issue-data) || '' }}
+
+            - *Generic Sysbox Image:* ${{ needs.scan-sysbox-generic.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-sysbox-generic.result == 'success' && needs.scan-sysbox-generic.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-sysbox-generic.outputs.jira-issue-data) || '' }}

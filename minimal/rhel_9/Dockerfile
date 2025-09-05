@@ -1,21 +1,19 @@
-FROM ubuntu:24.04
+FROM redhat/ubi9
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # The minimum requirements to run a Strong Network workspace
-RUN apt-get update && \
-    apt-get install -y git locales sudo curl \
-    libkrb5-dev libssl-dev && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs ssh && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
+RUN yum update -y && \
+    yum install -y git sudo openssl-devel util-linux-user && \
+    yum update -y && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true yum -y install git-lfs openssh-clients openssh && \
     chsh -s /bin/bash && \
-    sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
+    sed -i 's/# LC_ALL=en_US.UTF-8/LC_CTYPE=en_US.UTF-8/' /etc/environment && \
     mkdir -p /usr/bin/strong_network_startup && chmod 777 /usr/bin/strong_network_startup && \
-    usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && \
-    adduser --gecos '' --disabled-password developer && \
+    # usermod -u 2000 ubuntu && groupmod -g 2000 ubuntu && \
+    adduser developer && \
     # Change permissions of /usr/local
     chgrp -R developer /usr/local && \
     chmod -R g+w /usr/local && \
@@ -25,9 +23,7 @@ RUN apt-get update && \
 COPY validate_file_hash.sh /validate_file_hash
 
 # Optional Install user space packages
-RUN apt-get install -y wget python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
-    build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \ 
-    libxi6 libfreetype6 dirmngr lsb-release less && \
+RUN yum install -y wget python3 python3-pip nano vim clang rsync unzip dirmngr less && \
     mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
     chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions && \
     mkdir -p /home/developer && \

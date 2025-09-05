@@ -4,12 +4,10 @@ on:
   workflow_dispatch:
 
 jobs:
-
   deploy_images:
-    
     environment: production
     env:
-      REGISTRY_URL : ${{ secrets.REGISTRY_DO }}
+      REGISTRY_URL: ${{ secrets.REGISTRY_DO }}
 
     runs-on: ubuntu-latest
 
@@ -22,25 +20,16 @@ jobs:
           VERSION=$(awk NF ${GIT_ROOT}/VERSION)
           echo GENERIC_IMAGE_URL=$REGISTRY_URL/cloud_editor_generic:$VERSION >>  $GITHUB_ENV
           echo JFROG_GENERIC_IMAGE_URL=$REGISTRY_URL/jfrog_generic:$VERSION >>  $GITHUB_ENV
-          echo JAVA_INTELLIJ_IMAGE_URL=$REGISTRY_URL/intellij_java:$VERSION >>  $GITHUB_ENV
-          echo GOLAND_IMAGE_URL=$REGISTRY_URL/goland_go:$VERSION >>  $GITHUB_ENV
-          echo PYCHARM_IMAGE_URL=$REGISTRY_URL/pycharm_python:$VERSION >>  $GITHUB_ENV
-          echo PHPSTORM_IMAGE_URL=$REGISTRY_URL/phpstorm_php:$VERSION >>  $GITHUB_ENV
-          echo ANDROID_IMAGE_URL=$REGISTRY_URL/android_studio:$VERSION >>  $GITHUB_ENV
-          echo INTELLIJ_ULTIMATE_IMAGE_URL=$REGISTRY_URL/intellij_ultimate:$VERSION >>  $GITHUB_ENV
-          echo WEBSTORM_IMAGE_URL=$REGISTRY_URL/webstorm_image:$VERSION >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_URL=$REGISTRY_URL/sysbox_generic:$VERSION >> $GITHUB_ENV
-          echo NOVNC_IMAGE_URL=$REGISTRY_URL/no_vnc:$VERSION >> $GITHUB_ENV
+          echo GUI_DEBIAN_KALI_IMAGE_URL=$REGISTRY_URL/gui_debian_kali_linux:$VERSION >> $GITHUB_ENV
+          echo GUI_UBUNTU_BASE_IMAGE_URL=$REGISTRY_URL/gui_ubuntu_base:$VERSION >> $GITHUB_ENV
+          echo GUI_UBUNTU_ECLIPSE_IMAGE_URL=$REGISTRY_URL/gui_ubuntu_eclipse:$VERSION >> $GITHUB_ENV
+
           echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
-          echo INTELLIJ_ULTIMATE_IMAGE_NAME=$(make get_intellij_ultimate_image) >> $GITHUB_ENV
-          echo JAVA_INTELLIJ_IMAGE_NAME=$(make get_java_intellij_image) >> $GITHUB_ENV
-          echo GOLAND_IMAGE_NAME=$(make get_goland_image) >> $GITHUB_ENV
-          echo PYCHARM_IMAGE_NAME=$(make get_pycharm_image) >> $GITHUB_ENV
-          echo PHPSTORM_IMAGE_NAME=$(make get_phpstorm_image) >> $GITHUB_ENV
-          echo WEBSTORM_IMAGE_NAME=$(make get_webstorm_image) >> $GITHUB_ENV
-          echo ANDROID_IMAGE_NAME=$(make get_android_studio_image) >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_NAME=$(make get_sysbox_generic_image) >> $GITHUB_ENV
-          echo NOVNC_IMAGE_NAME=$(make get_no_vnc_image) >> $GITHUB_ENV
+          echo GUI_DEBIAN_IMAGE_NAME=$(make get_gui_debian_image) >> $GITHUB_ENV
+          echo GUI_UBUNTU_BASE_IMAGE_NAME=$(make get_gui_ubuntu_base_image) >> $GITHUB_ENV
+          echo GUI_UBUNTU_ECLIPSE_IMAGE_NAME=$(make get_gui_ubuntu_eclipse_image) >> $GITHUB_ENV
           echo JFROG_GENERIC_IMAGE_NAME=$(make get_generic_jfrog_image) >> $GITHUB_ENV
 
       - name: Install doctl
@@ -62,15 +51,30 @@ jobs:
           make-command: generic_image
           image-url: ${{ env.GENERIC_IMAGE_URL }}
 
-      # Push novnc generic image
-
+      # Push GUI Debian Kali image
       - uses: ./.github/actions/push-image
-        name: push novnc image
+        name: push gui debian kali image
         with:
-          image-name: ${{ env.NOVNC_IMAGE_NAME }}
-          make-command: no_vnc
-          image-url: ${{ env.NOVNC_IMAGE_URL }}
-          
+          image-name: ${{ env.GUI_DEBIAN_IMAGE_NAME }}
+          make-command: gui_debian
+          image-url: ${{ env.GUI_DEBIAN_KALI_IMAGE_URL }}
+
+      # Push GUI Ubuntu base image
+      - uses: ./.github/actions/push-image
+        name: push gui ubuntu base image
+        with:
+          image-name: ${{ env.GUI_UBUNTU_BASE_IMAGE_NAME }}
+          make-command: gui_ubuntu_base_image
+          image-url: ${{ env.GUI_UBUNTU_BASE_IMAGE_URL }}
+
+      # Push GUI Ubuntu eclipse image
+      - uses: ./.github/actions/push-image
+        name: push gui ubuntu eclipse image
+        with:
+          image-name: ${{ env.GUI_UBUNTU_ECLIPSE_IMAGE_NAME }}
+          make-command: gui_ubuntu_eclipse_image
+          image-url: ${{ env.GUI_UBUNTU_ECLIPSE_IMAGE_URL }}
+
       - uses: ./.github/actions/push-image
         name: push generic image image JFROG
         with:
@@ -78,65 +82,7 @@ jobs:
           make-command: generic_jfrog_image
           image-url: ${{ env.JFROG_GENERIC_IMAGE_URL }}
 
-      # Build Java Intellij image
-      - uses: ./.github/actions/push-image
-        name: push java intellij image
-        with:
-          image-name: ${{ env.JAVA_INTELLIJ_IMAGE_NAME }}
-          make-command: java_intellij
-          image-url: ${{ env.JAVA_INTELLIJ_IMAGE_URL }}
-
-      # build Goland image
-      - uses: ./.github/actions/push-image
-        name: push goland image
-        with:
-          image-name: ${{ env.GOLAND_IMAGE_NAME }}
-          make-command: goland
-          image-url: ${{ env.GOLAND_IMAGE_URL }}
-
-      # Build Pycharm image
-      - uses: ./.github/actions/push-image
-        name: push pycharm image
-        with:
-          image-name: ${{ env.PYCHARM_IMAGE_NAME }}
-          make-command: pycharm
-          image-url: ${{ env.PYCHARM_IMAGE_URL }}
-
-      # Build phpstorm
-      - uses: ./.github/actions/push-image
-        name: push phpstorm image
-        with:
-          image-name: ${{ env.PHPSTORM_IMAGE_NAME }}
-          make-command: phpstorm
-          image-url: ${{ env.PHPSTORM_IMAGE_URL }}
-      
-      # Build Android studio
-      - uses: ./.github/actions/push-image
-        name: push android studio image
-        with:
-          image-name: ${{ env.ANDROID_IMAGE_NAME }}
-          make-command: android_studio
-          image-url: ${{ env.ANDROID_IMAGE_URL }}
-
-      # Build Intellij Ultimate
-      - uses: ./.github/actions/push-image
-        name: push intellij ultimate image
-        with:
-          image-name: ${{ env.INTELLIJ_ULTIMATE_IMAGE_NAME }}
-          make-command: intellij_ultimate
-          image-url: ${{ env.INTELLIJ_ULTIMATE_IMAGE_URL }}
-
-      # Push webstorm image
-
-      - uses: ./.github/actions/push-image
-        name: push webstorm image
-        with:
-          image-name: ${{ env.WEBSTORM_IMAGE_NAME }}
-          make-command: webstorm_image
-          image-url: ${{ env.WEBSTORM_IMAGE_URL }}
-
       # Push sysbox generic image
-
       - uses: ./.github/actions/push-image
         name: push sysbox image
         with:
