@@ -7,7 +7,7 @@ ENV PATH=/usr/local/go/bin:/home/developer/go/bin:${PATH}
 ENV GO111MODULE=on
 
 RUN apt-get update && \
-    apt-get -y upgrade && \
+    # apt-get -y upgrade && \
     apt-get install -y rlwrap && \
     wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.24.4.linux-amd64.tar.gz && \
     /validate_file_hash 77e5da33bb72aeaef1ba4418b6fe511bc4d041873cbf82e5aa6318740df98717 golang_sdk-linux-amd64.tar.gz && \
