@@ -162,7 +162,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Make generic sysbox env
+      - name: Make generic ubuntu env
         run: |
           echo GUI_UBUNTU_IMAGE=$(make get_gui_ubuntu_base_image) >> $GITHUB_ENV
 
@@ -172,6 +172,126 @@ jobs:
         with:
           image-name: ${{ env.GUI_UBUNTU_IMAGE }}
           make-command: gui_ubuntu_base_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+  scan-ubuntu-18:
+    runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make ubuntu 18 env
+        run: |
+          echo GUI_UBUNTU_18_IMAGE=$(make get_base18_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        id: scan_image_step
+        name: scan image
+        with:
+          image-name: ${{ env.GUI_UBUNTU_18_IMAGE }}
+          make-command: base18_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+  scan-centos:
+    runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make CentOS env
+        run: |
+          echo CENTOS_IMAGE=$(make get_centos_base_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        id: scan_image_step
+        name: scan image
+        with:
+          image-name: ${{ env.CENTOS_IMAGE }}
+          make-command: centos_base_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+  scan-minimal-alpine:
+    runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make Minimal Alpine env
+        run: |
+          echo MINIMAL_ALPINE_IMAGE=$(make get_minimal_alpine_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        id: scan_image_step
+        name: scan image
+        with:
+          image-name: ${{ env.MINIMAL_ALPINE_IMAGE }}
+          make-command: minimal_alpine_image
+          upload-data: ${{ github.event_name == 'schedule' }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: Output the output
+        id: output_output
+        run: |
+          {
+            echo 'jira-issue-data-key<<EOF'
+            echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+  scan-minimal-rhel9:
+    runs-on: ubuntu-22.04
+    outputs:
+      jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Make Minimal RHEL9 env
+        run: |
+          echo MINIMAL_RHEL9_IMAGE=$(make get_minimal_rhel9_image) >> $GITHUB_ENV
+
+      - uses: ./.github/actions/scan-image
+        id: scan_image_step
+        name: scan image
+        with:
+          image-name: ${{ env.MINIMAL_RHEL9_IMAGE }}
+          make-command: minimal_rhel9_image
           upload-data: ${{ github.event_name == 'schedule' }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
@@ -215,3 +335,15 @@ jobs:
 
             - *GUI Ubuntu Image:* ${{ needs.scan-gui-ubuntu.result == 'success' && '✅ Passed' || '❌ Failed' }}
             ${{ needs.scan-gui-ubuntu.result == 'success' && needs.scan-gui-ubuntu.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-gui-ubuntu.outputs.jira-issue-data) || '' }}
+            
+            - *Ubuntu 18 Image:* ${{ needs.scan-ubuntu-18.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-ubuntu-18.result == 'success' && needs.scan-ubuntu-18.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-ubuntu-18.outputs.jira-issue-data) || '' }}
+
+            - *CentOS 7 Image:* ${{ needs.scan-centos.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-centos.result == 'success' && needs.scan-centos.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-centos.outputs.jira-issue-data) || '' }}
+
+            - *Minimal Alpine Image:* ${{ needs.scan-minimal-alpine.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-minimal-alpine.result == 'success' && needs.scan-minimal-alpine.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-minimal-alpine.outputs.jira-issue-data) || '' }}
+
+            - *Minimal RHEL9 Image:* ${{ needs.scan-minimal-rhel9.result == 'success' && '✅ Passed' || '❌ Failed' }}
+            ${{ needs.scan-minimal-rhel9.result == 'success' && needs.scan-minimal-rhel9.outputs.jira-issue-data != '' && format('A Jira ticket has been created: {0}/browse/{1}', 'https://strong-network-citrix.atlassian.net', needs.scan-minimal-rhel9.outputs.jira-issue-data) || '' }}           
