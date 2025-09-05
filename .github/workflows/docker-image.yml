@@ -61,5 +61,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build strong network Ubuntu18 Image
+      - name: Build strong network CentOS Image
         run: make centos_base_image && docker inspect --type=image $(make get_centos_base_image) > /dev/null
