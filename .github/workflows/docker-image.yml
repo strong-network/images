@@ -49,3 +49,17 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build strong network GUI Ubuntu Eclipse image
         run: make gui_ubuntu_eclipse_image && docker inspect --type=image $(make get_gui_ubuntu_eclipse_image) > /dev/null
+
+  build_minimal_alpine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network Minimal Alpine image
+        run: make minimal_alpine_image && docker inspect --type=image $(make get_minimal_alpine_image) > /dev/null
+
+  build_minimal_rhel9:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network Minimal RHEL9 image
+        run: make minimal_rhel9_image && docker inspect --type=image $(make get_minimal_rhel9_image) > /dev/null
