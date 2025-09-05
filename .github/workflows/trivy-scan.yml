@@ -36,18 +36,6 @@ jobs:
             echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
-          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
-      # - if: ${{ github.event_name == 'schedule' }}
-      # - uses: act10ns/slack@v2
-      #   env:
-      #     # SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST }}
-      #   with:
-      #     status: ${{ job.status }}
-      #     message: |
-      #       Trivy scan on workspace image failed.
-      #       ${{steps.scan_image_step.outputs.jira-issue-data}}
-      #       A Jira ticket has been created: ${{ format('{0}/browse/{1}', secrets.JIRA_BASE_URL, fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) }}
 
   scan-generic:
     runs-on: ubuntu-22.04
@@ -78,7 +66,6 @@ jobs:
             echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
-          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
   scan-generic-jfrog:
     runs-on: ubuntu-22.04
     outputs:
@@ -107,7 +94,6 @@ jobs:
             echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
-          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
 
   scan-sysbox-generic:
     runs-on: ubuntu-22.04
@@ -138,7 +124,6 @@ jobs:
             echo "${{ steps.scan_image_step.outputs.jira-issue-data && format('{0}', fromJSON(steps.scan_image_step.outputs.jira-issue-data).key) || '' }}"
             echo 'EOF'
           } >> $GITHUB_OUTPUT
-          # echo "jira-issue-data3=${{steps.scan_image_step.outputs.jira-issue-data}}" >> $GITHUB_OUTPUT
 
   slack-summary:
     runs-on: ubuntu-latest
