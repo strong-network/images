@@ -6,7 +6,7 @@ WORKDIR /
 
 
 #### #### Eclipse #### ####
-ARG eclipseVersion=2025-09/M3/eclipse-committers-2025-09-M3-linux-gtk-x86_64.tar.gz
+ARG eclipseVersion=2025-09/R/eclipse-committers-2025-09-R-linux-gtk-x86_64.tar.gz
 RUN wget -O eclipse.tar.gz http://www.mirrorservice.org/sites/download.eclipse.org/eclipseMirror/technology/epp/downloads/release/${eclipseVersion}
 RUN tar -xvzf eclipse.tar.gz --directory /opt && rm eclipse.tar.gz
 COPY tools/eclipse.desktop /opt/eclipse.desktop
