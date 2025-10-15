@@ -2,8 +2,8 @@ FROM sn_generic
 
 USER 1000
 
-RUN wget -O jfrog.vsix https://open-vsx.org/api/JFrog/jfrog-vscode-extension/2.10.1/file/JFrog.jfrog-vscode-extension-2.10.1.vsix && \
-    /validate_file_hash 8b0dc85a4e1f8c19f0bf44dc8cc3d809e6ede854b2f3d7d1562c3cfee9d3ec44  jfrog.vsix && \
+RUN wget -O jfrog.vsix https://open-vsx.org/api/JFrog/jfrog-vscode-extension/2.14.5/file/JFrog.jfrog-vscode-extension-2.14.5.vsix && \
+    /validate_file_hash 744d8d3bc01ab8c8a90986c3b61532420db4bfd9562067ccf0518b59f29fd3f9  jfrog.vsix && \
     mv jfrog.vsix /usr/bin/strong_network_startup/vscode_extensions
 
 WORKDIR /
