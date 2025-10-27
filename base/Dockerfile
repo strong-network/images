@@ -25,7 +25,8 @@ RUN apt-get update && \
 COPY validate_file_hash.sh /validate_file_hash
 
 # Install user space packages
-RUN apt-get install -y wget python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
+RUN var=$(apt-cache madison python3-pip) && echo $var && exit 1
+RUN apt-get install -y --target-release noble-security wget python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
     build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \
     libxi6 libfreetype6 dirmngr lsb-release less && \
     mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
@@ -84,17 +85,21 @@ RUN mkdir -p /etc/apt/keyrings && \
     apt-get update
 
 # Install hashcorp/terraform tools
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
-    /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029 hashicorp.key && \
-    cat hashicorp.key | apt-key add - && \
-    rm hashicorp.key && \
-    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
-    apt-get update && \
-    apt-get install terraform -y
+# RUN curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
+#     /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029 hashicorp.key && \
+#     cat hashicorp.key | apt-key add - && \
+#     rm hashicorp.key && \
+#     apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
+#     apt-get update && \
+#     apt-get install terraform -y
+
+RUN wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list && \
+    apt update && apt install terraform
 
 
 # Setup environment for developers
-    # install general packages related to development
+# install general packages related to development
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && apt-get install nodejs -y && \
