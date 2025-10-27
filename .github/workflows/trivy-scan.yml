@@ -147,7 +147,7 @@ jobs:
         name: scan image
         with:
           image-name: ${{ env.GUI_KALI_IMAGE }}
-          make-command: gui_debian
+          make-command: gui_debian_kali
           upload-data: ${{ github.event_name == 'schedule' }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
@@ -177,7 +177,7 @@ jobs:
         name: scan image
         with:
           image-name: ${{ env.GUI_DEBIAN_IMAGE }}
-          make-command: gui_debian
+          make-command: gui_debian_postman
           upload-data: ${{ github.event_name == 'schedule' }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
