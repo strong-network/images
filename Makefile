@@ -46,7 +46,7 @@ remove_base_image:
 	@docker image rm ${BASE_IMAGE_NAME}:latest
 
 generic_image: base_image
-	@docker build --progress=plain --no-cache -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
+	@docker build -t ${GENERIC_IMAGE_NAME}:${VERSION} generic
 	@docker tag ${GENERIC_IMAGE_NAME}:${VERSION} ${GENERIC_IMAGE_NAME}
 
 .PHONY: gui_debian_kali
@@ -113,7 +113,7 @@ get_generic_image:
 
 .PHONY: get_gui_kali_image
 get_gui_kali_image:
-	@echo ${GUI_DEBIAN}:${VERSION}
+	@echo ${GUI_DEBIAN_KALI}:${VERSION}
 
 .PHONY: get_gui_debian_image
 get_gui_debian_image:
