@@ -22,11 +22,13 @@ jobs:
           echo JFROG_GENERIC_IMAGE_URL=$REGISTRY_URL/jfrog_generic:$VERSION >>  $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_URL=$REGISTRY_URL/sysbox_generic:$VERSION >> $GITHUB_ENV
           echo GUI_DEBIAN_KALI_IMAGE_URL=$REGISTRY_URL/gui_debian_kali_linux:$VERSION >> $GITHUB_ENV
+          echo GUI_DEBIAN_IMAGE_URL=$REGISTRY_URL/gui_debian_linux:$VERSION >> $GITHUB_ENV
           echo GUI_UBUNTU_BASE_IMAGE_URL=$REGISTRY_URL/gui_ubuntu_base:$VERSION >> $GITHUB_ENV
           echo GUI_UBUNTU_ECLIPSE_IMAGE_URL=$REGISTRY_URL/gui_ubuntu_eclipse:$VERSION >> $GITHUB_ENV
 
           echo GENERIC_IMAGE_NAME=$(make get_generic_image) >> $GITHUB_ENV
           echo SYSBOX_GENERIC_IMAGE_NAME=$(make get_sysbox_generic_image) >> $GITHUB_ENV
+          echo GUI_DEBIAN_KALI_IMAGE_NAME=$(make get_gui_kali_image) >> $GITHUB_ENV
           echo GUI_DEBIAN_IMAGE_NAME=$(make get_gui_debian_image) >> $GITHUB_ENV
           echo JFROG_GENERIC_IMAGE_NAME=$(make get_generic_jfrog_image) >> $GITHUB_ENV
           echo GUI_UBUNTU_BASE_IMAGE_NAME=$(make get_gui_ubuntu_base_image) >> $GITHUB_ENV
@@ -54,9 +56,17 @@ jobs:
       - uses: ./.github/actions/push-image
         name: push gui debian kali image
         with:
-          image-name: ${{ env.GUI_DEBIAN_IMAGE_NAME }}
-          make-command: gui_debian
+          image-name: ${{ env.GUI_DEBIAN_KALI_IMAGE_NAME }}
+          make-command: gui_debian_kali
           image-url: ${{ env.GUI_DEBIAN_KALI_IMAGE_URL }}
+
+      # Push GUI Debian image
+      - uses: ./.github/actions/push-image
+        name: push gui debian image
+        with:
+          image-name: ${{ env.GUI_DEBIAN_IMAGE_NAME }}
+          make-command: gui_debian_postman
+          image-url: ${{ env.GUI_DEBIAN_IMAGE_URL }}
 
       # Push GUI Ubuntu base image
       - uses: ./.github/actions/push-image
