@@ -126,7 +126,7 @@ jobs:
           } >> $GITHUB_OUTPUT
 
   scan-gui-kali:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest-4-cores
     outputs:
       jira-issue-data: ${{ steps.output_output.outputs.jira-issue-data-key }}
     steps:
@@ -135,12 +135,6 @@ jobs:
       - name: Make generic sysbox env
         run: |
           echo GUI_KALI_IMAGE=$(make get_gui_kali_image) >> $GITHUB_ENV
-
-      - name: Free up Disk Space
-        run: |
-          docker rmi $(docker images -f "dangling=true" -q) || true
-          docker system prune -f || true
-          sudo rm -rf ./.docker_temp*
 
       - uses: ./.github/actions/scan-image
         id: scan_image_step
