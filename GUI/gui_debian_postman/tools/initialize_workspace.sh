@@ -22,12 +22,12 @@ fi
 
 # start tightvnc, using xfce4 by default
 export USER=developer
-killall -9 Xtightvnc
+killall -9 Xtigervnc
 find /tmp -name ".X[1-6]-lock" | xargs rm -rf
 find /tmp/.X11-unix -name "X[1-6]" | xargs rm -rf
 cp $HOME/.vnc/xstartup.xfce4 $HOME/.vnc/xstartup
 chmod +x $HOME/.vnc/xstartup
-vncserver -geometry 1920x1080 -depth 24
+vncserver -geometry 4096x2160 -depth 24
 
 # start novnc
-/usr/share/novnc/utils/launch.sh --listen 8081 --vnc localhost:5901
+/usr/share/novnc/utils/novnc_proxy --listen 8081 --vnc localhost:5901

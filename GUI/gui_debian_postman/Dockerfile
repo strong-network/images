@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:experimental
-ARG BASE_IMAGE=debian:bullseye-slim
+ARG BASE_IMAGE=debian:bookworm-slim
 FROM ${BASE_IMAGE}
 
 ARG user=developer
@@ -30,9 +30,10 @@ RUN apt-get update && \
 #### #### NoVNC #### ####
 # # install xfce4 desktop
 RUN apt-get install -y xfce4 xfce4-goodies dbus-x11
-# install novnc and tightvnc
-# we opt for TightVNC over TigerVNC because TightVNC offers robust support for both GNOME and XFCE4 desktop environments on Ubuntu 22.04.
-RUN apt-get install -y novnc tightvncserver
+# install novnc and TigerVNC
+RUN apt-get install -y novnc tigervnc-standalone-server tigervnc-common
+# RUN apt-get install -y novnc tightvncserver
+
 RUN apt-get install -y vim net-tools
 # To get clipboard support
 RUN apt-get install autocutsel
