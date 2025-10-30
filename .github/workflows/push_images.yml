@@ -65,7 +65,7 @@ jobs:
         name: push gui debian image
         with:
           image-name: ${{ env.GUI_DEBIAN_IMAGE_NAME }}
-          make-command: gui_debian_postman
+          make-command: gui_debian
           image-url: ${{ env.GUI_DEBIAN_IMAGE_URL }}
 
       # Push GUI Ubuntu base image

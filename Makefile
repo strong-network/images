@@ -16,7 +16,7 @@ FLUTTER_IMAGE_NAME=sn_flutter
 GUI_DEBIAN_KALI=sn_gui_debian_kali
 GUI_UBUNTU_BASE=sn_gui_ubuntu
 GUI_UBUNTU_ECLIPSE=sn_gui_ubuntu_eclipse
-GUI_DEBIAN_POSTMAN=sn_gui_debian_postman
+GUI_DEBIAN=sn_gui_debian
 MINIMAL_ALPINE=sn_minimal_alpine
 MINIMAL_RHEL9=sn_minimal_rhel9
 
@@ -53,9 +53,9 @@ generic_image: base_image
 gui_debian_kali:
 	@docker build -t ${GUI_DEBIAN_KALI}:${VERSION} ${GIT_ROOT}/GUI/gui_debian_kali
 
-.PHONY: gui_debian_postman
-gui_debian_postman:
-	@docker build -t ${GUI_DEBIAN_POSTMAN}:${VERSION} ${GIT_ROOT}/GUI/gui_debian_postman
+.PHONY: gui_debian
+gui_debian:
+	@docker build -t ${GUI_DEBIAN}:${VERSION} ${GIT_ROOT}/GUI/gui_debian
 
 .PHONY: gui_ubuntu_base_image
 gui_ubuntu_base_image:
@@ -89,7 +89,7 @@ minimal_rhel9_image: minimal_rhel9_image
 	@docker build -t ${MINIMAL_RHEL9}:${VERSION} ${GIT_ROOT}/minimal/rhel_9
 
 .PHONY: all
-all: base_image generic_image gui_debian_kali gui_ubuntu_base_image gui_ubuntu_eclipse_image gui_debian_postman minimal_alpine_image minimal_rhel9_image
+all: base_image generic_image gui_debian_kali gui_ubuntu_base_image gui_ubuntu_eclipse_image gui_debian minimal_alpine_image minimal_rhel9_image
 
 .PHONY: get_version
 get_version:
@@ -117,7 +117,7 @@ get_gui_kali_image:
 
 .PHONY: get_gui_debian_image
 get_gui_debian_image:
-	@echo ${GUI_DEBIAN_POSTMAN}:${VERSION}
+	@echo ${GUI_DEBIAN}:${VERSION}
 
 .PHONY: get_gui_ubuntu_base_image
 get_gui_ubuntu_base_image:
