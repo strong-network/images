@@ -8,7 +8,7 @@ ARG uid=1000
 ARG gid=1000
 
 RUN groupadd -g ${gid} ${group}
-RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sn_user' --disabled-password ${user}
+RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sds_user' --disabled-password ${user}
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 #### #### Strong Network #### ####
@@ -32,7 +32,6 @@ RUN apt-get update && \
 RUN apt-get install -y xfce4 xfce4-goodies dbus-x11
 # install novnc and TigerVNC
 RUN apt-get install -y novnc tigervnc-standalone-server tigervnc-common
-# RUN apt-get install -y novnc tightvncserver
 
 RUN apt-get install -y vim net-tools
 # To get clipboard support
