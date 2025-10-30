@@ -8,7 +8,7 @@ ARG uid=1000
 ARG gid=1000
 
 RUN groupadd -g ${gid} ${group}
-RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sn_user' --disabled-password ${user}
+RUN adduser --home /home/${user} --uid ${uid} --gid ${gid} --gecos 'sds_user' --disabled-password ${user}
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 #### #### Strong Network #### ####

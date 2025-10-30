@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build strong network GUI Debian image
-        run: make gui_debian_postman && docker inspect --type=image $(make get_gui_debian_image) > /dev/null
+        run: make gui_debian && docker inspect --type=image $(make get_gui_debian_image) > /dev/null
 
   build_gui_ubuntu_base:
     runs-on: ubuntu-latest
