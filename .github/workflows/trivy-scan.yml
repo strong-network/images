@@ -338,7 +338,7 @@ jobs:
   slack-summary:
     runs-on: ubuntu-latest
     needs: [scan-base, scan-generic, scan-generic-jfrog, scan-sysbox-generic, scan-gui-kali, scan-gui-debian, scan-gui-ubuntu, scan-ubuntu-18, scan-centos, scan-minimal-alpine, scan-minimal-rhel9]
-    if: always()
+    if: always() && github.event_name == 'schedule'
     steps:
       - name: Send Workflow Summary
         uses: act10ns/slack@v2
