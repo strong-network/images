@@ -344,7 +344,7 @@ jobs:
         uses: act10ns/slack@v2
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          status: failure # The overall status is failure if any job fails
+          status: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
           message: |
             Workflow Summary for `${{ github.workflow }}` on `${{ github.ref_name }}`:
 
