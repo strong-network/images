@@ -31,17 +31,17 @@ RUN yum install -y wget python3 python3-pip nano vim clang rsync unzip dirmngr l
     chmod -R 770 /home/developer
 
 # Optional Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-26.1.1.tgz -O docker.tar.gz && \
-    /validate_file_hash c0ef0ee7d00deb803a6f5fa78d83ec8cbe1848eaaea9fb7071364d526624278f docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.0.2.tgz -O docker.tar.gz && \
+    /validate_file_hash 079e491e942e7a7a090c593db7eb63f3d657b5ca166c38dab59678b165b91eca docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.14.0/buildx-v0.14.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    wget https://github.com/docker/buildx/releases/download/v0.30.1/buildx-v0.30.1.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash f3ba3bf1e4ab18e96c2d36526a075a02a78fb5f8e80d3e3ca9c5bf256d81d0a0 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash dba9d98e1ba5bfe11d88c99b9bd32fc4a0624a30fafe68eea34d61a3e42fd372 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 

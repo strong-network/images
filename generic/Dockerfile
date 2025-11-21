@@ -10,8 +10,8 @@ RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y rlwrap
 
-RUN wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.25.3.linux-amd64.tar.gz && \
-    /validate_file_hash 0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f golang_sdk-linux-amd64.tar.gz && \
+RUN wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.25.4.linux-amd64.tar.gz && \
+    /validate_file_hash 9fa5ffeda4170de60f67f3aa0f824e426421ba724c21e133c1e35d6159ca1bec golang_sdk-linux-amd64.tar.gz && \
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz && \
     rm golang_sdk-linux-amd64.tar.gz
 
