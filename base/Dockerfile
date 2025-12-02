@@ -38,8 +38,8 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.0.2.tgz -O docker.tar.gz && \
-    /validate_file_hash 079e491e942e7a7a090c593db7eb63f3d657b5ca166c38dab59678b165b91eca docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.1.1.tgz -O docker.tar.gz && \
+    /validate_file_hash 4d371f9a79601899de996931aa776d0ea3cb932c97b7cdeeea02f230d3a64464 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
