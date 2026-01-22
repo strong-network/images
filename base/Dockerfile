@@ -34,19 +34,16 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
     chown -R developer /home/developer && \
     chmod -R 770 /home/developer
 
-# Install uv Python package manager
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.1.1.tgz -O docker.tar.gz && \
-    /validate_file_hash 4d371f9a79601899de996931aa776d0ea3cb932c97b7cdeeea02f230d3a64464 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.1.5.tgz -O docker.tar.gz && \
+    /validate_file_hash 882bb03f3fd36ad565b1362f5bbb5d5af5f2410a5c10cae3f9d3d54e2540adc2 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.30.1/buildx-v0.30.1.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
-    /validate_file_hash c37114fcd034025ec68e224657c8a5a850df472ded3ddcbca75ad3a7ebb9710d /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    wget https://github.com/docker/buildx/releases/download/v0.31.0/buildx-v0.31.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    /validate_file_hash 39cc424a730d8b7364c23a137582cb29e7f024b175bb595001ff6f90121b005b /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
     wget https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
     /validate_file_hash dba9d98e1ba5bfe11d88c99b9bd32fc4a0624a30fafe68eea34d61a3e42fd372 /usr/local/bin/docker-compose && \
@@ -54,20 +51,20 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.0.0-linux-amd64.tar.gz && \
-    /validate_file_hash c77e9e7c1cc96e066bd240d190d1beed9a6b08060b2043ef0862c4f865eca08f helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.0-linux-amd64.tar.gz && \
+    /validate_file_hash 8e7ae5cb890c56f53713bffec38e41cd8e7e4619ebe56f8b31cd383bfb3dbb83 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.34.2/bin/linux/amd64/kubectl && \
-    /validate_file_hash 9591f3d75e1581f3f7392e6ad119aab2f28ae7d6c6e083dc5d22469667f27253 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl && \
+    /validate_file_hash a2e984a18a0c063279d692533031c1eff93a262afcc0afdc517375432d060989 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.32.1.zip" -o "awscliv2.zip" && \
-    /validate_file_hash 7be410c23d191e39c898cdd0cca7795de3a7c230631b1076246a3017ecfcd42e awscliv2.zip && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.33.4.zip" -o "awscliv2.zip" && \
+    /validate_file_hash cade846393b3ecf779f9c13bad00b59a470896e2970560bb652e8db76fc90a20 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
