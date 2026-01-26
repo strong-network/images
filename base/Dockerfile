@@ -45,8 +45,8 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     wget https://github.com/docker/buildx/releases/download/v0.31.0/buildx-v0.31.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
     /validate_file_hash 39cc424a730d8b7364c23a137582cb29e7f024b175bb595001ff6f90121b005b /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v2.40.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash dba9d98e1ba5bfe11d88c99b9bd32fc4a0624a30fafe68eea34d61a3e42fd372 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v5.0.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 2d880f723d3da7c779c54fdaea91a842fca8af55d1397f1ed8d7cbab3dd7af67 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
@@ -63,12 +63,14 @@ RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.0-linux-amd64.tar.gz && \
     chmod 4755 /usr/local/bin/kubectl
 
 # Install cloud specific CLI tools
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.33.4.zip" -o "awscliv2.zip" && \
-    /validate_file_hash cade846393b3ecf779f9c13bad00b59a470896e2970560bb652e8db76fc90a20 awscliv2.zip && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.33.6.zip" -o "awscliv2.zip" && \
+    /validate_file_hash e27a9d9b07429099dd641ed2b3b6664b41ff9471c426e8323c076ba87d215210 awscliv2.zip && \
     unzip awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
-    rm -rf aws
+    rm -rf aws && \
+    # Remove bundled vulnerable wheel package from AWS CLI (CVE-2026-24049)
+    find /usr/local/aws-cli -name 'wheel*.dist-info' -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Install  Azure CLi
 RUN mkdir -p /etc/apt/keyrings && \
@@ -99,7 +101,7 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && apt-get install nodejs -y && \
     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
-    /validate_file_hash 8550a7e298b523fffa899069754fc150f2ff74092701e4d4109edd1cd6d5327f  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && \
+    /validate_file_hash 63edc60568db873b70db03a3c4dd062a16c6b3d6e3015eb748edc234e6a4facd  yarn.gpg.key && cat yarn.gpg.key | apt-key add - && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && apt-get -y install gcc g++ make yarn && \
     # script is to have the latest available version of git-lfs
