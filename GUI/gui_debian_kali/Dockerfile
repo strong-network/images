@@ -53,25 +53,6 @@ RUN wget -O doctl.tar.gz https://github.com/digitalocean/doctl/releases/download
 
 # Setup environment for developers
     # install general packages related to development
-# RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-#     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-#     apt-get update && apt-get install nodejs -y && \
-#     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg > yarn.gpg.key && \
-#     /validate_file_hash 63edc60568db873b70db03a3c4dd062a16c6b3d6e3015eb748edc234e6a4facd  yarn.gpg.key && \
-#     mkdir -p /etc/apt/keyrings && \
-#     cat yarn.gpg.key | gpg --dearmor -o /etc/apt/keyrings/yarn.gpg && \
-#     echo "deb [signed-by=/etc/apt/keyrings/yarn.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-#     apt-get update && apt-get -y install gcc g++ make yarn && \
-#     # script is to have the latest available version of git-lfs
-#     apt-get install -y  git-lfs git htop less locales man nano  ssh sudo tmux vim emacs asciinema \
-#     zsh  jq zip shellcheck tree \
-#     nodejs openjdk-11-jdk \
-#     # install networking related packages
-#     ca-certificates apt-transport-https dnsutils gnupg2 httpie inetutils-ping inetutils-tools inetutils-traceroute net-tools && \
-#     apt-get update && \
-#     rm -rf /var/lib/apt/lists/* && \
-#     rm -rf /var/cache/apt
-
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && apt-get install nodejs -y && \
