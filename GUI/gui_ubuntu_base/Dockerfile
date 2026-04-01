@@ -27,6 +27,24 @@ RUN apt-get update && \
     echo 'developer ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/nopasswd
 #### #### Strong Network #### ####
 
+COPY validate_file_hash.sh /validate_file_hash
+
+# Download docker tools
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.1.5.tgz -O docker.tar.gz && \
+    /validate_file_hash 882bb03f3fd36ad565b1362f5bbb5d5af5f2410a5c10cae3f9d3d54e2540adc2 docker.tar.gz && \
+    tar -C /tmp -xzf docker.tar.gz && \
+    rm docker.tar.gz && \
+    mv /tmp/docker/docker /usr/bin/ && \
+    rm -r /tmp/docker && \
+    mkdir -p /usr/local/lib/docker/cli-plugins && \
+    wget https://github.com/docker/buildx/releases/download/v0.31.0/buildx-v0.31.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    /validate_file_hash 39cc424a730d8b7364c23a137582cb29e7f024b175bb595001ff6f90121b005b /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    wget https://github.com/docker/compose/releases/download/v5.0.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 2d880f723d3da7c779c54fdaea91a842fca8af55d1397f1ed8d7cbab3dd7af67 /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose && \
+    mkdir -p /usr/bin/strong_network_startup
+
 #### #### NoVNC #### ####
 # install gnome desktop
 RUN apt-get install -y ubuntu-desktop ubuntu-gnome-desktop gnome-core gnome-panel gnome-tweaks
