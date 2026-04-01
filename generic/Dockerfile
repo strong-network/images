@@ -27,7 +27,7 @@ RUN curl -fsSL http://http.us.debian.org/debian/pool/main/libo/libonig/libonig5_
     curl -fsSL http://http.us.debian.org/debian/pool/main/j/jq/jq_1.8.1-4+b1_amd64.deb > jq.deb  && \
     /validate_file_hash 90897b56cd86c21f8c1c98687cf185ddfa52add5a0bae7b894fe863f45fd34c5 jq.deb && \
     dpkg -i jq.deb && rm *.deb && \
-    npm install -g npm && \
+    curl -fsSL https://www.npmjs.com/install.sh | sh && \
     curl -fsSL https://download.clojure.org/install/linux-install-1.12.4.1582.sh > linux-install-clojure.sh && \
     /validate_file_hash 0dc6f211d2a737ce6872feb0aa4d1cbbbe72d02665c684f9ad206b88d2e7f4fb linux-install-clojure.sh && \
     chmod +x linux-install-clojure.sh && \
