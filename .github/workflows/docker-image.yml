@@ -15,6 +15,13 @@ jobs:
       - name: Build the base image
         run: make base_image
 
+  build_claude:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build strong network Claude image
+        run: make claude_code_image && docker inspect --type=image $(make get_claude_code_image) > /dev/null
+
   build_generic:
     runs-on: ubuntu-latest
     steps:

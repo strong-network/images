@@ -11,6 +11,7 @@ PYTHON_ANACONDA_IMAGE_NAME=sn_python_anaconda
 NODEJS_IMAGE_NAME=sn_nodejs
 GENERIC_IMAGE_NAME=sn_generic
 GENERIC_JFROG_IMAGE_NAME=sn_generic_jfrog
+CLAUDE_CODE_IMAGE_NAME=sn_claude_code
 SYSBOX_GENERIC_IMAGE_NAME=sn_sysbox_generic
 FLUTTER_IMAGE_NAME=sn_flutter
 GUI_DEBIAN_KALI=sn_gui_debian_kali
@@ -71,6 +72,10 @@ gui_ubuntu_eclipse_image: gui_ubuntu_base_image
 generic_jfrog_image: generic_image
 	@docker build -t ${GENERIC_JFROG_IMAGE_NAME}:${VERSION} generic_jfrog
 
+.PHONY: claude_code_image
+claude_code_image: generic_image
+	@docker build -t ${CLAUDE_CODE_IMAGE_NAME}:${VERSION} claude_code
+
 .PHONY: sysbox_base_image
 sysbox_base_image: base_image
 	@docker build -t ${SYSBOX_BASE_IMAGE_NAME}:${VERSION} sysbox_base
@@ -130,6 +135,10 @@ get_gui_ubuntu_eclipse_image:
 .PHONY: get_generic_jfrog_image
 get_generic_jfrog_image:
 	@echo ${GENERIC_JFROG_IMAGE_NAME}:${VERSION}
+
+.PHONY: get_claude_code_image
+get_claude_code_image:
+	@echo ${CLAUDE_CODE_IMAGE_NAME}:${VERSION}
 
 .PHONY: get_sysbox_base_image
 get_sysbox_base_image:
