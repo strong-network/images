@@ -10,8 +10,8 @@ RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y rlwrap
 
-RUN wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.25.6.linux-amd64.tar.gz && \
-    /validate_file_hash f022b6aad78e362bcba9b0b94d09ad58c5a70c6ba3b7582905fababf5fe0181a golang_sdk-linux-amd64.tar.gz && \
+RUN wget -O golang_sdk-linux-amd64.tar.gz https://go.dev/dl/go1.25.9.linux-amd64.tar.gz && \
+    /validate_file_hash 00859d7bd6defe8bf84d9db9e57b9a4467b2887c18cd93ae7460e713db774bc1 golang_sdk-linux-amd64.tar.gz && \
     tar -C /usr/local -xzf golang_sdk-linux-amd64.tar.gz && \
     rm golang_sdk-linux-amd64.tar.gz
 
@@ -28,8 +28,9 @@ RUN curl -fsSL http://http.us.debian.org/debian/pool/main/libo/libonig/libonig5_
     /validate_file_hash 90897b56cd86c21f8c1c98687cf185ddfa52add5a0bae7b894fe863f45fd34c5 jq.deb && \
     dpkg -i jq.deb && rm *.deb && \
     curl -fsSL https://www.npmjs.com/install.sh | sh && \
-    curl -fsSL https://download.clojure.org/install/linux-install-1.12.4.1582.sh > linux-install-clojure.sh && \
-    /validate_file_hash 0dc6f211d2a737ce6872feb0aa4d1cbbbe72d02665c684f9ad206b88d2e7f4fb linux-install-clojure.sh && \
+    npm update brace-expansion picomatch && \
+    curl -fsSL https://download.clojure.org/install/linux-install-1.12.4.1618.sh > linux-install-clojure.sh && \
+    /validate_file_hash 8a49ab11a639ce1d49e5459a7bfa8fcc74684ad3bc9acd181e3adc7a662918cf linux-install-clojure.sh && \
     chmod +x linux-install-clojure.sh && \
     ./linux-install-clojure.sh && rm -f linux-install-clojure.sh
 

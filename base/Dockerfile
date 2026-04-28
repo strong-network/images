@@ -35,15 +35,15 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
     chmod -R 770 /home/developer
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.1.5.tgz -O docker.tar.gz && \
-    /validate_file_hash 882bb03f3fd36ad565b1362f5bbb5d5af5f2410a5c10cae3f9d3d54e2540adc2 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.2.1.tgz -O docker.tar.gz && \
+    /validate_file_hash 995b1d0b51e96d551a3b49c552c0170bc6ce9f8b9e0866b8c15bbc67d1cf93a3 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.31.0/buildx-v0.31.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
-    /validate_file_hash 39cc424a730d8b7364c23a137582cb29e7f024b175bb595001ff6f90121b005b /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    wget https://github.com/docker/buildx/releases/download/v0.33.0/buildx-v0.33.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    /validate_file_hash 9426a15411f35f635afef3f5d3bae53155c3e30d26dee430cc968e13d34be49f /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
     wget https://github.com/docker/compose/releases/download/v5.0.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
     /validate_file_hash 2d880f723d3da7c779c54fdaea91a842fca8af55d1397f1ed8d7cbab3dd7af67 /usr/local/bin/docker-compose && \
@@ -51,14 +51,14 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.0-linux-amd64.tar.gz && \
-    /validate_file_hash 8e7ae5cb890c56f53713bffec38e41cd8e7e4619ebe56f8b31cd383bfb3dbb83 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.4-linux-amd64.tar.gz && \
+    /validate_file_hash 70b2c30a19da4db264dfd68c8a3664e05093a361cefd89572ffb36f8abfa3d09 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash a2e984a18a0c063279d692533031c1eff93a262afcc0afdc517375432d060989 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.36.0/bin/linux/amd64/kubectl && \
+    /validate_file_hash 123d8c8844f46b1244c547fffb3c17180c0c26dac9890589fe7e67763298748e kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
