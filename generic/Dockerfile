@@ -28,7 +28,7 @@ RUN curl -fsSL https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux6
     chmod +x /usr/local/bin/jq
 
 RUN curl -fsSL https://www.npmjs.com/install.sh | sh && \
-    npm update brace-expansion picomatch && \
+    npm install -g brace-expansion picomatch && \
     curl -fsSL https://download.clojure.org/install/linux-install-1.12.4.1618.sh > linux-install-clojure.sh && \
     /validate_file_hash 8a49ab11a639ce1d49e5459a7bfa8fcc74684ad3bc9acd181e3adc7a662918cf linux-install-clojure.sh && \
     chmod +x linux-install-clojure.sh && \
