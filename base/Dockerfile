@@ -42,8 +42,8 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
     chmod -R 770 /home/developer
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.2.1.tgz -O docker.tar.gz && \
-    /validate_file_hash 995b1d0b51e96d551a3b49c552c0170bc6ce9f8b9e0866b8c15bbc67d1cf93a3 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.4.1.tgz -O docker.tar.gz && \
+    /validate_file_hash 0fb3d2b72414ab862d68517f0b17b78c93c149d1c5c461acb969aacde1a2189d docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
