@@ -8,8 +8,15 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN apt-get update && \
     apt-get install -y git locales sudo curl \
     libkrb5-dev libssl-dev && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs ssh && \
+    # Install git-lfs v3.7.1 from GitHub releases (compiled with Go 1.25) instead of packagecloud apt.
+    # This resolves CVE-2025-68121 (stdlib < 1.24.13), which has a reachable path through git-lfs.
+    # The packagecloud apt package bundles an older Go stdlib that is vulnerable.
+    curl -fsSL https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-amd64-v3.7.1.tar.gz -o git-lfs.tar.gz && \
+    echo "1c0b6ee5200ca708c5cebebb18fdeb0e1c98f1af5c1a9cba205a4c0ab5a5ec08  git-lfs.tar.gz" | sha256sum -c - && \
+    tar -C /tmp -xzf git-lfs.tar.gz && \
+    /tmp/git-lfs-3.7.1/install.sh && \
+    rm -rf git-lfs.tar.gz /tmp/git-lfs-3.7.1 && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install ssh && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
@@ -45,8 +52,8 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     wget https://github.com/docker/buildx/releases/download/v0.33.0/buildx-v0.33.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
     /validate_file_hash 9426a15411f35f635afef3f5d3bae53155c3e30d26dee430cc968e13d34be49f /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v5.0.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 2d880f723d3da7c779c54fdaea91a842fca8af55d1397f1ed8d7cbab3dd7af67 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v5.1.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash a0298760c9772d2c06888fc8703a487c94c3c3b0134adeef830742a2fc7647b4 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
@@ -103,7 +110,6 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     apt-get update && apt-get install nodejs -y && \
     corepack enable && corepack prepare yarn@stable --activate && \
     apt-get -y install gcc g++ make && \
-    # script is to have the latest available version of git-lfs
     apt-get install -y htop \
     zsh jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
