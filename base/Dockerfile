@@ -23,7 +23,8 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # The minimum requirements to run a Strong Network workspace
 RUN apt-get update && \
-    apt-get install -y git locales sudo curl \
+    apt-get install -y --no-install-recommends git && \
+    apt-get install -y locales sudo curl \
     libkrb5-dev libssl-dev && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install ssh && \
     git lfs install && \
