@@ -1,4 +1,21 @@
+# Build stage: compile git-lfs from source using Go 1.26.2.
+# The v3.7.1 release binary was compiled with Go 1.25.3, which is vulnerable to multiple stdlib CVEs
+# (CVE-2025-68121, CVE-2025-61726, CVE-2025-61728, CVE-2025-61729, CVE-2026-25679, CVE-2026-32280,
+# CVE-2026-32281, CVE-2026-32283 — all require Go ≥ 1.25.9). Building with Go 1.26.2 resolves all of them.
+# Commit 0a45b99 is a post-v3.7.1 main branch commit that upgrades git-lfs to Go 1.26.
+# CGO_ENABLED=0 produces a fully static binary with no runtime dependencies.
+# Using a separate build stage ensures the Go toolchain (~500MB) never appears in the final image.
+FROM golang:1.26.2 AS git-lfs-builder
+RUN GIT_LFS_COMMIT="0a45b99f9fa8d1942cc44f089029a031805461f1" && \
+    curl -fsSL "https://github.com/git-lfs/git-lfs/archive/${GIT_LFS_COMMIT}.tar.gz" -o /tmp/git-lfs-src.tar.gz && \
+    tar -xzf /tmp/git-lfs-src.tar.gz -C /tmp && \
+    cd "/tmp/git-lfs-${GIT_LFS_COMMIT}" && \
+    CGO_ENABLED=0 go build -o /usr/local/bin/git-lfs .
+
 FROM ubuntu:24.04
+
+# Copy the git-lfs binary compiled in the build stage above
+COPY --from=git-lfs-builder /usr/local/bin/git-lfs /usr/local/bin/git-lfs
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -8,30 +25,8 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN apt-get update && \
     apt-get install -y git locales sudo curl \
     libkrb5-dev libssl-dev && \
-    # Build git-lfs from source at commit 0a45b99 (post-v3.7.1, upgrades to Go 1.26) using Go 1.26.2.
-    # The v3.7.1 release binary was compiled with Go 1.25.3, which is vulnerable to multiple stdlib CVEs
-    # (CVE-2025-68121, CVE-2025-61726, CVE-2025-61728, CVE-2025-61729, CVE-2026-25679, CVE-2026-32280,
-    # CVE-2026-32281, CVE-2026-32283 — all require Go ≥ 1.25.9). Building with Go 1.26.2 resolves all of them.
-    # CGO_ENABLED=0 ensures a fully static binary requiring no C toolchain at this build stage.
-    # Note: /validate_file_hash is not yet available here (copied later), so sha256sum is used inline.
-    GIT_LFS_COMMIT="0a45b99f9fa8d1942cc44f089029a031805461f1" && \
-    GO_VERSION="1.26.2" && \
-    curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz" -o /tmp/go.tar.gz && \
-    echo "990e6b4bbba816dc3ee129eaeaf4b42f17c2800b88a2166c265ac1a200262282  /tmp/go.tar.gz" | sha256sum -c - && \
-    tar -C /usr/local -xzf /tmp/go.tar.gz && \
-    rm /tmp/go.tar.gz && \
-    export PATH="/usr/local/go/bin:${PATH}" && \
-    curl -fsSL "https://github.com/git-lfs/git-lfs/archive/${GIT_LFS_COMMIT}.tar.gz" -o /tmp/git-lfs-src.tar.gz && \
-    tar -xzf /tmp/git-lfs-src.tar.gz -C /tmp && \
-    cd "/tmp/git-lfs-${GIT_LFS_COMMIT}" && \
-    CGO_ENABLED=0 go build -o /usr/local/bin/git-lfs . && \
-    cd / && \
-    # Remove Go toolchain after build — keeping it would add ~500MB to all derived images
-    # (gui_ubuntu_base, gui_debian, claude_code, sysbox_base) that do not need Go.
-    # The generic image re-installs Go 1.26.2 separately as a developer tool.
-    rm -rf /tmp/git-lfs-src.tar.gz "/tmp/git-lfs-${GIT_LFS_COMMIT}" /usr/local/go && \
-    git lfs install && \
     DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install ssh && \
+    git lfs install && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
