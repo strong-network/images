@@ -1,4 +1,21 @@
+# Build stage: compile git-lfs from source using Go 1.26.2.
+# The v3.7.1 release binary was compiled with Go 1.25.3, which is vulnerable to multiple stdlib CVEs
+# (CVE-2025-68121, CVE-2025-61726, CVE-2025-61728, CVE-2025-61729, CVE-2026-25679, CVE-2026-32280,
+# CVE-2026-32281, CVE-2026-32283 — all require Go ≥ 1.25.9). Building with Go 1.26.2 resolves all of them.
+# Commit 0a45b99 is a post-v3.7.1 main branch commit that upgrades git-lfs to Go 1.26.
+# CGO_ENABLED=0 produces a fully static binary with no runtime dependencies.
+# Using a separate build stage ensures the Go toolchain (~500MB) never appears in the final image.
+FROM golang:1.26.2 AS git-lfs-builder
+RUN GIT_LFS_COMMIT="0a45b99f9fa8d1942cc44f089029a031805461f1" && \
+    curl -fsSL "https://github.com/git-lfs/git-lfs/archive/${GIT_LFS_COMMIT}.tar.gz" -o /tmp/git-lfs-src.tar.gz && \
+    tar -xzf /tmp/git-lfs-src.tar.gz -C /tmp && \
+    cd "/tmp/git-lfs-${GIT_LFS_COMMIT}" && \
+    CGO_ENABLED=0 go build -o /usr/local/bin/git-lfs .
+
 FROM ubuntu:24.04
+
+# Copy the git-lfs binary compiled in the build stage above
+COPY --from=git-lfs-builder /usr/local/bin/git-lfs /usr/local/bin/git-lfs
 
 ENV SHELL=/bin/bash
 ENV LANG=en_US.UTF-8
@@ -6,10 +23,11 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # The minimum requirements to run a Strong Network workspace
 RUN apt-get update && \
-    apt-get install -y git locales sudo curl \
+    apt-get install -y --no-install-recommends git && \
+    apt-get install -y locales sudo curl \
     libkrb5-dev libssl-dev && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && apt-get update && \
-    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install git-lfs ssh && \
+    DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true apt-get -y install ssh && \
+    git lfs install && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata && \
     chsh -s /bin/bash && \
     sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen && \
@@ -35,30 +53,30 @@ RUN apt-get install -y wget python3-dev python3-pip python3-venv software-proper
     chmod -R 770 /home/developer
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.1.5.tgz -O docker.tar.gz && \
-    /validate_file_hash 882bb03f3fd36ad565b1362f5bbb5d5af5f2410a5c10cae3f9d3d54e2540adc2 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.4.1.tgz -O docker.tar.gz && \
+    /validate_file_hash 0fb3d2b72414ab862d68517f0b17b78c93c149d1c5c461acb969aacde1a2189d docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.31.0/buildx-v0.31.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
-    /validate_file_hash 39cc424a730d8b7364c23a137582cb29e7f024b175bb595001ff6f90121b005b /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    wget https://github.com/docker/buildx/releases/download/v0.33.0/buildx-v0.33.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    /validate_file_hash 9426a15411f35f635afef3f5d3bae53155c3e30d26dee430cc968e13d34be49f /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v5.0.2/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 2d880f723d3da7c779c54fdaea91a842fca8af55d1397f1ed8d7cbab3dd7af67 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v5.1.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash a0298760c9772d2c06888fc8703a487c94c3c3b0134adeef830742a2fc7647b4 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.0-linux-amd64.tar.gz && \
-    /validate_file_hash 8e7ae5cb890c56f53713bffec38e41cd8e7e4619ebe56f8b31cd383bfb3dbb83 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.4-linux-amd64.tar.gz && \
+    /validate_file_hash 70b2c30a19da4db264dfd68c8a3664e05093a361cefd89572ffb36f8abfa3d09 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash a2e984a18a0c063279d692533031c1eff93a262afcc0afdc517375432d060989 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.36.0/bin/linux/amd64/kubectl && \
+    /validate_file_hash 123d8c8844f46b1244c547fffb3c17180c0c26dac9890589fe7e67763298748e kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
@@ -103,7 +121,6 @@ RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo 
     apt-get update && apt-get install nodejs -y && \
     corepack enable && corepack prepare yarn@stable --activate && \
     apt-get -y install gcc g++ make && \
-    # script is to have the latest available version of git-lfs
     apt-get install -y htop \
     zsh jq zip shellcheck tree \
     nodejs openjdk-11-jdk \
