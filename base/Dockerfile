@@ -60,8 +60,8 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.33.0/buildx-v0.33.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
-    /validate_file_hash 9426a15411f35f635afef3f5d3bae53155c3e30d26dee430cc968e13d34be49f /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    wget https://github.com/docker/buildx/releases/download/v0.34.0/buildx-v0.34.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    /validate_file_hash 0144479d5a1cd710be3464ae898628cfa68033e16b225aef52f81930c45ac9b5 /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
     wget https://github.com/docker/compose/releases/download/v5.1.3/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
     /validate_file_hash a0298760c9772d2c06888fc8703a487c94c3c3b0134adeef830742a2fc7647b4 /usr/local/bin/docker-compose && \
@@ -69,8 +69,8 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.1.4-linux-amd64.tar.gz && \
-    /validate_file_hash 70b2c30a19da4db264dfd68c8a3664e05093a361cefd89572ffb36f8abfa3d09 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.2.0-linux-amd64.tar.gz && \
+    /validate_file_hash 97dbeb971be4ac4b27e3839976d9564c0fb35c6f3b1da89dd1e292d236af4096 helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
