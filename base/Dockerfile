@@ -75,8 +75,8 @@ RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.2.0-linux-amd64.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.36.0/bin/linux/amd64/kubectl && \
-    /validate_file_hash 123d8c8844f46b1244c547fffb3c17180c0c26dac9890589fe7e67763298748e kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.36.1/bin/linux/amd64/kubectl && \
+    /validate_file_hash 629d3f410e09bf49b64ae7079f7f0bda1191efed311f7d37fdbab0ad5b0ec2b7 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
