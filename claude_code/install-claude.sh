@@ -2,7 +2,7 @@
 set -e
 
 apt-get update
-apt-get install -y ca-certificates curl jq
+apt-get install -y ca-certificates curl
 
 GCS_BUCKET="https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases"
 
