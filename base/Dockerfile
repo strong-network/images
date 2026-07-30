@@ -1,13 +1,14 @@
-# Build stage: compile git-lfs from source using Go 1.26.4.
+# Build stage: compile git-lfs from source using Go 1.26.5.
 # CGO_ENABLED=0 produces a fully static binary with no runtime dependencies.
 # Using a separate build stage ensures the Go toolchain (~500MB) never appears in the final image.
-FROM golang:1.26.4 AS git-lfs-builder
+# Go 1.26.5 clears the stdlib CVE-2026-39822 (HIGH) carried in the git-lfs binary.
+FROM golang:1.26.5 AS git-lfs-builder
 RUN GIT_LFS_COMMIT="0a45b99f9fa8d1942cc44f089029a031805461f1" && \
     curl -fsSL "https://github.com/git-lfs/git-lfs/archive/${GIT_LFS_COMMIT}.tar.gz" -o /tmp/git-lfs-src.tar.gz && \
     tar -xzf /tmp/git-lfs-src.tar.gz -C /tmp && \
     cd "/tmp/git-lfs-${GIT_LFS_COMMIT}" && \
     # Bump vulnerable transitive deps before building:
-    go get golang.org/x/crypto@v0.52.0 golang.org/x/net@v0.55.0 && \
+    go get golang.org/x/crypto@v0.52.0 golang.org/x/net@v0.55.0 golang.org/x/text@v0.39.0 && \
     go mod tidy && \
     CGO_ENABLED=0 go build -o /usr/local/bin/git-lfs .
 
@@ -56,8 +57,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.6.1.tgz -O docker.tar.gz && \
-    /validate_file_hash b0df4a43a98d7ecb708acbdb5a34a3416e13b6e39bcbbdf296f51f0f3442b29f docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.6.2.tgz -O docker.tar.gz && \
+    /validate_file_hash d6204aea92238e2453d5445c885b9d2e5eb8f82915568ec50edf9dbe12a3ac74 docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
@@ -66,20 +67,20 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     wget https://github.com/docker/buildx/releases/download/v0.35.0/buildx-v0.35.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
     /validate_file_hash d41ece72044243b4f58b343441ae37446d9c29a7d6b5e11c61847bbcf8f7dfda /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v5.2.0/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash 018f9612ecabc5f2d7aaa53d6f5f44453a87611e2d72c8ef84d7b1eca070e719 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v5.3.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash f9ebc6ebdb19d769b793c245a736caaeb198c62587f13b25c660c13b4987f959 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.2.2-linux-amd64.tar.gz && \
-    /validate_file_hash 9adafecab4d406853bba163a70e9f104f47dbbf65ce24b7653bae7e36150bcb6 helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.2.3-linux-amd64.tar.gz && \
+    /validate_file_hash e9b88b4ee95b18c706839c28d3a0220e5bc470e9cd9262410c90793c45ff8b7c helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.36.2/bin/linux/amd64/kubectl && \
-    /validate_file_hash 1e9045ec32bea85da43de85f0065358529ea7c7a152eca78154fba5b58c27d82 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.36.3/bin/linux/amd64/kubectl && \
+    /validate_file_hash ebbd080e7c2e275093b55915722043257eb24004363e20acb3c4d71919f88336 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
