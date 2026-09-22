@@ -118,7 +118,7 @@ RUN mkdir -p /etc/apt/keyrings && \
 # Install hashicorp/terraform tools
 RUN mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://apt.releases.hashicorp.com/gpg > hashicorp.key && \
-    /validate_file_hash cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029 hashicorp.key && \
+    /validate_file_hash 1df7d66b79352bab45388511079f74987568672a8ed6395053a050b61f6c5430 hashicorp.key && \
     gpg --dearmor -o /etc/apt/keyrings/hashicorp.gpg hashicorp.key && \
     chmod go+r /etc/apt/keyrings/hashicorp.gpg && \
     rm hashicorp.key && \
