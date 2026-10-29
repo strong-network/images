@@ -1,8 +1,8 @@
-# Build stage: compile git-lfs from source using Go 1.26.5.
+# Build stage: compile git-lfs from source using Go 1.26.10.
 # CGO_ENABLED=0 produces a fully static binary with no runtime dependencies.
 # Using a separate build stage ensures the Go toolchain (~500MB) never appears in the final image.
-# Go 1.26.5 clears the stdlib CVE-2026-39822 (HIGH) carried in the git-lfs binary.
-FROM golang:1.26.5 AS git-lfs-builder
+# Go 1.26.10 picks up the latest stdlib security fixes (crypto/x509) for the git-lfs binary.
+FROM golang:1.26.10 AS git-lfs-builder
 RUN GIT_LFS_COMMIT="0a45b99f9fa8d1942cc44f089029a031805461f1" && \
     curl -fsSL "https://github.com/git-lfs/git-lfs/archive/${GIT_LFS_COMMIT}.tar.gz" -o /tmp/git-lfs-src.tar.gz && \
     tar -xzf /tmp/git-lfs-src.tar.gz -C /tmp && \
@@ -57,30 +57,30 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Download docker tools
-RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.6.2.tgz -O docker.tar.gz && \
-    /validate_file_hash d6204aea92238e2453d5445c885b9d2e5eb8f82915568ec50edf9dbe12a3ac74 docker.tar.gz && \
+RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/static/stable/x86_64/docker-29.9.2.tgz -O docker.tar.gz && \
+    /validate_file_hash 9ac225999fd5e863f7694c728ef23d480616b1e5639328fa309befd4243d69eb docker.tar.gz && \
     tar -C /tmp -xzf docker.tar.gz && \
     rm docker.tar.gz && \
     mv /tmp/docker/docker /usr/bin/ && \
     rm -r /tmp/docker && \
     mkdir -p /usr/local/lib/docker/cli-plugins && \
-    wget https://github.com/docker/buildx/releases/download/v0.35.0/buildx-v0.35.0.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
-    /validate_file_hash d41ece72044243b4f58b343441ae37446d9c29a7d6b5e11c61847bbcf8f7dfda /usr/local/lib/docker/cli-plugins/docker-buildx && \
+    wget https://github.com/docker/buildx/releases/download/v0.38.1/buildx-v0.38.1.linux-amd64 -O /usr/local/lib/docker/cli-plugins/docker-buildx  && \
+    /validate_file_hash e25d5cd675092bb5d1d03632fdc46cdf3fede7b514dc5f023a105e00d3ce5ad4 /usr/local/lib/docker/cli-plugins/docker-buildx && \
     chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx && \
-    wget https://github.com/docker/compose/releases/download/v5.3.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
-    /validate_file_hash f9ebc6ebdb19d769b793c245a736caaeb198c62587f13b25c660c13b4987f959 /usr/local/bin/docker-compose && \
+    wget https://github.com/docker/compose/releases/download/v5.6.1/docker-compose-linux-x86_64 -O /usr/local/bin/docker-compose && \
+    /validate_file_hash 47737f4236e6d3ccea7291995203f8f018058783b4c3a9469119811a0b5db8c0 /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose && \
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.2.3-linux-amd64.tar.gz && \
-    /validate_file_hash e9b88b4ee95b18c706839c28d3a0220e5bc470e9cd9262410c90793c45ff8b7c helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz && \
+    /validate_file_hash 0403a88ae20913d11b10a2467b50087721fea7581736da6b9d3992f5357fe54b helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.36.3/bin/linux/amd64/kubectl && \
-    /validate_file_hash ebbd080e7c2e275093b55915722043257eb24004363e20acb3c4d71919f88336 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.37.2/bin/linux/amd64/kubectl && \
+    /validate_file_hash c04487523e7aa7d1493f7808174c899db93d7a9cf57531420cd76b9bd415f8f4 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
@@ -131,9 +131,9 @@ RUN mkdir -p /etc/apt/keyrings && \
 # Setup environment for developers
     # install general packages related to development
 
-RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && apt-get install nodejs -y && \
+# NodeSource's setup_lts.x configures the apt repo for the current Node.js LTS major version
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install nodejs -y && \
     corepack enable && corepack prepare yarn@stable --activate && \
     apt-get -y install gcc g++ make && \
     apt-get install -y htop \
