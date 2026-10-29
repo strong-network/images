@@ -73,14 +73,14 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
     mkdir -p /usr/bin/strong_network_startup
 
 # Install kubernetes related tools
-RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.2.3-linux-amd64.tar.gz && \
-    /validate_file_hash e9b88b4ee95b18c706839c28d3a0220e5bc470e9cd9262410c90793c45ff8b7c helm.tar.gz && \
+RUN wget -O helm.tar.gz https://get.helm.sh/helm-v4.3.1-linux-amd64.tar.gz && \
+    /validate_file_hash 0403a88ae20913d11b10a2467b50087721fea7581736da6b9d3992f5357fe54b helm.tar.gz && \
     tar -C /tmp -xzf helm.tar.gz && \
     mv /tmp/linux-amd64/helm /usr/local/bin && \
     rm helm.tar.gz && \
     rm -r /tmp/linux-amd64 && \
-    wget -O kubectl https://dl.k8s.io/release/v1.36.3/bin/linux/amd64/kubectl && \
-    /validate_file_hash ebbd080e7c2e275093b55915722043257eb24004363e20acb3c4d71919f88336 kubectl && \
+    wget -O kubectl https://dl.k8s.io/release/v1.37.2/bin/linux/amd64/kubectl && \
+    /validate_file_hash c04487523e7aa7d1493f7808174c899db93d7a9cf57531420cd76b9bd415f8f4 kubectl && \
     mv kubectl /usr/local/bin && \
     chmod 4755 /usr/local/bin/kubectl
 
