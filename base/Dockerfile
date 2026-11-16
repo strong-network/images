@@ -134,7 +134,10 @@ RUN mkdir -p /etc/apt/keyrings && \
 # NodeSource's setup_lts.x configures the apt repo for the current Node.js LTS major version
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install nodejs -y && \
-    corepack enable && corepack prepare yarn@stable --activate && \
+    npm install -g corepack@latest && \
+    corepack enable && \
+    corepack prepare yarn@stable --activate && \
+    corepack prepare pnpm@latest --activate && \
     apt-get -y install gcc g++ make && \
     apt-get install -y htop \
     zsh zip shellcheck tree \
