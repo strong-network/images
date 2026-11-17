@@ -26,7 +26,7 @@ COPY validate_file_hash.sh /validate_file_hash
 
 # Optional Install user space packages
 RUN apt-get install -y wget python3-dev python3-pip python3-venv software-properties-common libffi-dev nano tmux vim emacs asciinema \
-    build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \ 
+    build-essential clang-format clang libsecret-1-dev libx11-dev libxkbfile-dev gettext-base rsync libxext6 libxrender1 libxtst6 unzip \
     libxi6 libfreetype6 dirmngr lsb-release less && \
     mkdir -p /usr/bin/strong_network_startup/vscode_extensions && chmod 777 /usr/bin/strong_network_startup/vscode_extensions && \
     chown 1000:1000 /usr/bin/strong_network_startup/vscode_extensions && \
@@ -51,7 +51,7 @@ RUN chmod +x /validate_file_hash && wget https://download.docker.com/linux/stati
 
 # Install and setup chromium and dependencies
 RUN add-apt-repository ppa:xtradeb/apps -y && \
-    apt-get update && apt-get install -y xvfb chromium libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 xauth 
+    apt-get update && apt-get install -y xvfb chromium libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 xauth
 
 ADD xvfb-chromium /usr/bin/xvfb-chromium
 
@@ -62,7 +62,10 @@ RUN chmod +x /usr/bin/xvfb-chromium && \
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && apt-get install nodejs -y && \
-    corepack enable && corepack prepare yarn@stable --activate && \
+    npm install -g corepack@latest && \
+    corepack enable && \
+    corepack prepare yarn@stable --activate && \
+    corepack prepare pnpm@latest --activate && \
     apt-get -y install make && \
     apt-get install -y htop zsh jq zip shellcheck tree nodejs \
     # install networking related packages
